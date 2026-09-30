@@ -1,103 +1,69 @@
-# Once Human Guide — Complete App
+# Once Human Guide
 
-Adaptive tactical UI + SQLite/JSON database for **Once Human**  
-**App 5.0.0** · **Data `2026-09-30-v5-complete`** · **372 records** · patch **3.0.7**
+Adaptive game companion for **Once Human**  
+**App 5.1** · Data `2026-09-30-v5-complete` · Patch **3.0.7**
 
-**GitHub:** https://github.com/smus-rgb/once-human-guide
+**Repo:** https://github.com/smus-rgb/once-human-guide
 
 ---
 
-## Quick install
+## One-command install (automatic)
 
-### From this folder (local)
+Needs only **Python 3.10+**.
+
+### Windows (PowerShell)
+
+```powershell
+Invoke-WebRequest -Uri https://raw.githubusercontent.com/smus-rgb/once-human-guide/main/bootstrap.py -OutFile bootstrap.py
+python bootstrap.py
+cd once-human-guide-app
+.\start.bat
+```
+
+### macOS / Linux
 
 ```bash
-python3 install.py --dir ~/once-human-guide-app
-cd ~/once-human-guide-app
+curl -fsSL https://raw.githubusercontent.com/smus-rgb/once-human-guide/main/bootstrap.py -o bootstrap.py
+python3 bootstrap.py
+cd once-human-guide-app
 ./start.sh
 ```
 
-### From GitHub only
+Or install directly:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/smus-rgb/once-human-guide/main/install.py -o install.py
-python3 install.py --from-github --dir ~/once-human-guide-app
-cd ~/once-human-guide-app && ./start.sh
+python3 install.py --dir ~/once-human-guide-app --launch
 ```
 
-### Offline UI (no Python)
+Then open **http://127.0.0.1:8000/ui**
 
-Open `once_human_guide_ui_v4.html` in a browser.
+The installer automatically:
+1. Downloads all app + data files from GitHub  
+2. Installs `fastapi` + `uvicorn`  
+3. Builds SQLite database  
+4. Creates `start.sh` / `start.bat`  
+
+### Update later
+
+```bash
+cd once-human-guide-app
+python3 updater.py
+```
 
 ---
 
-## Auto-updater
+## Offline (no Python)
 
-```bash
-python3 updater.py           # download newer data from GitHub
-python3 updater.py --check   # only check versions
-python3 updater.py --force   # re-download everything
-./update.sh
-```
-
-API:
-
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/update/check` | GET | Local vs GitHub version |
-| `/update/run` | POST | Run updater (`?force=true`) |
+Open `once_human_guide_ui_v4.html` from the Complete zip in a browser.
 
 ---
 
 ## API
 
-```bash
-pip install -r requirements.txt
-python api_main.py
-# or ./start.sh
-```
-
 | URL | Description |
 |-----|-------------|
-| http://127.0.0.1:8000/ui | Full SPA |
-| http://127.0.0.1:8000/stats | Record counts |
-| http://127.0.0.1:8000/search?q=socr | Global search |
-| http://127.0.0.1:8000/export | Full JSON |
+| http://127.0.0.1:8000/ui | App |
 | http://127.0.0.1:8000/docs | OpenAPI |
-| http://127.0.0.1:8000/update/check | Update status |
-
----
-
-## Database (372)
-
-| Module | # |
-|--------|--:|
-| deviations | 71 |
-| locations | 42 |
-| mods | 48 |
-| weapons | 38 |
-| recipes | 26 |
-| materials | 24 |
-| creatures | 20 |
-| quests | 18 |
-| armor | 18 |
-| bosses | 16 |
-| npcs | 11 |
-| scenarios | 10 |
-| plants / animals | 7 / 7 |
-| fish / flowers / events | 5 / 6 / 5 |
-
----
-
-## Files
-
-| File | Role |
-|------|------|
-| `install.py` | One-shot installer |
-| `updater.py` | GitHub auto-updater + SQLite rebuild |
-| `version.json` | Version manifest for updates |
-| `once_human_guide_ui_v4.html` | Offline SPA |
-| `once_human.db` | SQLite (built by install/updater) |
-| `database_full.json` | Master data |
-| `api_main.py` | FastAPI server |
-| `start.sh` | Launch API |
+| http://127.0.0.1:8000/stats | Counts |
+| http://127.0.0.1:8000/update/check | Update check |
