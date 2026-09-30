@@ -1,1 +1,50 @@
-[]
+[
+  {
+    "id": "mat_scrap",
+    "name": "Scrap",
+    "type": "Material",
+    "desc": "Základní crafting materiál z lootů a recycle."
+  },
+  {
+    "id": "mat_metal",
+    "name": "Metal Scraps / Ingots",
+    "type": "Material",
+    "desc": "Tavení z rud. Digby Boy pomáhá."
+  },
+  {
+    "id": "mat_starchrom",
+    "name": "Starchrom",
+    "type": "Currency",
+    "desc": "Blueprint System – unlock a enhance."
+  },
+  {
+    "id": "mat_heart_vine",
+    "name": "Heart Vine",
+    "type": "Deviant Material",
+    "desc": "Z Harveseed → Living Armor."
+  },
+  {
+    "id": "mat_thread",
+    "name": "Thread of Dreams",
+    "type": "Deviant Material",
+    "desc": "Z Dreamcatcher → The Weaver."
+  },
+  {
+    "id": "mat_split",
+    "name": "Split-Core Cotton",
+    "type": "Deviant Material",
+    "desc": "Z Atomic Lighter → Fusion Lighter."
+  },
+  {
+    "id": "mat_balloon",
+    "name": "Small Balloons",
+    "type": "Deviant Material",
+    "desc": "Z Pup Buddy → Featherweight."
+  },
+  {
+    "id": "mat_silver_spring",
+    "name": "Silver Spring",
+    "type": "Deviant Material",
+    "desc": "Z Frog the Leaper → Spring Legs."
+  }
+]
