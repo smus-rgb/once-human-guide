@@ -1,1 +1,66 @@
-[]
+[
+  {
+    "id": "boss_ravenous",
+    "name": "Ravenous Hunter",
+    "location": "Monolith of Greed",
+    "region": "Dayton Wetlands",
+    "drops": "Weapon mods (Burn/Frost)",
+    "desc": "Story boss. Stagger bar pod sustained fire."
+  },
+  {
+    "id": "boss_treant",
+    "name": "Treant",
+    "location": "Avalanche Monolith",
+    "region": "—",
+    "drops": "Harveseed, Tar Pudding, Burn/Bounce mods",
+    "desc": "Capturable Harveseed po porážce."
+  },
+  {
+    "id": "boss_arachsiam",
+    "name": "Arachsiam",
+    "location": "—",
+    "region": "—",
+    "drops": "Dreamcatcher",
+    "desc": "Capturable Dreamcatcher."
+  },
+  {
+    "id": "boss_shadow",
+    "name": "Shadow Hound",
+    "location": "Monolith of Thirst",
+    "region": "Iron River / Chalk Peak",
+    "drops": "Lonewolf's Whisper, Shrapnel mods",
+    "desc": "Klíčový boss pro top combat deviant."
+  },
+  {
+    "id": "boss_foul",
+    "name": "Foul Shadowhunter",
+    "location": "—",
+    "region": "—",
+    "drops": "Festering Gel",
+    "desc": "Odemyká nejlepší beginner combat deviant."
+  },
+  {
+    "id": "boss_mensdevoran",
+    "name": "Mensdevoran",
+    "location": "—",
+    "region": "—",
+    "drops": "Nutcracker",
+    "desc": "Territory defense deviant unlock."
+  },
+  {
+    "id": "boss_forsaken",
+    "name": "Forsaken Giant",
+    "location": "Firedust Monolith",
+    "region": "—",
+    "drops": "Brave George, Shrapnel/Fast Gunner mods",
+    "desc": "Major monolith boss."
+  },
+  {
+    "id": "boss_servitor",
+    "name": "Secret Servitor",
+    "location": "Tundra Monolith",
+    "region": "Onyx Tundra",
+    "drops": "Snapshot",
+    "desc": "Way of Winter sniper-support deviant."
+  }
+]
