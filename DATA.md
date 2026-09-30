@@ -1,15 +1,13 @@
 # Data version
 
-- **version:** `2026-09-30-v4-3.0.7-plus-abyss-prep`
-- **patch_target:** 3.0.7 live
-- **next:** Isles of Abyss (Oct 21–22 2026 PT) — scenario + RaidZone ocean map prepared
-- **total records:** 247
+- **version:** `2026-09-30-v4-data-fill2`
+- **patch_target:** 3.0.7 live · Isles of Abyss prep
+- **total records:** see README after sync
 
-## 3.0.7 core additions
+## Fill wave 2
 
-- Scenarios: SCP, RaidZone, Manibus Novice, Isles of Abyss, Isles of Abyss: RaidZone
-- Weapons: QBJ97 Fiery Trees, SN700 Finale, FP9 Additional Rules
-- Armor: Treacherous Tides, Ghost Link, Wind Interpreter Cap, Ankh Mask, Glide Pants, Magnetic Moment Top
-- Deviations: ZapCam, Penguin Hope, Zapamander, Party Monkey + event dogs
-- Events: Golden Autumn, Frames of Wonder, Abyss Reservation
-- Animals: Buck, Doe, Buffalo, Bear (breeding 3.0.7)
+- Silo / monolith bosses (Alpha, Theta, Sigma, Phi, EX1, Shadow Hound, Arachsiam, Treant…)
+- Expanded weapon & armor mod pool (Shrapnel, Blaze, Frost, Shock, Aberrant Progeny Mirror/Wild/Phantasmal…)
+- More locations (GAIA ruins, Whalebone, Camp Igloo, Prime War zones…)
+- Quests (Carnival of Doom, There's A Dragon Here, season melee goal…)
+- Deviation materials (Heart Vine, Thread of Dreams, Split-Core Cotton)
