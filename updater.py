@@ -2,7 +2,7 @@
 """Once Human Guide — auto-updater
 
 Checks GitHub for a newer version.json and downloads updated data/UI/API files.
-Rebuilds once_human.db from database_full.json after data update.
+Rebuilds once_human.db from database_full.json (or assembled module JSON).
 
 Usage:
   python updater.py              # check + update if newer
@@ -26,7 +26,6 @@ DEFAULT_RAW = "https://raw.githubusercontent.com/smus-rgb/once-human-guide/main"
 UPDATE_MAP = {
     "database_full.json": "database_full.json",
     "once_human_guide_ui_v4.html": "once_human_guide_ui_v4.html",
-    "once_human_guide_app.html": "once_human_guide_app.html",
     "api_main.py": "api_main.py",
     "requirements.txt": "requirements.txt",
     "updater.py": "updater.py",
@@ -52,6 +51,26 @@ UPDATE_MAP = {
     "flowers.json": "flowers.json",
 }
 
+MODULE_FILES = [
+    ("deviations", "deviations.json"),
+    ("weapons", "weapons.json"),
+    ("armor", "armor.json"),
+    ("mods", "mods.json"),
+    ("bosses", "bosses.json"),
+    ("locations", "map_locations.json"),
+    ("recipes", "recipes.json"),
+    ("materials", "materials.json"),
+    ("scenarios", "scenarios.json"),
+    ("quests", "quests.json"),
+    ("events", "events.json"),
+    ("creatures", "creatures.json"),
+    ("npcs", "npcs.json"),
+    ("plants", "plants.json"),
+    ("fish", "fish.json"),
+    ("animals", "animals.json"),
+    ("flowers", "flowers.json"),
+]
+
 
 def load_local() -> dict:
     if LOCAL_VERSION.exists():
@@ -71,23 +90,35 @@ def fetch_bytes(url: str, timeout: int = 60) -> bytes:
         return resp.read()
 
 
-def ver_tuple(v: str) -> tuple:
-    parts = []
-    for p in v.replace("-", ".").split("."):
-        if p.isdigit():
-            parts.append((0, int(p)))
-        else:
-            parts.append((1, p))
-    return tuple(parts)
-
-
 def is_newer(remote: dict, local: dict) -> bool:
-    try:
-        if ver_tuple(remote.get("app_version", "0")) > ver_tuple(local.get("app_version", "0")):
-            return True
-    except Exception:
-        pass
-    return (remote.get("data_version") or "") != (local.get("data_version") or "")
+    return (remote.get("data_version") or "") != (local.get("data_version") or "") or (
+        remote.get("app_version") or "") != (local.get("app_version") or "")
+
+
+def assemble_database_full(base: Path) -> Path | None:
+    """Build database_full.json from module JSON files if missing."""
+    full = base / "database_full.json"
+    modules = {}
+    for key, fname in MODULE_FILES:
+        fp = base / fname
+        if fp.exists():
+            try:
+                modules[key] = json.loads(fp.read_text(encoding="utf-8"))
+            except Exception:
+                pass
+    if not modules:
+        return full if full.exists() else None
+    ver = "assembled"
+    vp = base / "version.json"
+    if vp.exists():
+        try:
+            ver = json.loads(vp.read_text(encoding="utf-8")).get("data_version", ver)
+        except Exception:
+            pass
+    data = {"version": ver, **modules}
+    full.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(f"[updater] assembled database_full.json from {len(modules)} modules")
+    return full
 
 
 def rebuild_sqlite(json_path: Path, db_path: Path) -> int:
@@ -195,6 +226,9 @@ def run(check_only: bool = False, force: bool = False) -> int:
             print(f"[updater] skip {name}: {e}")
 
     full = BASE / "database_full.json"
+    if not full.exists() or full.stat().st_size < 100:
+        assemble_database_full(BASE)
+        full = BASE / "database_full.json"
     if full.exists():
         n = rebuild_sqlite(full, BASE / "once_human.db")
         print(f"[updater] rebuilt once_human.db ({n} rows)")
