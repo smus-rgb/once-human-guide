@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "name": "Once Human Guide",
+    "slug": "once-human-guide",
+    "version": "3.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "scheme": "oncehumanguide",
+    "ios": { "supportsTablet": true, "bundleIdentifier": "com.oncehumanguide.app" },
+    "android": { "package": "com.oncehumanguide.app" },
+    "plugins": ["expo-router"]
+  }
+}
