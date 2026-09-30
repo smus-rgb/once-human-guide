@@ -1,60 +1,51 @@
-# Once Human Guide v3
+# Once Human Guide
 
-**Repo:** https://github.com/smus-rgb/once-human-guide
+Adaptive UI terminal + curated game database for **Once Human**.
 
-Adaptive companion pro **Once Human** — web SPA, React, Expo (mobil) + online API.
+**Repo:** https://github.com/smus-rgb/once-human-guide  
+**Data version:** `2026-09-30-v4-3.0.7-plus-abyss-prep`  
+**Patch target:** 3.0.7 live · Isles of Abyss prep (Oct 21–22 2026)
 
-## Rychlý start
+## Quick start
 
-| Klient | Příkaz |
-|--------|--------|
-| **HTML SPA** | Otevři `once_human_guide_app.html` (z release / workspace) |
-| **API** | `python api_main.py` → http://localhost:8000 |
-| **React** | `cd react-app && npm i && npm run dev` |
-| **Expo** | `cd expo-app && npm i && npx expo start` |
+1. Open `once_human_guide_ui_v4.html` in a browser (offline-capable SPA).
+2. Or run API: `python api_main.py` (serves JSON + search).
 
-## Novinky v3
+## Database counts (247 records)
 
-### Databáze (186 záznamů)
-- 66 deviations · 25 zbraní · 12 armor · 18 mods · 33 lokací · 16 receptů
+| Module | Count |
+|--------|------:|
+| animals | 7 |
+| armor | 18 |
+| bosses | 8 |
+| creatures | 6 |
+| deviations | 70 |
+| events | 5 |
+| fish | 3 |
+| flowers | 3 |
+| locations | 33 |
+| materials | 8 |
+| mods | 18 |
+| npcs | 4 |
+| plants | 4 |
+| quests | 6 |
+| recipes | 16 |
+| scenarios | 10 |
+| weapons | 28 |
 
-### Mapa embed
-- **Lokální body** (filtry)
-- **THGL** iframe → https://oncehuman.th.gl
-- **MapGenie** iframe → mapgenie.io/once-human
+## Modules in UI
 
-### Online vyhledávání a aktualizace
-- `GET /version` — kontrola verze dat
-- `GET /search?q=` — online fuzzy search
-- `GET /export` — plný JSON snapshot pro update klienta
-- V SPA: tlačítka **Update** a **Online ⌕**, nastavení API URL
+Command · Search · Map · DB · Scenarios · Quests · Events · Bestiary · NPC · Deviations · Builds · Craft · Plants · Fishing · Animals · Grafting · AI · Progress
 
-### Expo mobil
-- Složka `expo-app/` — iOS / Android / web
-- Offline DB + online update/search přes stejné API
+## Structure
 
-## API endpointy
+- `once_human_guide_ui_v4.html` — production adaptive SPA
+- `database_full.json` / category `*.json` — seed data
+- `api_main.py` — data API skeleton
+- `react-app/` · `expo-app/` — client scaffolds
+- `Once_Human_Guide_UI_Architecture.md` — UI system design
 
-```
-GET /version
-GET /stats
-GET /deviations?q=&type=
-GET /weapons?q=
-GET /armor?q=
-GET /mods?q=
-GET /locations
-GET /bosses
-GET /recipes
-GET /search?q=&limit=
-GET /export
-GET /maps
-```
+## Notes
 
-## Data v repozitáři
-
-- `api_main.py`, `weapons.json`, `bosses.json`, `materials.json`
-- Další JSON + SPA HTML + SQLite: viz `DATA.md` a balíček `OnceHumanGuide_v3.zip` z workspace
-
-## Licence
-
-Community fan project — data z veřejných wiki / community sources. Once Human © NetEase / Starry Studio.
+- Version **3.0.8** is not published yet; next major content is **Isles of Abyss**.
+- Catalog is curated core, not a full dump of every in-game spawn/skin.

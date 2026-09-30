@@ -1,16 +1,15 @@
-# Data files
+# Data version
 
-Full dataset (186 records) lives in local project artifacts:
+- **version:** `2026-09-30-v4-3.0.7-plus-abyss-prep`
+- **patch_target:** 3.0.7 live
+- **next:** Isles of Abyss (Oct 21–22 2026 PT) — scenario + RaidZone ocean map prepared
+- **total records:** 247
 
-- `database_full.json` — complete export
-- `deviations.json` (66), `weapons.json` (25), `mods.json` (18), `map_locations.json` (33)
-- `once_human.db` — SQLite
-- `once_human_guide_app.html` — offline SPA with embedded DB + map embeds + online update
+## 3.0.7 core additions
 
-Copy these from the project workspace or release package `OnceHumanGuide_v3.zip` into this repo root for local API:
-
-```bash
-python api_main.py
-```
-
-API will serve `/export` and `/search` from `once_human.db`.
+- Scenarios: SCP, RaidZone, Manibus Novice, Isles of Abyss, Isles of Abyss: RaidZone
+- Weapons: QBJ97 Fiery Trees, SN700 Finale, FP9 Additional Rules
+- Armor: Treacherous Tides, Ghost Link, Wind Interpreter Cap, Ankh Mask, Glide Pants, Magnetic Moment Top
+- Deviations: ZapCam, Penguin Hope, Zapamander, Party Monkey + event dogs
+- Events: Golden Autumn, Frames of Wonder, Abyss Reservation
+- Animals: Buck, Doe, Buffalo, Bear (breeding 3.0.7)
