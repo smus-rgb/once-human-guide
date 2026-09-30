@@ -1,0 +1,31 @@
+{
+  "app_version": "5.0.0",
+  "data_version": "2026-09-30-v5-complete",
+  "released_at": "2026-09-30T08:10:00Z",
+  "min_app_version": "5.0.0",
+  "patch_target": "3.0.7",
+  "records": 372,
+  "files": {
+    "database_full.json": "data",
+    "once_human_guide_ui_v4.html": "ui",
+    "api_main.py": "api",
+    "requirements.txt": "deps",
+    "updater.py": "tool",
+    "install.py": "tool",
+    "version.json": "meta"
+  },
+  "notes": "Complete app with installer + auto-updater. Patch 3.0.7 core + Isles of Abyss prep.",
+  "changelog": [
+    "372 curated records across 17 modules",
+    "SQLite + JSON dual storage",
+    "FastAPI with /ui /search /export /update",
+    "install.py one-shot setup",
+    "updater.py GitHub data sync"
+  ],
+  "github": {
+    "owner": "smus-rgb",
+    "repo": "once-human-guide",
+    "branch": "main",
+    "raw_base": "https://raw.githubusercontent.com/smus-rgb/once-human-guide/main"
+  }
+}
