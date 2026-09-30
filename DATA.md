@@ -1,13 +1,35 @@
-# Data version
+# Once Human Guide — Data
 
-- **version:** `2026-09-30-v4-data-fill2`
-- **patch_target:** 3.0.7 live · Isles of Abyss prep
-- **total records:** see README after sync
+**version:** `2026-09-30-v5-complete`  
+**app:** 5.0.0  
+**patch_target:** 3.0.7 live · Isles of Abyss prep  
 
-## Fill wave 2
+## Modules on GitHub (module JSON)
 
-- Silo / monolith bosses (Alpha, Theta, Sigma, Phi, EX1, Shadow Hound, Arachsiam, Treant…)
-- Expanded weapon & armor mod pool (Shrapnel, Blaze, Frost, Shock, Aberrant Progeny Mirror/Wild/Phantasmal…)
-- More locations (GAIA ruins, Whalebone, Camp Igloo, Prime War zones…)
-- Quests (Carnival of Doom, There's A Dragon Here, season melee goal…)
-- Deviation materials (Heart Vine, Thread of Dreams, Split-Core Cotton)
+| File | Role |
+|------|------|
+| deviations.json | Combat / Territory / Crafting deviations |
+| weapons.json | Named weapons |
+| armor.json | Armor sets |
+| mods.json | Weapon & armor mods |
+| bosses.json | Silo / monolith / raid bosses |
+| map_locations.json | Regions, silos, hubs |
+| recipes.json | Food, ammo, structures |
+| materials.json | Craft mats & currencies |
+| scenarios.json | Manibus, Winter, SCP, RaidZone, Abyss… |
+| quests.json | Main / side / silo quests |
+| events.json | Golden Autumn, Prime War, Abyss reservation |
+| creatures.json | Bestiary |
+| npcs.json | Vendors & quest NPCs |
+| plants / fish / animals / flowers | Gatherables |
+
+## Install / update
+
+```bash
+python3 install.py --from-github
+python3 updater.py
+```
+
+Updater **assembles** `database_full.json` from module JSON when the monolithic file is not present, then rebuilds `once_human.db`.
+
+Full embedded SPA + SQLite dump: see **OnceHumanGuide_Complete.zip** in project artifacts.
