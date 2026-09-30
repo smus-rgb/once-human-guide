@@ -1,12 +1,14 @@
 # Once Human Guide v3
 
+**Repo:** https://github.com/smus-rgb/once-human-guide
+
 Adaptive companion pro **Once Human** — web SPA, React, Expo (mobil) + online API.
 
 ## Rychlý start
 
 | Klient | Příkaz |
 |--------|--------|
-| **HTML SPA** | Otevři `once_human_guide_app.html` |
+| **HTML SPA** | Otevři `once_human_guide_app.html` (z release / workspace) |
 | **API** | `python api_main.py` → http://localhost:8000 |
 | **React** | `cd react-app && npm i && npm run dev` |
 | **Expo** | `cd expo-app && npm i && npx expo start` |
@@ -48,14 +50,11 @@ GET /export
 GET /maps
 ```
 
-## Struktura
+## Data v repozitáři
 
-```
-once_human_guide_app.html   # SPA v3
-api_main.py                 # FastAPI
-once_human.db               # SQLite
-database_full.json          # export
-react-app/                  # Vite React
-expo-app/                   # Expo Router
-*.json                      # kategorie
-```
+- `api_main.py`, `weapons.json`, `bosses.json`, `materials.json`
+- Další JSON + SPA HTML + SQLite: viz `DATA.md` a balíček `OnceHumanGuide_v3.zip` z workspace
+
+## Licence
+
+Community fan project — data z veřejných wiki / community sources. Once Human © NetEase / Starry Studio.
