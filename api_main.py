@@ -1,4 +1,4 @@
-"""Once Human Guide API — FastAPI + SQLite + search + export"""
+"""Once Human Guide API — FastAPI + SQLite + FTS search + static shell."""
 from __future__ import annotations
 
 from datetime import datetime, timezone
@@ -16,7 +16,7 @@ if not DB_PATH.exists():
     DB_PATH = BASE.parent / "once_human.db"
 
 DATA_VERSION = "2026-10-01-v19-372"
-API_VERSION = "5.3.0"
+API_VERSION = "5.4.0"
 MAP_EMBEDS = {
     "thgl": "https://oncehuman.th.gl",
     "mapgenie": "https://mapgenie.io/once-human/maps/nalcott",
@@ -27,6 +27,25 @@ TABLES = [
     "recipes", "materials", "scenarios", "quests", "events", "creatures",
     "npcs", "plants", "fish", "animals", "flowers",
 ]
+MODULE_FILES = {
+    "deviations": "deviations.json",
+    "weapons": "weapons.json",
+    "armor": "armor.json",
+    "mods": "mods.json",
+    "bosses": "bosses.json",
+    "locations": "map_locations.json",
+    "recipes": "recipes.json",
+    "materials": "materials.json",
+    "scenarios": "scenarios.json",
+    "quests": "quests.json",
+    "events": "events.json",
+    "creatures": "creatures.json",
+    "npcs": "npcs.json",
+    "plants": "plants.json",
+    "fish": "fish.json",
+    "animals": "animals.json",
+    "flowers": "flowers.json",
+}
 
 app = FastAPI(
     title="Once Human Guide API",
@@ -66,23 +85,33 @@ def fetch_all(table: str, q: str | None = None) -> list[dict]:
         raise HTTPException(404, f"Unknown table: {table}")
     conn = get_db()
     try:
-        rows = conn.execute(f"SELECT * FROM {table}").fetchall()
+        if q:
+            rows = conn.execute(
+                f"SELECT * FROM {table} WHERE lower(coalesce(name,'')) LIKE ? OR lower(coalesce(desc,'')) LIKE ?",
+                (f"%{q.lower()}%", f"%{q.lower()}%"),
+            ).fetchall()
+        else:
+            rows = conn.execute(f"SELECT * FROM {table}").fetchall()
     except sqlite3.Error as e:
         conn.close()
         raise HTTPException(500, str(e))
     conn.close()
-    items = rows_to_list(rows)
-    if q:
-        s = q.lower()
-        def match(item: dict) -> bool:
-            blob = " ".join(
-                str(item.get(k) or "")
-                for k in ("name", "desc", "type", "region", "location", "source", "utility", "rarity", "style")
-            ).lower()
-            tags = item.get("tags") or []
-            return s in blob or any(s in str(t).lower() for t in tags)
-        items = [i for i in items if match(i)]
-    return items
+    return rows_to_list(rows)
+
+
+def _json_counts() -> dict[str, int]:
+    out = {}
+    for table, fname in MODULE_FILES.items():
+        fp = BASE / fname
+        if not fp.exists():
+            out[table] = -1
+            continue
+        try:
+            data = json.loads(fp.read_text(encoding="utf-8"))
+            out[table] = len(data) if isinstance(data, list) else -1
+        except Exception:
+            out[table] = -1
+    return out
 
 
 @app.get("/")
@@ -95,6 +124,8 @@ def root():
         "tables": TABLES,
         "endpoints": {
             "ui": "/ui",
+            "health": "/health",
+            "integrity": "/integrity",
             "version": "/version",
             "stats": "/stats",
             "search": "/search?q=",
@@ -103,6 +134,23 @@ def root():
             "table": "/{table}",
             "item": "/{table}/{id}",
         },
+    }
+
+
+@app.get("/health")
+def health():
+    db_ok = DB_PATH.exists()
+    ui_ok = (BASE / "once_human_guide_v19.html").exists()
+    modules_ok = all((BASE / "modules" / n).exists() for n in (
+        "ohg_runtime.js", "ohg_map.js", "ohg_builds.js", "ohg_pack_channel.js",
+    ))
+    return {
+        "ok": db_ok and ui_ok and modules_ok,
+        "api_version": API_VERSION,
+        "db": str(DB_PATH) if db_ok else None,
+        "ui": ui_ok,
+        "modules": modules_ok,
+        "server_time": datetime.now(timezone.utc).isoformat(),
     }
 
 
@@ -118,6 +166,32 @@ def serve_ui():
         if html.exists():
             return HTMLResponse(html.read_text(encoding="utf-8"))
     raise HTTPException(404, "UI HTML not found")
+
+
+@app.get("/ohg_data.js")
+def pack_js():
+    fp = BASE / "ohg_data.js"
+    if not fp.exists():
+        raise HTTPException(404, "ohg_data.js missing")
+    return FileResponse(str(fp), media_type="application/javascript")
+
+
+@app.get("/ohg_sw.js")
+def sw_js():
+    fp = BASE / "ohg_sw.js"
+    if not fp.exists():
+        raise HTTPException(404, "ohg_sw.js missing")
+    return FileResponse(str(fp), media_type="application/javascript")
+
+
+@app.get("/modules/{name}")
+def module_js(name: str):
+    if "/" in name or ".." in name or not name.endswith(".js"):
+        raise HTTPException(404, "module not found")
+    fp = BASE / "modules" / name
+    if not fp.exists():
+        raise HTTPException(404, "module not found")
+    return FileResponse(str(fp), media_type="application/javascript")
 
 
 @app.get("/version")
@@ -161,24 +235,108 @@ def stats():
             n = 0
         out[t] = n
         total += n
+    fts = False
+    try:
+        conn.execute("SELECT 1 FROM search_fts LIMIT 1")
+        fts = True
+    except Exception:
+        fts = False
     conn.close()
     out["total"] = total
     out["data_version"] = DATA_VERSION
+    out["fts"] = fts
     return out
+
+
+@app.get("/integrity")
+def integrity():
+    """Compare module JSON counts with SQLite. Pack stays canonical."""
+    json_counts = _json_counts()
+    sqlite_counts = {}
+    issues = []
+    fts = False
+    if not DB_PATH.exists():
+        return {"ok": False, "error": "sqlite missing", "json": json_counts}
+    conn = get_db()
+    try:
+        for t in TABLES:
+            try:
+                n = conn.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0]
+            except Exception as e:
+                n = -1
+                issues.append(f"{t}: {e}")
+            sqlite_counts[t] = n
+            jn = json_counts.get(t, -1)
+            if jn >= 0 and n >= 0 and jn != n:
+                issues.append(f"{t}: json {jn} != sqlite {n}")
+            if n >= 0:
+                dup = conn.execute(
+                    f"SELECT id, COUNT(*) c FROM {t} GROUP BY id HAVING c > 1"
+                ).fetchall()
+                for row in dup:
+                    issues.append(f"{t}: duplicate id {row['id']}")
+                missing = conn.execute(
+                    f"SELECT COUNT(*) FROM {t} WHERE id IS NULL OR trim(id)='' OR name IS NULL OR trim(name)=''"
+                ).fetchone()[0]
+                if missing:
+                    issues.append(f"{t}: {missing} rows missing id or name")
+        try:
+            conn.execute("SELECT 1 FROM search_fts LIMIT 1")
+            fts = True
+        except Exception:
+            issues.append("search_fts missing — rebuild DB via updater.py")
+    finally:
+        conn.close()
+    jtot = sum(v for v in json_counts.values() if v >= 0)
+    stot = sum(v for v in sqlite_counts.values() if v >= 0)
+    return {
+        "ok": not issues,
+        "match": jtot == stot and not issues,
+        "json_total": jtot,
+        "sqlite_total": stot,
+        "expected_records": 372,
+        "fts": fts,
+        "json": json_counts,
+        "sqlite": sqlite_counts,
+        "issues": issues,
+    }
 
 
 @app.get("/search")
 def search(q: str = Query(..., min_length=1), limit: int = Query(50, ge=1, le=200)):
-    s = q.lower()
+    conn = get_db()
     results = []
-    for table in TABLES:
-        for item in fetch_all(table):
-            blob = " ".join(str(v) for v in item.values() if v is not None).lower()
-            if s in blob:
-                results.append({"table": table, **item})
-            if len(results) >= limit:
-                return {"q": q, "count": len(results), "results": results}
-    return {"q": q, "count": len(results), "results": results}
+    try:
+        try:
+            rows = conn.execute(
+                "SELECT table_name, item_id, name, snippet(search_fts, 3, '', '', '…', 12) AS snippet "
+                "FROM search_fts WHERE search_fts MATCH ? LIMIT ?",
+                (q.replace('"', "") + "*", limit),
+            ).fetchall()
+            for row in rows:
+                results.append({
+                    "table": row["table_name"],
+                    "id": row["item_id"],
+                    "name": row["name"],
+                    "snippet": row["snippet"],
+                })
+            if results:
+                return {"q": q, "count": len(results), "engine": "fts5", "results": results}
+        except sqlite3.Error:
+            pass
+        like = f"%{q.lower()}%"
+        for table in TABLES:
+            rows = conn.execute(
+                f"SELECT * FROM {table} WHERE lower(coalesce(name,'')) LIKE ? OR lower(coalesce(desc,'')) LIKE ? LIMIT ?",
+                (like, like, limit - len(results)),
+            ).fetchall()
+            for row in rows:
+                results.append({"table": table, **rows_to_list([row])[0]})
+                if len(results) >= limit:
+                    return {"q": q, "count": len(results), "engine": "like", "results": results}
+    finally:
+        conn.close()
+    return {"q": q, "count": len(results), "engine": "like", "results": results}
 
 
 @app.get("/export")
@@ -196,7 +354,6 @@ def db_file():
     return FileResponse(str(DB_PATH), filename="once_human.db")
 
 
-# Generic table routes
 @app.get("/deviations")
 def list_deviations(type: str | None = None, q: str | None = None):
     items = fetch_all("deviations", q)
@@ -300,7 +457,7 @@ def update_check():
     try:
         req = urllib.request.Request(
             f"{raw}/version.json",
-            headers={"User-Agent": "OnceHumanGuide-API/5.0"},
+            headers={"User-Agent": "OnceHumanGuide-API/5.4"},
         )
         with urllib.request.urlopen(req, timeout=20) as resp:
             remote = json.loads(resp.read().decode("utf-8"))

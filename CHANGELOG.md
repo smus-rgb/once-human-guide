@@ -1,5 +1,14 @@
 # Changelog
 
+## 5.4.0 — 2026-10-01
+
+- `/ui` teď servuje `ohg_data.js` a `modules/*.js` (shell se na API opravdu spustí)
+- SQLite rebuild: indexy na `name` + virtual table `search_fts` (FTS5)
+- `GET /health`, `GET /integrity` (JSON vs SQLite, duplicitní id, prázdné name)
+- `/search` používá FTS5, fallback LIKE
+- v19 badge DB z `/integrity`
+- pack zůstává 372 entit
+
 ## 5.3.0 / shell 19.0 — 2026-10-01
 
 - Tenký host `once_human_guide_v19.html`; runtime v `modules/ohg_runtime.js`

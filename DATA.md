@@ -33,3 +33,7 @@ python3 updater.py
 Updater **assembles** `database_full.json` from module JSON when the monolithic file is not present, then rebuilds `once_human.db`.
 
 Full embedded SPA + SQLite dump: see **OnceHumanGuide_Complete.zip** in project artifacts.
+
+## DB layer (5.4.0)
+
+Pack JSON stays canonical. `updater.py` rebuilds SQLite with `name` indexes and `search_fts` (FTS5: table_name, item_id, name, body). Check with `GET /integrity` — expected 372 rows, no duplicate ids. User layer is not stored in this DB.
