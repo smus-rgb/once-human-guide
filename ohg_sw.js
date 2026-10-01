@@ -1,5 +1,5 @@
 /* Once Human Guide v18 — cache pack + shell */
-const CACHE = 'ohg-v18-307';
+const CACHE = 'ohg-v19-307';
 const PRECACHE = [
   './once_human_guide_v18.html',
   './once_human_guide_v17.html',

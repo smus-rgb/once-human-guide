@@ -1,0 +1,94 @@
+[
+  {
+    "id": "tech_overhaul_307",
+    "name": "Tech System Overhaul",
+    "type": "System",
+    "branch": "All",
+    "desc": "Live patch shipped 28 Sep 2026 (3.0.x): progression moves from level/phase gates to exploration. Characters start with basic tech unlocked. Future unlocks are not limited by scenario phase or character level.",
+    "source": "Official patch notes 2026-09-28",
+    "tags": [
+      "tech",
+      "3.0.7",
+      "progression",
+      "patch"
+    ]
+  },
+  {
+    "id": "tech_branch_survival",
+    "name": "Tech branch: Survival",
+    "type": "Branch",
+    "branch": "Survival",
+    "desc": "One of four rebuilt branches (Survival, Production, Combat, Building). Covers field survival unlocks discovered while exploring, not by hitting a level cap.",
+    "source": "Official patch notes 2026-09-28",
+    "tags": [
+      "tech",
+      "survival",
+      "branch"
+    ]
+  },
+  {
+    "id": "tech_branch_production",
+    "name": "Tech branch: Production",
+    "type": "Branch",
+    "branch": "Production",
+    "desc": "Crafting and facility unlocks. Cultural artifacts brought to the Synthesis Bench can reverse-engineer into recipes or tech points.",
+    "source": "Official patch notes 2026-09-28",
+    "tags": [
+      "tech",
+      "production",
+      "crafting"
+    ]
+  },
+  {
+    "id": "tech_branch_combat",
+    "name": "Tech branch: Combat",
+    "type": "Branch",
+    "branch": "Combat",
+    "desc": "Combat tech branch in the rebuilt tree. Unlocks are exploration-driven rather than scenario-phase locked.",
+    "source": "Official patch notes 2026-09-28",
+    "tags": [
+      "tech",
+      "combat",
+      "branch"
+    ]
+  },
+  {
+    "id": "tech_branch_building",
+    "name": "Tech branch: Building",
+    "type": "Branch",
+    "branch": "Building",
+    "desc": "Building tech branch. Terrain Modifier (Eternaland Shop) is a separate building tool for reshaping terrain, not a tech-tree node.",
+    "source": "Official patch notes 2026-09-28",
+    "tags": [
+      "tech",
+      "building",
+      "branch"
+    ]
+  },
+  {
+    "id": "tech_reverse_engineering",
+    "name": "Reverse Engineering",
+    "type": "Unlock",
+    "branch": "Production",
+    "desc": "Collect facilities and items marked as cultural artifacts in the wilderness, then process them at the Synthesis Bench. Can unlock crafting or grant Tech Points.",
+    "source": "Official patch notes 2026-09-28",
+    "tags": [
+      "tech",
+      "reverse-engineering",
+      "synthesis-bench"
+    ]
+  },
+  {
+    "id": "tech_terrain_modifier",
+    "name": "Terrain Modifier",
+    "type": "Tool",
+    "branch": "Building",
+    "desc": "Purchased in the Eternaland Shop. Place on the hotbar to reshape terrain (flatten or raise). Separate from the tech tree overhaul.",
+    "source": "Official patch notes 2026-09-28",
+    "tags": [
+      "building",
+      "terrain",
+      "eternaland"
+    ]
+  }
+]

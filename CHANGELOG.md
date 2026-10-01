@@ -1,15 +1,14 @@
 # Changelog
 
-## 5.2.0 / shell 18.0 — 2026-09-30
+## 5.3.0 / 2026-10-01-v19-379
 
-- AdaptiveShell v18 + ModuleHost + hash routing
-- Pack `ohg_data.js` 372 entit, SW cache `ohg-v18-307`
-- Installer/updater stahují `once_human_guide_v18.html`, `ohg_data.js`, `ohg_sw.js`
-- Sjednocené verze: `version.json` app 5.2.0, data `2026-09-30-v18-372`
-- Hotfix: Home badge App 18.0 (místo 17.0)
+- App: `/ui` now serves `once_human_guide_v18.html` (the v4 file was never in the repo, so the endpoint 404'd).
+- Database: version strings unified (`database_full.json` was still `v5-complete` while the shell claimed `v18-372`).
+- Database: `tech` module (7 records) for the 28 Sep 2026 tech-tree overhaul — Survival, Production, Combat, Building, reverse engineering, Terrain Modifier.
+- System: rebuild keeps `user_favorites`, `user_progress`, `builds`, `map_markers` and writes `audit_log`.
+- System: name indexes + SQL `LIKE` search instead of loading every row into Python.
+- API: `GET/POST/DELETE /favorites`.
 
-## 5.0.0 — 2026-09-30
+## 5.2.0 / 2026-09-30-v18-372
 
-- Installer, updater, FastAPI 5.x
-- 372 records, dual JSON + SQLite
-- UI v4 offline HTML
+- Adaptive shell v18, 372 curated records, installer/updater pull the v18 pack.

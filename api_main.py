@@ -15,8 +15,8 @@ DB_PATH = BASE / "once_human.db"
 if not DB_PATH.exists():
     DB_PATH = BASE.parent / "once_human.db"
 
-DATA_VERSION = "2026-09-30-v18-372"
-API_VERSION = "5.2.0"
+DATA_VERSION = "2026-10-01-v19-379"
+API_VERSION = "5.3.0"
 MAP_EMBEDS = {
     "thgl": "https://oncehuman.th.gl",
     "mapgenie": "https://mapgenie.io/once-human/maps/nalcott",
@@ -25,7 +25,7 @@ MAP_EMBEDS = {
 TABLES = [
     "deviations", "weapons", "armor", "mods", "bosses", "locations",
     "recipes", "materials", "scenarios", "quests", "events", "creatures",
-    "npcs", "plants", "fish", "animals", "flowers",
+    "npcs", "plants", "fish", "animals", "flowers", "tech",
 ]
 
 app = FastAPI(
@@ -108,12 +108,15 @@ def root():
 
 @app.get("/ui")
 def serve_ui():
-    html = BASE / "once_human_guide_ui_v4.html"
-    if not html.exists():
-        html = BASE / "once_human_guide_app.html"
-    if not html.exists():
-        raise HTTPException(404, "UI HTML not found")
-    return HTMLResponse(html.read_text(encoding="utf-8"))
+    for name in (
+        "once_human_guide_v18.html",
+        "once_human_guide_ui_v4.html",
+        "once_human_guide_app.html",
+    ):
+        html = BASE / name
+        if html.exists():
+            return HTMLResponse(html.read_text(encoding="utf-8"))
+    raise HTTPException(404, "UI HTML not found")
 
 
 @app.get("/version")
@@ -165,16 +168,83 @@ def stats():
 
 @app.get("/search")
 def search(q: str = Query(..., min_length=1), limit: int = Query(50, ge=1, le=200)):
-    s = q.lower()
+    """SQL LIKE search over name/desc/type. Falls back to in-memory scan."""
+    needle = f"%{q.lower()}%"
     results = []
-    for table in TABLES:
-        for item in fetch_all(table):
-            blob = " ".join(str(v) for v in item.values() if v is not None).lower()
-            if s in blob:
+    conn = get_db()
+    try:
+        for table in TABLES:
+            try:
+                cols = [r[1] for r in conn.execute(f"PRAGMA table_info({table})")]
+            except sqlite3.Error:
+                continue
+            blob_cols = [c for c in ("name", "desc", "type", "branch", "region", "source") if c in cols]
+            if not blob_cols:
+                continue
+            where = " OR ".join(f"lower(COALESCE({c},'')) LIKE ?" for c in blob_cols)
+            rows = conn.execute(
+                f"SELECT * FROM {table} WHERE {where} LIMIT ?",
+                (*([needle] * len(blob_cols)), limit),
+            ).fetchall()
+            for item in rows_to_list(rows):
                 results.append({"table": table, **item})
-            if len(results) >= limit:
-                return {"q": q, "count": len(results), "results": results}
+                if len(results) >= limit:
+                    return {"q": q, "count": len(results), "results": results}
+    finally:
+        conn.close()
     return {"q": q, "count": len(results), "results": results}
+
+
+@app.get("/favorites")
+def list_favorites():
+    conn = get_db()
+    try:
+        conn.execute(
+            "CREATE TABLE IF NOT EXISTS user_favorites (id INTEGER PRIMARY KEY AUTOINCREMENT, table_name TEXT NOT NULL, item_id TEXT NOT NULL, created_at TEXT DEFAULT (datetime('now')), UNIQUE(table_name, item_id))"
+        )
+        rows = conn.execute("SELECT * FROM user_favorites ORDER BY id DESC").fetchall()
+        return [dict(r) for r in rows]
+    finally:
+        conn.close()
+
+
+@app.post("/favorites")
+def add_favorite(table: str = Query(...), item_id: str = Query(...)):
+    if table not in TABLES:
+        raise HTTPException(400, "unknown table")
+    conn = get_db()
+    try:
+        conn.execute(
+            "CREATE TABLE IF NOT EXISTS user_favorites (id INTEGER PRIMARY KEY AUTOINCREMENT, table_name TEXT NOT NULL, item_id TEXT NOT NULL, created_at TEXT DEFAULT (datetime('now')), UNIQUE(table_name, item_id))"
+        )
+        conn.execute(
+            "INSERT OR IGNORE INTO user_favorites(table_name, item_id) VALUES (?, ?)",
+            (table, item_id),
+        )
+        conn.execute(
+            "INSERT INTO audit_log(action, detail) SELECT 'favorite', ? WHERE EXISTS (SELECT 1 FROM sqlite_master WHERE name='audit_log')",
+            (f"{table}/{item_id}",),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+    return {"ok": True, "table": table, "item_id": item_id}
+
+
+@app.delete("/favorites")
+def remove_favorite(table: str = Query(...), item_id: str = Query(...)):
+    conn = get_db()
+    try:
+        conn.execute(
+            "DELETE FROM user_favorites WHERE table_name=? AND item_id=?",
+            (table, item_id),
+        )
+        conn.commit()
+    except sqlite3.Error as e:
+        raise HTTPException(500, str(e))
+    finally:
+        conn.close()
+    return {"ok": True}
 
 
 @app.get("/export")
@@ -296,7 +366,7 @@ def update_check():
     try:
         req = urllib.request.Request(
             f"{raw}/version.json",
-            headers={"User-Agent": "OnceHumanGuide-API/5.0"},
+            headers={"User-Agent": "OnceHumanGuide-API/5.3"},
         )
         with urllib.request.urlopen(req, timeout=20) as resp:
             remote = json.loads(resp.read().decode("utf-8"))

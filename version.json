@@ -1,29 +1,32 @@
 {
-  "app_version": "5.2.0",
-  "shell_version": "18.0",
-  "data_version": "2026-09-30-v18-372",
-  "released_at": "2026-09-30T21:00:00Z",
+  "app_version": "5.3.0",
+  "shell_version": "19.0",
+  "data_version": "2026-10-01-v19-379",
+  "released_at": "2026-10-01T10:00:00Z",
   "min_app_version": "5.0.0",
   "patch_target": "3.0.7",
-  "records": 372,
-  "sw_cache": "ohg-v18-307",
+  "records": 379,
+  "sw_cache": "ohg-v19-307",
   "files": {
     "database_full.json": "data",
     "ohg_data.js": "pack",
     "once_human_guide_v18.html": "ui",
     "ohg_sw.js": "sw",
     "api_main.py": "api",
+    "db_layer.py": "db",
+    "tech.json": "data",
     "requirements.txt": "deps",
     "updater.py": "tool",
     "install.py": "tool",
     "version.json": "meta"
   },
-  "notes": "v18 AdaptiveShell + pack 372 + installer/updater stahují aktuální shell.",
+  "notes": "v19: UI route serves v18 shell, user tables survive rebuild, SQL search, tech module for the 28 Sep 2026 overhaul.",
   "changelog": [
-    "Unify version.json / OHG_META / SW cache ohg-v18-307",
-    "Installer + updater pull v18 html + ohg_data.js + ohg_sw.js",
-    "372 curated records across 17 categories",
-    "Home badge App 18.0 (hotfix A1)"
+    "Fix /ui so it serves once_human_guide_v18.html instead of missing v4",
+    "Align data_version across version.json, database_full.json and OHG_META",
+    "Add tech.json (7 records) for the 3.0 tech overhaul",
+    "Preserve favorites/progress/builds/markers across SQLite rebuild",
+    "SQL search + name indexes + /favorites"
   ],
   "github": {
     "owner": "smus-rgb",

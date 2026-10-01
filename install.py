@@ -61,6 +61,8 @@ DATA_JSON = [
     "fish.json",
     "animals.json",
     "flowers.json",
+    "tech.json",
+    "db_layer.py",
 ]
 
 OPTIONAL = [
@@ -92,6 +94,7 @@ MODULE_KEYS = [
     ("fish", "fish.json"),
     ("animals", "animals.json"),
     ("flowers", "flowers.json"),
+    ("tech", "tech.json"),
 ]
 
 
@@ -184,6 +187,12 @@ def assemble_database(dest_dir: Path) -> Path | None:
 
 def rebuild_sqlite(json_path: Path, db_path: Path) -> int:
     data = json.loads(json_path.read_text(encoding="utf-8"))
+    try:
+        from db_layer import snapshot_user, restore_user
+    except ImportError:
+        snapshot_user = lambda _p: {}
+        restore_user = lambda _c, _s: None
+    snap = snapshot_user(db_path)
     if db_path.exists():
         db_path.unlink()
     import sqlite3
@@ -214,6 +223,7 @@ def rebuild_sqlite(json_path: Path, db_path: Path) -> int:
             placeholders = ",".join("?" * len(cols))
             c.execute(f'INSERT INTO "{key}" VALUES ({placeholders})', vals)
             total += 1
+    restore_user(conn, snap)
     conn.commit()
     conn.close()
     return total
@@ -230,7 +240,7 @@ def write_launchers(dest_dir: Path) -> None:
         "echo \"  Once Human Guide\"\n"
         "echo \"  UI:  http://127.0.0.1:8000/ui\"\n"
         "echo \"  API: http://127.0.0.1:8000/docs\"\n"
-        "echo \"  Offline: open once_human_guide_ui_v4.html (if present)\"\n"
+        "echo \"  Offline: open once_human_guide_v18.html next to ohg_data.js\"\n"
         "echo \"\"\n"
         "exec python3 -m uvicorn api_main:app --host 0.0.0.0 --port 8000\n",
         encoding="utf-8",

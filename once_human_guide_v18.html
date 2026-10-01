@@ -154,7 +154,8 @@ const DB_CATS={
   animals:{key:'animals',title:'Animals'},
   plants:{key:'plants',title:'Plants',extra:'flowers'},
   resources:{key:'materials',title:'Resources'},
-  locations:{key:'locations',title:'Locations'}
+  locations:{key:'locations',title:'Locations'},
+  tech:{key:'tech',title:'Tech (3.0)'}
 };
 const BUILD_SLOTS=[
   {id:'weapon1',label:'Zbraň 1',cats:['weapons']},
@@ -335,7 +336,7 @@ function viewHome(){
   const done=Object.values(user.progress).filter(Boolean).length;
   const bp=typeof calcBuild==='function'?calcBuild():{power:0,filled:0};
   return `<div class="kicker">Dashboard</div><h1>Once Human Guide</h1>
-    <p class="sub">App 18.0 · ModuleHost · ${META.version||'pack'} · Patch ${META.patch||'3.0.7'} · ${n} entit · ${MODULES.length} modulů · AdaptiveShell ${device}</p>
+    <p class="sub">App 19.0 · ModuleHost · ${META.version||'pack'} · Patch ${META.patch||'3.0.7'} · ${n} entit · ${MODULES.length} modulů · AdaptiveShell ${device}</p>
     <div class="grid g4">
       <div class="card"><div class="kicker">Databáze</div><div class="stat">${n}</div><div class="muted">lokální pack</div></div>
       <div class="card"><div class="kicker">Build Power</div><div class="stat">${bp.power||'—'}</div><div class="muted">${bp.filled||0}/5 slotů</div></div>
@@ -672,7 +673,7 @@ function viewOffline(){
   const sw = navigator.serviceWorker && navigator.serviceWorker.controller ? 'ACTIVE' : (window.OHG_SW||'NONE');
   return `<div class="kicker">Offline</div><h1>Cache a synchronizace</h1>
     <div class="card"><div class="kicker">Status</div><b>${user.offline?'OFFLINE FIRST':'ONLINE PREFERRED'}</b>
-      <p class="muted">Pack v ohg_data.js (${META.entities} záznamů). User layer = localStorage. Service worker cache = ohg-v18-307. Pack kanál: local first, SW precache, volitelný remote version.json.</p>
+      <p class="muted">Pack v ohg_data.js (${META.entities} záznamů). User layer = localStorage. Service worker cache = ohg-v19-307. Pack kanál: local first, SW precache, volitelný remote version.json.</p>
       <div class="row"><span class="badge on">LOCAL PACK</span><span class="badge ${sw==='ACTIVE'?'on':''}">SW ${sw}</span></div>
       <div class="row" style="margin-top:10px">
         <button class="btn ghost" onclick="user.offline=!user.offline;saveUser();render()">Přepnout offline flag</button>
