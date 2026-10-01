@@ -346,7 +346,7 @@ class InstallerGUI:
             "#!/usr/bin/env bash\nset -e\ncd \"$(dirname \"$0\")\"\n"
             "python3 -m pip install -q -r requirements.txt 2>/dev/null || true\n"
             "echo \"  Once Human Guide — http://127.0.0.1:8000/ui\"\n"
-            "exec python3 -m uvicorn api_main:app --host 0.0.0.0 --port 8000\n",
+            "exec python3 -m uvicorn api_main:app --host 127.0.0.1 --port 8000\n",
             encoding="utf-8",
         )
         try:
