@@ -1,0 +1,3096 @@
+{
+  "version": "2026-09-30-v5-complete",
+  "deviations": [
+    {
+      "id": "dev_butterfly",
+      "name": "Butterfly's Emissary",
+      "type": "Combat",
+      "rarity": "Epic",
+      "utility": "Attacker",
+      "desc": "Fatal Flaw weakspot attacker. Tutorial + Silo Alpha.",
+      "source": "Tutorial / Silo Alpha"
+    },
+    {
+      "id": "dev_festering",
+      "name": "Festering Gel",
+      "type": "Combat",
+      "rarity": "Epic",
+      "utility": "Defender",
+      "desc": "Fortification heal + sanity. Best beginner combat.",
+      "source": "Foul Shadowhunter"
+    },
+    {
+      "id": "dev_lonewolf",
+      "name": "Lonewolf's Whisper",
+      "type": "Combat",
+      "rarity": "Legendary",
+      "utility": "Attacker",
+      "desc": "Top DPS combat deviation.",
+      "source": "Shadow Hound / Monolith of Thirst"
+    },
+    {
+      "id": "dev_polar",
+      "name": "Polar Jelly",
+      "type": "Combat",
+      "rarity": "Epic",
+      "utility": "Control",
+      "desc": "Frost vortex synergy.",
+      "source": "Winter content"
+    },
+    {
+      "id": "dev_teddy",
+      "name": "Dr. Teddy",
+      "type": "Combat",
+      "rarity": "Epic",
+      "utility": "Support",
+      "desc": "Healing and revive utility.",
+      "source": "Silo Theta"
+    },
+    {
+      "id": "dev_digby",
+      "name": "The Digby Boy",
+      "type": "Territory",
+      "rarity": "Epic",
+      "utility": "Miner",
+      "desc": "Passive ore mining up to silver.",
+      "source": "Mining nodes"
+    },
+    {
+      "id": "dev_bee",
+      "name": "Buzzy Bee",
+      "type": "Territory",
+      "rarity": "Rare",
+      "utility": "Farmer",
+      "desc": "Crop mutation chance.",
+      "source": "Farms / Morphic Crates"
+    },
+    {
+      "id": "dev_beaver",
+      "name": "Logging Beaver",
+      "type": "Territory",
+      "rarity": "Rare",
+      "utility": "Logger",
+      "desc": "Produces logs and rare furniture.",
+      "source": "Wilderness docks"
+    },
+    {
+      "id": "dev_eel",
+      "name": "Electric Eel",
+      "type": "Territory",
+      "rarity": "Epic",
+      "utility": "Power",
+      "desc": "Boosts generator output.",
+      "source": "Fishing"
+    },
+    {
+      "id": "dev_growshroom",
+      "name": "Growshroom",
+      "type": "Territory",
+      "rarity": "Epic",
+      "utility": "Farmer",
+      "desc": "Automated farming support.",
+      "source": "World"
+    },
+    {
+      "id": "dev_chef",
+      "name": "Chefosaurus Rex",
+      "type": "Territory",
+      "rarity": "Epic",
+      "utility": "Cooking",
+      "desc": "Cooking bonuses.",
+      "source": "Silo Phi / quest"
+    },
+    {
+      "id": "dev_nutcracker",
+      "name": "Nutcracker",
+      "type": "Territory",
+      "rarity": "Epic",
+      "utility": "Defense",
+      "desc": "Mobile turret territory defense.",
+      "source": "Mensdevoran"
+    },
+    {
+      "id": "dev_harveseed",
+      "name": "Harveseed",
+      "type": "Crafting",
+      "rarity": "Epic",
+      "utility": "Crafting",
+      "desc": "Produces Heart Vine for Chloro-armor.",
+      "source": "Treant"
+    },
+    {
+      "id": "dev_dreamcatcher",
+      "name": "Dreamcatcher",
+      "type": "Crafting",
+      "rarity": "Epic",
+      "utility": "Crafting",
+      "desc": "Produces Thread of Dreams for The Weaver.",
+      "source": "Arachsiam"
+    },
+    {
+      "id": "dev_atomic",
+      "name": "Atomic Lighter",
+      "type": "Crafting",
+      "rarity": "Epic",
+      "utility": "Crafting",
+      "desc": "Produces Split-Core Cotton for Fusion Lighter.",
+      "source": "Silo EX1"
+    },
+    {
+      "id": "dev_artisan",
+      "name": "Artisan's Touch",
+      "type": "Crafting",
+      "rarity": "Epic",
+      "utility": "Repair",
+      "desc": "Universal Toolkits for auto repairs.",
+      "source": "Carnival of Doom"
+    },
+    {
+      "id": "dev_space",
+      "name": "Space Turner",
+      "type": "Crafting",
+      "rarity": "Epic",
+      "utility": "Utility",
+      "desc": "Teleport-related utility.",
+      "source": "World / craft"
+    },
+    {
+      "id": "dev_pup",
+      "name": "Pup Buddy",
+      "type": "Crafting",
+      "rarity": "Rare",
+      "utility": "Carry",
+      "desc": "Carrying capacity help.",
+      "source": "World"
+    },
+    {
+      "id": "dev_h37",
+      "name": "H37",
+      "type": "Combat",
+      "rarity": "Epic",
+      "utility": "Support",
+      "desc": "Greywater questline deviation.",
+      "source": "H37 quest"
+    },
+    {
+      "id": "dev_disco",
+      "name": "Disco Ball",
+      "type": "Crafting",
+      "rarity": "Epic",
+      "utility": "Crafting",
+      "desc": "Inspiration Fragment / Utter Delight.",
+      "source": "Hales Moving House"
+    },
+    {
+      "id": "dev_mini_wonder",
+      "name": "Mini Wonder",
+      "type": "Combat",
+      "rarity": "Rare",
+      "utility": "Defender",
+      "desc": "Defensive combat deviation.",
+      "source": "Craft / world"
+    },
+    {
+      "id": "dev_by_the_wind",
+      "name": "By-the-Wind",
+      "type": "Combat",
+      "rarity": "Epic",
+      "utility": "Attacker",
+      "desc": "Prime War reward combat deviation.",
+      "source": "Prime War"
+    },
+    {
+      "id": "dev_rebecca",
+      "name": "Rebecca",
+      "type": "Territory",
+      "rarity": "Epic",
+      "utility": "Energy",
+      "desc": "Improves Deviant energy recovery.",
+      "source": "World"
+    },
+    {
+      "id": "dev_wish",
+      "name": "Mr. Wish",
+      "type": "Combat",
+      "rarity": "Epic",
+      "utility": "Support",
+      "desc": "Silo Sigma / PvP associated.",
+      "source": "Silo Sigma"
+    },
+    {
+      "id": "dev_snapshot",
+      "name": "Snapshot",
+      "type": "Combat",
+      "rarity": "Epic",
+      "utility": "Sniper support",
+      "desc": "Way of Winter sniper-support.",
+      "source": "Secret Servitor"
+    },
+    {
+      "id": "dev_brave",
+      "name": "Brave George",
+      "type": "Combat",
+      "rarity": "Epic",
+      "utility": "Attacker",
+      "desc": "Forsaken Giant / event box option.",
+      "source": "Forsaken Giant / Autumn event"
+    },
+    {
+      "id": "dev_flame",
+      "name": "Flame Essence – Golden Toad",
+      "type": "Combat",
+      "rarity": "Epic",
+      "utility": "Attacker",
+      "desc": "Autumn event selectable.",
+      "source": "Golden Autumn box"
+    },
+    {
+      "id": "dev_rain",
+      "name": "Rain Man – Youthful Heart",
+      "type": "Combat",
+      "rarity": "Epic",
+      "utility": "Support",
+      "desc": "Autumn event selectable.",
+      "source": "Golden Autumn box"
+    },
+    {
+      "id": "dev_whalepup",
+      "name": "Whalepup",
+      "type": "Combat",
+      "rarity": "Epic",
+      "utility": "Support",
+      "desc": "Autumn event selectable.",
+      "source": "Golden Autumn box"
+    },
+    {
+      "id": "dev_soul",
+      "name": "Soul Summoner",
+      "type": "Combat",
+      "rarity": "Epic",
+      "utility": "Status",
+      "desc": "Autumn event selectable; status synergy.",
+      "source": "Golden Autumn box"
+    },
+    {
+      "id": "dev_labrador",
+      "name": "Labrador",
+      "type": "Companion",
+      "rarity": "Epic",
+      "utility": "Pet",
+      "desc": "Event dog deviation 5/5 option.",
+      "source": "Golden Autumn / Dog Crate"
+    },
+    {
+      "id": "dev_blackback",
+      "name": "Blackback",
+      "type": "Companion",
+      "rarity": "Epic",
+      "utility": "Pet",
+      "desc": "Event dog deviation 5/5 option.",
+      "source": "Golden Autumn / Dog Crate"
+    },
+    {
+      "id": "dev_doberman",
+      "name": "Doberman",
+      "type": "Companion",
+      "rarity": "Epic",
+      "utility": "Pet",
+      "desc": "Event dog deviation 5/5 option.",
+      "source": "Golden Autumn / Dog Crate"
+    },
+    {
+      "id": "dev_zeno",
+      "name": "Zeno-Purifier",
+      "type": "Combat",
+      "rarity": "Epic",
+      "utility": "Melee",
+      "desc": "Season melee goal reward.",
+      "source": "Season Goal Melee 200"
+    },
+    {
+      "id": "dev_strange_door",
+      "name": "Strange Door",
+      "type": "Utility",
+      "rarity": "Epic",
+      "utility": "World",
+      "desc": "Doors event drop chance.",
+      "source": "Doors Event"
+    },
+    {
+      "id": "dev_enchanting",
+      "name": "Enchanting Void",
+      "type": "Combat",
+      "rarity": "Epic",
+      "utility": "Control",
+      "desc": "Silo Theta farm route.",
+      "source": "Silo Theta"
+    },
+    {
+      "id": "dev_frog",
+      "name": "Frog the Leaper",
+      "type": "Crafting",
+      "rarity": "Rare",
+      "utility": "Mobility",
+      "desc": "Silver Spring for Spring Legs.",
+      "source": "World"
+    },
+    {
+      "id": "dev_snow",
+      "name": "Snow Globe",
+      "type": "Crafting",
+      "rarity": "Rare",
+      "utility": "Frost",
+      "desc": "Snowdust for Snowball tactical.",
+      "source": "Winter"
+    },
+    {
+      "id": "dev_orb",
+      "name": "Orb Lightning",
+      "type": "Crafting",
+      "rarity": "Rare",
+      "utility": "Shock",
+      "desc": "Plasma for Lightning Bottle.",
+      "source": "World"
+    },
+    {
+      "id": "dev_director",
+      "name": "Director Fox",
+      "type": "Territory",
+      "rarity": "Epic",
+      "utility": "Tamer",
+      "desc": "Taming expert.",
+      "source": "World / fusion"
+    },
+    {
+      "id": "dev_raven",
+      "name": "Doctor Raven",
+      "type": "Territory",
+      "rarity": "Epic",
+      "utility": "Medicine",
+      "desc": "Bizarre medicine; fusion obtain.",
+      "source": "Deviation fusion"
+    },
+    {
+      "id": "dev_fetch",
+      "name": "Fetch-A-Lot Bunny",
+      "type": "Territory",
+      "rarity": "Rare",
+      "utility": "Gather",
+      "desc": "Chance from Dracena trees.",
+      "source": "Dracena chop"
+    },
+    {
+      "id": "dev_grumpy",
+      "name": "Grumpy Bulb",
+      "type": "Territory",
+      "rarity": "Rare",
+      "utility": "Farm",
+      "desc": "From Deviated Onion harvest.",
+      "source": "Deviated Onion"
+    },
+    {
+      "id": "dev_atomic_snail",
+      "name": "Atomic Snail",
+      "type": "Combat",
+      "rarity": "Epic",
+      "utility": "Loot",
+      "desc": "Prime War / Stardust Advent crates.",
+      "source": "Prime War crates"
+    },
+    {
+      "id": "dev_berserk",
+      "name": "Berserkosaurus Rex",
+      "type": "Territory",
+      "rarity": "Epic",
+      "utility": "Combat support",
+      "desc": "Not in Manibus; other scenarios.",
+      "source": "Scenario specific"
+    },
+    {
+      "id": "dev_cattiva",
+      "name": "Cattiva",
+      "type": "Companion",
+      "rarity": "Rare",
+      "utility": "Pet",
+      "desc": "Companion check-in event.",
+      "source": "Event"
+    },
+    {
+      "id": "dev_void",
+      "name": "Void",
+      "type": "Combat",
+      "rarity": "Epic",
+      "utility": "Control",
+      "desc": "Advanced combat control.",
+      "source": "High content"
+    },
+    {
+      "id": "dev_pyro",
+      "name": "Pyro Ducky",
+      "type": "Combat",
+      "rarity": "Rare",
+      "utility": "Burn",
+      "desc": "Burn-oriented companion combat.",
+      "source": "World / event"
+    },
+    {
+      "id": "dev_shroom",
+      "name": "Shroom",
+      "type": "Territory",
+      "rarity": "Rare",
+      "utility": "Farm",
+      "desc": "Farming support variant.",
+      "source": "World"
+    },
+    {
+      "id": "dev_wolf",
+      "name": "Wolf Pup",
+      "type": "Companion",
+      "rarity": "Rare",
+      "utility": "Pet",
+      "desc": "Beastmaster related.",
+      "source": "Breeding / event"
+    },
+    {
+      "id": "dev_fox",
+      "name": "Fox",
+      "type": "Territory",
+      "rarity": "Rare",
+      "utility": "Scout",
+      "desc": "Territory utility.",
+      "source": "World"
+    },
+    {
+      "id": "dev_owl",
+      "name": "Owl",
+      "type": "Combat",
+      "rarity": "Rare",
+      "utility": "Scout",
+      "desc": "Night / scout support.",
+      "source": "World"
+    },
+    {
+      "id": "dev_crab",
+      "name": "Crab",
+      "type": "Territory",
+      "rarity": "Rare",
+      "utility": "Coast",
+      "desc": "Coastal gatherer.",
+      "source": "Coast"
+    },
+    {
+      "id": "dev_snail",
+      "name": "Snail",
+      "type": "Territory",
+      "rarity": "Rare",
+      "utility": "Slow utility",
+      "desc": "Territory utility.",
+      "source": "World"
+    },
+    {
+      "id": "dev_cat",
+      "name": "Cat",
+      "type": "Companion",
+      "rarity": "Rare",
+      "utility": "Pet",
+      "desc": "Companion pet.",
+      "source": "Event / world"
+    },
+    {
+      "id": "dev_bird",
+      "name": "Songbird",
+      "type": "Territory",
+      "rarity": "Rare",
+      "utility": "Mood",
+      "desc": "Mood related territory.",
+      "source": "World"
+    },
+    {
+      "id": "dev_mushroom",
+      "name": "Mushroom Buddy",
+      "type": "Territory",
+      "rarity": "Rare",
+      "utility": "Farm",
+      "desc": "Growshroom related.",
+      "source": "Farms"
+    },
+    {
+      "id": "dev_spider",
+      "name": "Spider",
+      "type": "Combat",
+      "rarity": "Rare",
+      "utility": "Control",
+      "desc": "Web / control combat.",
+      "source": "Ruins"
+    },
+    {
+      "id": "dev_bat",
+      "name": "Bat",
+      "type": "Combat",
+      "rarity": "Rare",
+      "utility": "Scout",
+      "desc": "Night combat support.",
+      "source": "Caves"
+    },
+    {
+      "id": "dev_plant",
+      "name": "Plantoid",
+      "type": "Territory",
+      "rarity": "Rare",
+      "utility": "Farm",
+      "desc": "Plant mutation support.",
+      "source": "Farms"
+    },
+    {
+      "id": "dev_robot",
+      "name": "Scrap Bot",
+      "type": "Territory",
+      "rarity": "Rare",
+      "utility": "Salvage",
+      "desc": "Scrap gathering.",
+      "source": "Industrial"
+    },
+    {
+      "id": "dev_ghost",
+      "name": "Ghost",
+      "type": "Combat",
+      "rarity": "Epic",
+      "utility": "Phase",
+      "desc": "Phase / evade combat.",
+      "source": "Anomaly"
+    },
+    {
+      "id": "dev_ice",
+      "name": "Ice Cube",
+      "type": "Combat",
+      "rarity": "Rare",
+      "utility": "Frost",
+      "desc": "Frost support.",
+      "source": "Winter"
+    },
+    {
+      "id": "dev_fire",
+      "name": "Ember",
+      "type": "Combat",
+      "rarity": "Rare",
+      "utility": "Burn",
+      "desc": "Burn support.",
+      "source": "World"
+    },
+    {
+      "id": "dev_water",
+      "name": "Droplet",
+      "type": "Territory",
+      "rarity": "Rare",
+      "utility": "Water",
+      "desc": "Water / cleanse utility.",
+      "source": "Lakes"
+    },
+    {
+      "id": "dev_stone",
+      "name": "Golem Shard",
+      "type": "Territory",
+      "rarity": "Rare",
+      "utility": "Defense",
+      "desc": "Territory hardener.",
+      "source": "Mountains"
+    },
+    {
+      "id": "dev_wind",
+      "name": "Zephyr",
+      "type": "Combat",
+      "rarity": "Rare",
+      "utility": "Mobility",
+      "desc": "Speed / wind combat.",
+      "source": "Highlands"
+    },
+    {
+      "id": "dev_light",
+      "name": "Prism",
+      "type": "Combat",
+      "rarity": "Epic",
+      "utility": "Light",
+      "desc": "Light / purify combat.",
+      "source": "Anomaly"
+    },
+    {
+      "id": "dev_dark",
+      "name": "Shade",
+      "type": "Combat",
+      "rarity": "Epic",
+      "utility": "Shadow",
+      "desc": "Shadow combat.",
+      "source": "Anomaly"
+    },
+    {
+      "id": "dev_metal",
+      "name": "Iron Buddy",
+      "type": "Territory",
+      "rarity": "Rare",
+      "utility": "Metal",
+      "desc": "Metal scrap support.",
+      "source": "Industrial"
+    },
+    {
+      "id": "dev_final",
+      "name": "Core Spark",
+      "type": "Combat",
+      "rarity": "Legendary",
+      "utility": "Ultimate",
+      "desc": "High-end combat spark.",
+      "source": "Late content"
+    }
+  ],
+  "weapons": [
+    {
+      "id": "w_socr_valor",
+      "name": "SOCR - The Last Valor",
+      "type": "Assault Rifle",
+      "rarity": "Legendary",
+      "style": "Operator",
+      "desc": "Benchmark AR 2026. 45 DMG, 515 RPM, 30 mag. S+ pro silo/monolith. Shrapnel synergy.",
+      "tags": [
+        "ar",
+        "shrapnel",
+        "dps",
+        "s-tier"
+      ]
+    },
+    {
+      "id": "w_socr_wildfire",
+      "name": "SOCR - Wildfire",
+      "type": "Assault Rifle",
+      "rarity": "Legendary",
+      "style": "Operator",
+      "desc": "Spolehlivá AR pro Shrapnel build. Vysoké RPM, crit stackování.",
+      "tags": [
+        "ar",
+        "shrapnel",
+        "dps"
+      ]
+    },
+    {
+      "id": "w_socr_outsider",
+      "name": "SOCR - Outsider",
+      "type": "Assault Rifle",
+      "rarity": "Epic",
+      "style": "Operator",
+      "desc": "Epic SOCR varianta. Solid mid-game AR.",
+      "tags": [
+        "ar"
+      ]
+    },
+    {
+      "id": "w_kam_abyss",
+      "name": "KAM - Abyss Glance",
+      "type": "Assault Rifle",
+      "rarity": "Legendary",
+      "style": "—",
+      "desc": "39 DMG, 600 RPM, 50 mag. High capacity AR.",
+      "tags": [
+        "ar"
+      ]
+    },
+    {
+      "id": "w_m416_silent",
+      "name": "M416 - Silent Anabasis",
+      "type": "Assault Rifle",
+      "rarity": "Legendary",
+      "style": "—",
+      "desc": "33 DMG, 750 RPM. High fire rate AR.",
+      "tags": [
+        "ar"
+      ]
+    },
+    {
+      "id": "w_aug_electron",
+      "name": "AUG - Electron Cloud",
+      "type": "Assault Rifle",
+      "rarity": "Legendary",
+      "style": "Operator",
+      "desc": "Shock elemental AR. Electric Orb rebound, Shock DMG boost.",
+      "tags": [
+        "ar",
+        "shock"
+      ]
+    },
+    {
+      "id": "w_ebr_octopus",
+      "name": "EBR-14 - Octopus! Grilled Rings!",
+      "type": "Assault Rifle",
+      "rarity": "Legendary",
+      "style": "—",
+      "desc": "Burn on hit, fire ring při max Burn stacks. Blaze build.",
+      "tags": [
+        "ar",
+        "blaze"
+      ]
+    },
+    {
+      "id": "w_predator",
+      "name": "MG4 - Predator",
+      "type": "LMG",
+      "rarity": "Legendary",
+      "style": "Huntsman",
+      "desc": "Legendary LMG. High sustained fire for Shrapnel/status.",
+      "tags": [
+        "lmg",
+        "dps"
+      ]
+    },
+    {
+      "id": "w_kvk_bull",
+      "name": "KVK 3 - Bull",
+      "type": "Shotgun",
+      "rarity": "Legendary",
+      "style": "Juggernaut",
+      "desc": "Silný shotgun pro close-range a silosy. Bounce Blast.",
+      "tags": [
+        "shotgun",
+        "close"
+      ]
+    },
+    {
+      "id": "w_acs_pyro",
+      "name": "ACS12 - Pyroclasm",
+      "type": "Shotgun",
+      "rarity": "Legendary",
+      "style": "—",
+      "desc": "Automatic shotgun, burn on hit, fire pools. Season shotgun pick.",
+      "tags": [
+        "shotgun",
+        "blaze",
+        "s-tier"
+      ]
+    },
+    {
+      "id": "w_dbsg_doom",
+      "name": "DBSG - Doombringer",
+      "type": "Shotgun",
+      "rarity": "Legendary",
+      "style": "—",
+      "desc": "High burst double-barrel shotgun.",
+      "tags": [
+        "shotgun"
+      ]
+    },
+    {
+      "id": "w_aws_bullseye",
+      "name": "AWS.338 - Bullseye",
+      "type": "Sniper Rifle",
+      "rarity": "Legendary",
+      "style": "—",
+      "desc": "Best precision rifle. ~316 DMG, long range. S+ sniper.",
+      "tags": [
+        "sniper",
+        "s-tier"
+      ]
+    },
+    {
+      "id": "w_hamr_brahminy",
+      "name": "HAMR - Brahminy",
+      "type": "Sniper Rifle",
+      "rarity": "Legendary",
+      "style": "—",
+      "desc": "Semi-auto sniper, 8 mag, solid DPS.",
+      "tags": [
+        "sniper"
+      ]
+    },
+    {
+      "id": "w_mps7_outer",
+      "name": "MPS7 - Outer Space",
+      "type": "SMG",
+      "rarity": "Legendary",
+      "style": "—",
+      "desc": "850 RPM SMG. Close-range burst king. Power Surge synergy.",
+      "tags": [
+        "smg",
+        "close",
+        "s-tier"
+      ]
+    },
+    {
+      "id": "w_kvsbr_jaws",
+      "name": "KV-SBR - Little Jaws",
+      "type": "SMG",
+      "rarity": "Legendary",
+      "style": "—",
+      "desc": "1000 RPM SMG, 39 mag. Aggressive CQC.",
+      "tags": [
+        "smg"
+      ]
+    },
+    {
+      "id": "w_de50_jaws",
+      "name": "DE.50 - Jaws",
+      "type": "Pistol",
+      "rarity": "Legendary",
+      "style": "Beyonder",
+      "desc": "Legenda pistol. Silný secondary.",
+      "tags": [
+        "pistol"
+      ]
+    },
+    {
+      "id": "w_r500_memento",
+      "name": "R500 - Memento",
+      "type": "Pistol",
+      "rarity": "Legendary",
+      "style": "Huntsman",
+      "desc": "High impact huntsman revolver.",
+      "tags": [
+        "pistol"
+      ]
+    },
+    {
+      "id": "w_g17_haz",
+      "name": "G17 - Hazardous Object",
+      "type": "Pistol",
+      "rarity": "Legendary",
+      "style": "Wanderer",
+      "desc": "Status / hazard focused pistol.",
+      "tags": [
+        "pistol",
+        "status"
+      ]
+    },
+    {
+      "id": "w_masamune",
+      "name": "The Fabled Masamune",
+      "type": "Melee",
+      "rarity": "Legendary",
+      "style": "Juggernaut",
+      "desc": "Legendární meč pro melee buildy.",
+      "tags": [
+        "melee"
+      ]
+    },
+    {
+      "id": "w_mps5_kumawink",
+      "name": "MPS5 - Kumawink",
+      "type": "SMG",
+      "rarity": "Legendary",
+      "style": "—",
+      "desc": "37 DMG, 750 RPM SMG. Strong mid-close range.",
+      "tags": [
+        "smg"
+      ]
+    },
+    {
+      "id": "w_sks_pathfinder",
+      "name": "SKS - Pathfinder",
+      "type": "Sniper Rifle",
+      "rarity": "Legendary",
+      "style": "—",
+      "desc": "Semi-auto sniper, 20 mag, high RPM for marksman.",
+      "tags": [
+        "sniper"
+      ]
+    },
+    {
+      "id": "w_kvd_boom",
+      "name": "KVD - Boom! Boom!",
+      "type": "LMG",
+      "rarity": "Legendary",
+      "style": "—",
+      "desc": "High capacity LMG, popular for sustained fire builds.",
+      "tags": [
+        "lmg",
+        "dps"
+      ]
+    },
+    {
+      "id": "w_compound_bow",
+      "name": "Compound Bow - The Burden of Betrayal",
+      "type": "Bow",
+      "rarity": "Legendary",
+      "style": "—",
+      "desc": "Sniping + AoE damage combination bow.",
+      "tags": [
+        "bow"
+      ]
+    },
+    {
+      "id": "w_mg4_memories",
+      "name": "MG4 - Conflicting Memories",
+      "type": "LMG",
+      "rarity": "Legendary",
+      "style": "—",
+      "desc": "Way of Winter LMG variant. Reworked 3.0.6 Shrapnel rhythm.",
+      "tags": [
+        "lmg",
+        "winter",
+        "3.0.6"
+      ]
+    },
+    {
+      "id": "w_db12_raining",
+      "name": "DB12 - Raining Cash",
+      "type": "Shotgun",
+      "rarity": "Legendary",
+      "style": "—",
+      "desc": "Drum-style shotgun, solid dungeon option.",
+      "tags": [
+        "shotgun"
+      ]
+    },
+    {
+      "id": "w_qbj97_fiery",
+      "name": "QBJ97 - Fiery Trees and Silver Flowers",
+      "type": "Assault Rifle",
+      "rarity": "Legendary",
+      "style": "—",
+      "desc": "Added July 2026 (3.0.1 anniversary). Hits can apply Unstable Bomber. Spark stacks reduce recoil; full Spark boosts Unstable Bomber chance. Blueprint system.",
+      "tags": [
+        "ar",
+        "unstable-bomber",
+        "3.0.1"
+      ]
+    },
+    {
+      "id": "w_sn700_finale",
+      "name": "SN700 - Finale",
+      "type": "Sniper Rifle",
+      "rarity": "Legendary",
+      "style": "—",
+      "desc": "Added July 2026 (3.0.1). Hits chance to trigger Shrapnel; weakspot hits guarantee Shrapnel. Blueprint system.",
+      "tags": [
+        "sniper",
+        "shrapnel",
+        "3.0.1"
+      ]
+    },
+    {
+      "id": "w_fp9_rules",
+      "name": "FP9 - Additional Rules",
+      "type": "SMG",
+      "rarity": "Legendary",
+      "style": "Beyonder",
+      "desc": "Also known as TEC9 - Additional Rules (renamed). Fortress Warfare on hit (CD). Empty reload restores Deviant Power. After Deviation skills, bullets deal elemental DMG by Deviation type. Status DMG focused after balance.",
+      "tags": [
+        "smg",
+        "beyonder",
+        "status",
+        "3.0.x"
+      ]
+    }
+  ],
+  "armor": [
+    {
+      "id": "set_lonewolf",
+      "name": "Lonewolf Set",
+      "type": "Armor Set",
+      "rarity": "Legendary",
+      "style": "Juggernaut",
+      "desc": "Magazine +10%, Crit Rate +5%. Crit → Lone Shadow stacks (až +60% Crit DMG). Univerzální endgame set.",
+      "pieces": 4,
+      "tags": [
+        "crit",
+        "dps",
+        "endgame",
+        "s-tier"
+      ]
+    },
+    {
+      "id": "set_shelterer",
+      "name": "Shelterer Set",
+      "type": "Armor Set",
+      "rarity": "Legendary",
+      "style": "Wanderer",
+      "desc": "Status DMG Reduction + Element DMG. Základ pro elemental (Blaze/Frost/Shock/Blast) buildy.",
+      "pieces": 4,
+      "tags": [
+        "elemental",
+        "defense"
+      ]
+    },
+    {
+      "id": "set_falcon",
+      "name": "Falcon Set",
+      "type": "Armor Set",
+      "rarity": "Epic",
+      "style": "Huntsman",
+      "desc": "Mid-game combat set. Crit a weapon DMG bonusy. Snadno z world crates.",
+      "pieces": 4,
+      "tags": [
+        "midgame",
+        "crit"
+      ]
+    },
+    {
+      "id": "set_scout",
+      "name": "Scout Set",
+      "type": "Armor Set",
+      "rarity": "Rare",
+      "style": "Wanderer",
+      "desc": "Max HP + Weapon DMG, bonus při undetected. Early combat.",
+      "pieces": 4,
+      "tags": [
+        "early",
+        "stealth"
+      ]
+    },
+    {
+      "id": "set_raid",
+      "name": "Raid Set",
+      "type": "Armor Set",
+      "rarity": "Rare",
+      "style": "Wanderer",
+      "desc": "Gathering Speed + Load, méně Staminy při glide/roll. Farm set.",
+      "pieces": 4,
+      "tags": [
+        "gathering"
+      ]
+    },
+    {
+      "id": "set_rustic",
+      "name": "Rustic Set",
+      "type": "Armor Set",
+      "rarity": "Common",
+      "style": "Wanderer",
+      "desc": "Movement Speed, Melee DMG, HP, Gathering. Starter set.",
+      "pieces": 5,
+      "tags": [
+        "starter"
+      ]
+    },
+    {
+      "id": "set_bastille",
+      "name": "Bastille Set",
+      "type": "Armor Set",
+      "rarity": "Legendary",
+      "style": "Beyonder",
+      "desc": "Obranný set se shield mechanikou a vulnerability při break.",
+      "pieces": 4,
+      "tags": [
+        "tank",
+        "defense"
+      ]
+    },
+    {
+      "id": "set_blackstone",
+      "name": "Blackstone Set",
+      "type": "Armor Set",
+      "rarity": "Legendary",
+      "style": "Wanderer",
+      "desc": "Way of Winter legendary set. Vysoké HP / Pollution / Psi.",
+      "pieces": 6,
+      "tags": [
+        "winter",
+        "tank"
+      ]
+    },
+    {
+      "id": "set_savior",
+      "name": "Savior Set",
+      "type": "Armor Set",
+      "rarity": "Legendary",
+      "style": "Operator",
+      "desc": "Support/heal oriented legendary set.",
+      "pieces": 4,
+      "tags": [
+        "heal",
+        "support"
+      ]
+    },
+    {
+      "id": "set_stormweaver",
+      "name": "Stormweaver Set",
+      "type": "Armor Set",
+      "rarity": "Legendary",
+      "style": "Stranger",
+      "desc": "Shock/elemental focused set.",
+      "pieces": 4,
+      "tags": [
+        "shock",
+        "elemental"
+      ]
+    },
+    {
+      "id": "set_renegade",
+      "name": "Renegade Set",
+      "type": "Armor Set",
+      "rarity": "Epic",
+      "style": "Huntsman",
+      "desc": "Aggressive mid-game huntsman set.",
+      "pieces": 4,
+      "tags": [
+        "midgame"
+      ]
+    },
+    {
+      "id": "set_agent",
+      "name": "Agent Set",
+      "type": "Armor Set",
+      "rarity": "Epic",
+      "style": "Wanderer",
+      "desc": "Fragments from Mystical Crates – Iron River.",
+      "pieces": 4,
+      "tags": [
+        "midgame"
+      ]
+    },
+    {
+      "id": "set_treacherous_tides",
+      "name": "Treacherous Tides Set",
+      "type": "Armor Set",
+      "rarity": "Legendary",
+      "style": "—",
+      "desc": "Reworked in 3.0.6: DMG bonus no longer scales with Sanity. Scales with HP instead. 2pc: when HP <70%, Weapon+Status DMG +12%. 3pc: base Weapon/Status DMG at 100% HP +8%, increases as HP drops (max 28%). 4pc: shield enhancement retained.",
+      "pieces": 4,
+      "tags": [
+        "hp-scaling",
+        "dps",
+        "3.0.6"
+      ]
+    },
+    {
+      "id": "set_ghost_link",
+      "name": "Ghost Link Set",
+      "type": "Armor Set",
+      "rarity": "Legendary",
+      "style": "—",
+      "desc": "Added with 3.0.1 anniversary weapons. 1pc: Crit rate up. 2pc: Reload efficiency up. 3pc conditions adjusted in 3.0.4 balance pass. Synergizes with Unstable Bomber / QBJ97 line.",
+      "pieces": 4,
+      "tags": [
+        "crit",
+        "reload",
+        "3.0.1"
+      ]
+    },
+    {
+      "id": "armor_wind_interpreter",
+      "name": "Wind Interpreter Cap",
+      "type": "Armor",
+      "rarity": "Legendary",
+      "style": "—",
+      "desc": "3.0.1 piece: When Unstable Bomber explodes, auto-load 1 bullet; Unstable Bomber DMG Rate +25%.",
+      "pieces": 1,
+      "tags": [
+        "unstable-bomber",
+        "3.0.1"
+      ]
+    },
+    {
+      "id": "armor_ankh_mask",
+      "name": "Ankh Mask",
+      "type": "Armor",
+      "rarity": "Legendary",
+      "style": "—",
+      "desc": "3.0.1 piece: Emptying magazine has a chance to consume ammo stock and partially refill magazine.",
+      "pieces": 1,
+      "tags": [
+        "reload",
+        "3.0.1"
+      ]
+    },
+    {
+      "id": "armor_glide_pants",
+      "name": "Glide Pants",
+      "type": "Armor",
+      "rarity": "Legendary",
+      "style": "—",
+      "desc": "May 2026 gear: Roll becomes slide; after slide Reload Speed + Movement Speed. With bow: slide loads 1 ammo, increases draw speed.",
+      "pieces": 1,
+      "tags": [
+        "mobility",
+        "bow"
+      ]
+    },
+    {
+      "id": "armor_magnetic_moment",
+      "name": "Magnetic Moment Top",
+      "type": "Armor",
+      "rarity": "Legendary",
+      "style": "—",
+      "desc": "May 2026 gear: Units with Power Surge continuously pull nearby enemies. Pairs with AUG - Electron Cloud.",
+      "pieces": 1,
+      "tags": [
+        "power-surge",
+        "shock"
+      ]
+    }
+  ],
+  "mods": [
+    {
+      "id": "mod_deadshot",
+      "name": "Deadshot",
+      "type": "Weapon Mod",
+      "rarity": "Legendary",
+      "slot": "Weapon",
+      "desc": "Precision / crit-oriented legendary mod.",
+      "tags": [
+        "crit",
+        "precision"
+      ]
+    },
+    {
+      "id": "mod_shrapnel",
+      "name": "Shrapnel Core",
+      "type": "Weapon Mod",
+      "rarity": "Legendary",
+      "slot": "Weapon",
+      "desc": "Shrapnel trigger rate / damage — SOCR Last Valor family.",
+      "tags": [
+        "shrapnel",
+        "dps"
+      ]
+    },
+    {
+      "id": "mod_blaze",
+      "name": "Blaze Amplifier",
+      "type": "Weapon Mod",
+      "rarity": "Legendary",
+      "slot": "Weapon",
+      "desc": "Burn stack and blaze pool damage.",
+      "tags": [
+        "blaze",
+        "status"
+      ]
+    },
+    {
+      "id": "mod_frost",
+      "name": "Frost Vortex",
+      "type": "Weapon Mod",
+      "rarity": "Legendary",
+      "slot": "Weapon",
+      "desc": "Frost status / vortex control for winter builds.",
+      "tags": [
+        "frost"
+      ]
+    },
+    {
+      "id": "mod_shock",
+      "name": "Shock Cascade",
+      "type": "Weapon Mod",
+      "rarity": "Legendary",
+      "slot": "Weapon",
+      "desc": "Shock chaining; pairs with Power Surge.",
+      "tags": [
+        "shock"
+      ]
+    },
+    {
+      "id": "mod_fast_gunner",
+      "name": "Fast Gunner",
+      "type": "Weapon Mod",
+      "rarity": "Legendary",
+      "slot": "Weapon",
+      "desc": "Increases fire rate after trigger conditions.",
+      "tags": [
+        "fire-rate",
+        "dps"
+      ]
+    },
+    {
+      "id": "mod_unstable_bomber",
+      "name": "Unstable Bomber",
+      "type": "Weapon Mod",
+      "rarity": "Legendary",
+      "slot": "Weapon",
+      "desc": "On-hit explosive status; QBJ97 / bomber builds.",
+      "tags": [
+        "explosion",
+        "status"
+      ]
+    },
+    {
+      "id": "mod_fortress",
+      "name": "Fortress Warfare",
+      "type": "Weapon Mod",
+      "rarity": "Legendary",
+      "slot": "Weapon",
+      "desc": "Defensive/offensive fortress status (FP9, snipers).",
+      "tags": [
+        "status"
+      ]
+    },
+    {
+      "id": "mod_bullseye",
+      "name": "The Bull's Eye",
+      "type": "Weapon Mod",
+      "rarity": "Legendary",
+      "slot": "Weapon",
+      "desc": "Weakspot mark / precision amplify — AWS Bullseye.",
+      "tags": [
+        "weakspot",
+        "precision"
+      ]
+    },
+    {
+      "id": "mod_power_surge",
+      "name": "Power Surge",
+      "type": "Weapon Mod",
+      "rarity": "Legendary",
+      "slot": "Weapon",
+      "desc": "Shock-related surge stacks; AUG Electron Cloud.",
+      "tags": [
+        "shock",
+        "status"
+      ]
+    },
+    {
+      "id": "mod_bounce_blast",
+      "name": "Bounce Blast",
+      "type": "Weapon Mod",
+      "rarity": "Epic",
+      "slot": "Weapon",
+      "desc": "Projectile bounce / multi-target.",
+      "tags": [
+        "aoe"
+      ]
+    },
+    {
+      "id": "mod_magazine",
+      "name": "Extended Magazine",
+      "type": "Weapon Mod",
+      "rarity": "Rare",
+      "slot": "Weapon",
+      "desc": "Increases magazine capacity.",
+      "tags": [
+        "mag"
+      ]
+    },
+    {
+      "id": "mod_reload",
+      "name": "Quick Reload",
+      "type": "Weapon Mod",
+      "rarity": "Rare",
+      "slot": "Weapon",
+      "desc": "Improves reload speed.",
+      "tags": [
+        "reload"
+      ]
+    },
+    {
+      "id": "mod_crit_rate",
+      "name": "Precision Circuit",
+      "type": "Weapon Mod",
+      "rarity": "Epic",
+      "slot": "Weapon",
+      "desc": "Crit Rate boost mod.",
+      "tags": [
+        "crit"
+      ]
+    },
+    {
+      "id": "mod_crit_dmg",
+      "name": "Devastator Chip",
+      "type": "Weapon Mod",
+      "rarity": "Epic",
+      "slot": "Weapon",
+      "desc": "Crit Damage boost mod.",
+      "tags": [
+        "crit"
+      ]
+    },
+    {
+      "id": "mod_weakspot",
+      "name": "Weakspot Calibrator",
+      "type": "Weapon Mod",
+      "rarity": "Epic",
+      "slot": "Weapon",
+      "desc": "Weakspot damage multiplier.",
+      "tags": [
+        "precision"
+      ]
+    },
+    {
+      "id": "mod_range",
+      "name": "Barrel Extension",
+      "type": "Weapon Mod",
+      "rarity": "Rare",
+      "slot": "Weapon",
+      "desc": "Effective range increase.",
+      "tags": [
+        "range"
+      ]
+    },
+    {
+      "id": "mod_stability",
+      "name": "Stabilizer Grip",
+      "type": "Weapon Mod",
+      "rarity": "Rare",
+      "slot": "Weapon",
+      "desc": "Recoil / stability improvement.",
+      "tags": [
+        "stability"
+      ]
+    },
+    {
+      "id": "mod_hipfire",
+      "name": "Hipfire Control",
+      "type": "Weapon Mod",
+      "rarity": "Rare",
+      "slot": "Weapon",
+      "desc": "Hipfire accuracy for CQC.",
+      "tags": [
+        "cqc"
+      ]
+    },
+    {
+      "id": "mod_status_vuln",
+      "name": "Status Vulnerability",
+      "type": "Weapon Mod",
+      "rarity": "Legendary",
+      "slot": "Weapon",
+      "desc": "Amplifies status vulnerability windows.",
+      "tags": [
+        "status"
+      ]
+    },
+    {
+      "id": "mod_weapon_vuln",
+      "name": "Weapon Vulnerability",
+      "type": "Weapon Mod",
+      "rarity": "Legendary",
+      "slot": "Weapon",
+      "desc": "Weapon DMG vulnerability application.",
+      "tags": [
+        "dps"
+      ]
+    },
+    {
+      "id": "mod_melee",
+      "name": "Melee Edge",
+      "type": "Weapon Mod",
+      "rarity": "Epic",
+      "slot": "Weapon",
+      "desc": "Melee damage for Masamune / club lines.",
+      "tags": [
+        "melee"
+      ]
+    },
+    {
+      "id": "mod_armor_hp",
+      "name": "Vital Plating",
+      "type": "Armor Mod",
+      "rarity": "Epic",
+      "slot": "Armor",
+      "desc": "Max HP increase for armor pieces.",
+      "tags": [
+        "hp"
+      ]
+    },
+    {
+      "id": "mod_armor_res",
+      "name": "Status Guard",
+      "type": "Armor Mod",
+      "rarity": "Epic",
+      "slot": "Armor",
+      "desc": "Status DMG reduction on armor.",
+      "tags": [
+        "defense"
+      ]
+    },
+    {
+      "id": "mod_psi",
+      "name": "Psi Intensity Booster",
+      "type": "Armor Mod",
+      "rarity": "Epic",
+      "slot": "Armor",
+      "desc": "Psi Intensity for deviation skill scaling.",
+      "tags": [
+        "psi",
+        "deviation"
+      ]
+    },
+    {
+      "id": "mod_sanity",
+      "name": "Sanity Anchor",
+      "type": "Armor Mod",
+      "rarity": "Epic",
+      "slot": "Armor",
+      "desc": "Sanity sustain / reduction resistance.",
+      "tags": [
+        "sanity"
+      ]
+    },
+    {
+      "id": "mod_pollution",
+      "name": "Pollution Resist",
+      "type": "Armor Mod",
+      "rarity": "Epic",
+      "slot": "Armor",
+      "desc": "Pollution resistance for contaminated zones.",
+      "tags": [
+        "pollution"
+      ]
+    },
+    {
+      "id": "mod_move",
+      "name": "Light Stride",
+      "type": "Armor Mod",
+      "rarity": "Rare",
+      "slot": "Armor",
+      "desc": "Movement speed on armor.",
+      "tags": [
+        "mobility"
+      ]
+    },
+    {
+      "id": "mod_shiny_stub",
+      "name": "Shiny Mod (Lv17+)",
+      "type": "Armor/Weapon Mod",
+      "rarity": "Legendary",
+      "slot": "Any",
+      "desc": "Peak mod tier with unique pin/display.",
+      "tags": [
+        "shiny",
+        "endgame"
+      ]
+    },
+    {
+      "id": "mod_aberrant_mirror",
+      "name": "Aberrant Progeny — Mirror",
+      "type": "Armor Mod",
+      "rarity": "Legendary",
+      "slot": "Upper Body / Shoes",
+      "desc": "Exclusive Aberrant Progeny mod suffix (Mirror).",
+      "tags": [
+        "aberrant",
+        "3.0.x"
+      ]
+    },
+    {
+      "id": "mod_aberrant_wild",
+      "name": "Aberrant Progeny — Wild",
+      "type": "Armor Mod",
+      "rarity": "Legendary",
+      "slot": "Upper Body / Shoes",
+      "desc": "Exclusive Aberrant Progeny mod suffix (Wild).",
+      "tags": [
+        "aberrant",
+        "3.0.x"
+      ]
+    },
+    {
+      "id": "mod_aberrant_phantasmal",
+      "name": "Aberrant Progeny — Phantasmal",
+      "type": "Armor Mod",
+      "rarity": "Legendary",
+      "slot": "Upper Body / Shoes",
+      "desc": "Exclusive Aberrant Progeny mod suffix (Phantasmal).",
+      "tags": [
+        "aberrant",
+        "3.0.x"
+      ]
+    }
+  ],
+  "bosses": [
+    {
+      "id": "boss_ravenous",
+      "name": "Ravenous Hunter",
+      "location": "Monolith of Greed",
+      "region": "Dayton Wetlands",
+      "drops": "Weapon mods (Burn/Frost)",
+      "desc": "Story boss. Stagger bar under sustained fire."
+    },
+    {
+      "id": "boss_treant",
+      "name": "Treant",
+      "location": "Avalanche Monolith",
+      "region": "—",
+      "drops": "Harveseed, Tar Pudding",
+      "desc": "Capturable Harveseed after defeat."
+    },
+    {
+      "id": "boss_arachsiam",
+      "name": "Arachsiam",
+      "location": "—",
+      "region": "—",
+      "drops": "Dreamcatcher",
+      "desc": "Capturable Dreamcatcher."
+    },
+    {
+      "id": "boss_shadow",
+      "name": "Shadow Hound",
+      "location": "Monolith of Thirst",
+      "region": "Iron River / Chalk Peak",
+      "drops": "Lonewolf's Whisper, Shrapnel mods",
+      "desc": "Key boss for top combat deviant."
+    },
+    {
+      "id": "boss_foul",
+      "name": "Foul Shadowhunter",
+      "location": "—",
+      "region": "—",
+      "drops": "Festering Gel",
+      "desc": "Unlocks top beginner combat deviant."
+    },
+    {
+      "id": "boss_mensdevoran",
+      "name": "Mensdevoran",
+      "location": "—",
+      "region": "—",
+      "drops": "Nutcracker",
+      "desc": "Territory defense deviant unlock."
+    },
+    {
+      "id": "boss_forsaken",
+      "name": "Forsaken Giant",
+      "location": "Firedust Monolith",
+      "region": "—",
+      "drops": "Brave George, Shrapnel mods",
+      "desc": "Major monolith boss."
+    },
+    {
+      "id": "boss_servitor",
+      "name": "Secret Servitor",
+      "location": "Tundra Monolith",
+      "region": "Onyx Tundra",
+      "drops": "Snapshot",
+      "desc": "Way of Winter sniper-support deviant."
+    },
+    {
+      "id": "boss_manibus",
+      "name": "Manibus",
+      "type": "Raid",
+      "region": "Prime War",
+      "desc": "Rift entity end boss of Manibus cycle.",
+      "drops": "Season rewards",
+      "tags": [
+        "raid"
+      ]
+    },
+    {
+      "id": "boss_sunken",
+      "name": "The Sunken Lord",
+      "type": "Raid",
+      "region": "Isles of Abyss",
+      "desc": "Ocean expansion final boss.",
+      "drops": "Abyss loot (TBD)",
+      "tags": [
+        "upcoming",
+        "ocean"
+      ]
+    },
+    {
+      "id": "boss_silo_alpha",
+      "name": "Securement Silo Alpha Boss",
+      "type": "Silo Boss",
+      "region": "Silo Alpha",
+      "desc": "Primary Silo Alpha boss; secondary may drop Butterfly's Emissary.",
+      "drops": "Mods, gear, deviation chance",
+      "tags": [
+        "silo"
+      ]
+    },
+    {
+      "id": "boss_silo_theta",
+      "name": "Securement Silo Theta Boss",
+      "type": "Silo Boss",
+      "region": "Silo Theta",
+      "desc": "Mid silo; Dr. Teddy / Enchanting Void farm.",
+      "drops": "Dr. Teddy, Enchanting Void chance",
+      "tags": [
+        "silo",
+        "deviation"
+      ]
+    },
+    {
+      "id": "boss_silo_sigma",
+      "name": "Securement Silo Sigma Boss",
+      "type": "Silo Boss",
+      "region": "Silo Sigma",
+      "desc": "Keycard room; Mr. Wish (esp. PvP).",
+      "drops": "Mr. Wish chance, mods",
+      "tags": [
+        "silo"
+      ]
+    },
+    {
+      "id": "boss_silo_phi",
+      "name": "Securement Silo Phi Boss",
+      "type": "Silo Boss",
+      "region": "Silo Phi",
+      "desc": "Possible Chefosaurus Rex drop.",
+      "drops": "Chefosaurus Rex chance",
+      "tags": [
+        "silo",
+        "deviation"
+      ]
+    },
+    {
+      "id": "boss_silo_ex1",
+      "name": "Securement Silo EX1 Boss",
+      "type": "Silo Boss",
+      "region": "Silo EX1",
+      "desc": "Post-boss spawn chance for Atomic Lighter.",
+      "drops": "Atomic Lighter chance",
+      "tags": [
+        "silo",
+        "deviation"
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "id": "loc_deadsville",
+      "name": "Deadsville",
+      "type": "Settlement",
+      "region": "Dayton Wetlands",
+      "desc": "Early hub; Weber vendor.",
+      "tags": [
+        "hub",
+        "dayton"
+      ]
+    },
+    {
+      "id": "loc_meyers",
+      "name": "Meyer's Market",
+      "type": "Settlement",
+      "region": "Broken Delta",
+      "desc": "Mid hub; Zhao Jintan, Lowe tasks.",
+      "tags": [
+        "hub"
+      ]
+    },
+    {
+      "id": "loc_citrus",
+      "name": "Citrus County",
+      "type": "Farm zone",
+      "region": "Dayton / Broken Delta",
+      "desc": "Farmland — Buzzy Bee spawn.",
+      "tags": [
+        "farm",
+        "deviation"
+      ]
+    },
+    {
+      "id": "loc_silo_alpha",
+      "name": "Securement Silo Alpha",
+      "type": "Silo",
+      "region": "Various",
+      "desc": "Early silo dungeon.",
+      "tags": [
+        "silo"
+      ]
+    },
+    {
+      "id": "loc_silo_theta",
+      "name": "Securement Silo Theta",
+      "type": "Silo",
+      "region": "Various",
+      "desc": "Dr. Teddy / Enchanting Void farm.",
+      "tags": [
+        "silo"
+      ]
+    },
+    {
+      "id": "loc_silo_sigma",
+      "name": "Securement Silo Sigma",
+      "type": "Silo",
+      "region": "Various",
+      "desc": "Keycard room — Mr. Wish.",
+      "tags": [
+        "silo"
+      ]
+    },
+    {
+      "id": "loc_silo_phi",
+      "name": "Securement Silo Phi",
+      "type": "Silo",
+      "region": "Various",
+      "desc": "Chefosaurus Rex possible drop.",
+      "tags": [
+        "silo"
+      ]
+    },
+    {
+      "id": "loc_silo_ex1",
+      "name": "Securement Silo EX1",
+      "type": "Silo",
+      "region": "Various",
+      "desc": "Atomic Lighter after boss.",
+      "tags": [
+        "silo"
+      ]
+    },
+    {
+      "id": "loc_onyx",
+      "name": "Onyx Tundra",
+      "type": "Region",
+      "region": "Way of Winter",
+      "desc": "Northern cold region; Thermal Tower required.",
+      "tags": [
+        "winter"
+      ]
+    },
+    {
+      "id": "loc_broken_delta",
+      "name": "Broken Delta",
+      "type": "Region",
+      "region": "Nalcott",
+      "desc": "Mid region; RaidZone base; Meyer's Market.",
+      "tags": [
+        "region"
+      ]
+    },
+    {
+      "id": "loc_iron_river",
+      "name": "Iron River",
+      "type": "Region",
+      "region": "Nalcott",
+      "desc": "Progression region; Agent set crates.",
+      "tags": [
+        "region"
+      ]
+    },
+    {
+      "id": "loc_chalk",
+      "name": "Chalk Peak",
+      "type": "Region",
+      "region": "Nalcott",
+      "desc": "Highlands; monoliths.",
+      "tags": [
+        "region"
+      ]
+    },
+    {
+      "id": "loc_red_sands",
+      "name": "Red Sands",
+      "type": "Region",
+      "region": "Nalcott",
+      "desc": "Late Manibus region.",
+      "tags": [
+        "region"
+      ]
+    },
+    {
+      "id": "loc_monolith_thirst",
+      "name": "Monolith of Thirst",
+      "type": "Monolith",
+      "region": "Chalk Peak",
+      "desc": "Shadow Hound / Lonewolf path.",
+      "tags": [
+        "monolith"
+      ]
+    },
+    {
+      "id": "loc_prime_war_zone",
+      "name": "Prime War Arena Zones",
+      "type": "Raid",
+      "region": "Manibus cycle",
+      "desc": "Co-op world boss spaces.",
+      "tags": [
+        "raid"
+      ]
+    },
+    {
+      "id": "loc_gaia_ruins",
+      "name": "GAIA Research Center Ruins",
+      "type": "POI",
+      "region": "Start area",
+      "desc": "Butterfly's Emissary farm.",
+      "tags": [
+        "poi",
+        "deviation"
+      ]
+    },
+    {
+      "id": "loc_whalebone",
+      "name": "Whalebone",
+      "type": "Settlement",
+      "region": "Coast",
+      "desc": "Lowe task destination.",
+      "tags": [
+        "quest",
+        "hub"
+      ]
+    },
+    {
+      "id": "loc_camp_igloo",
+      "name": "Camp Igloo",
+      "type": "Camp",
+      "region": "Cold path",
+      "desc": "Lowe task for combat deviation.",
+      "tags": [
+        "quest",
+        "winter"
+      ]
+    },
+    {
+      "id": "loc_greywater",
+      "name": "Greywater Camp",
+      "type": "Settlement",
+      "region": "Mid",
+      "desc": "H37 questline location.",
+      "tags": [
+        "quest",
+        "hub"
+      ]
+    }
+  ],
+  "recipes": [
+    {
+      "id": "rec_roasted_meat",
+      "name": "Roasted Meat",
+      "type": "Food",
+      "station": "Campfire / Stove",
+      "desc": "Starter food."
+    },
+    {
+      "id": "rec_corn_soup",
+      "name": "Corn Soup",
+      "type": "Food",
+      "station": "Stove",
+      "desc": "Basic recipe."
+    },
+    {
+      "id": "rec_fruit_tea",
+      "name": "Fruit Tea",
+      "type": "Drink",
+      "station": "Stove",
+      "desc": "Basic drink."
+    },
+    {
+      "id": "rec_ammo_556",
+      "name": "5.56mm Ammo",
+      "type": "Ammo",
+      "station": "Workbench",
+      "desc": "Standard AR ammunition."
+    },
+    {
+      "id": "rec_ammo_shotgun",
+      "name": "Shotgun Shells",
+      "type": "Ammo",
+      "station": "Workbench",
+      "desc": "Shells for ACS12 / DBSG."
+    },
+    {
+      "id": "rec_ammo_338",
+      "name": ".338 Ammo",
+      "type": "Ammo",
+      "station": "Workbench",
+      "desc": "Sniper ammo for AWS.338."
+    },
+    {
+      "id": "rec_bandages",
+      "name": "Bandage / Med Kit",
+      "type": "Consumable",
+      "station": "Medical Bench",
+      "desc": "Basic healing."
+    },
+    {
+      "id": "rec_portable_mixed",
+      "name": "Portable Mixed Fuel",
+      "type": "Fuel",
+      "station": "Workbench",
+      "desc": "Generator and vehicle fuel."
+    },
+    {
+      "id": "rec_fusion_lighter",
+      "name": "Fusion Lighter",
+      "type": "Tactical",
+      "station": "Advanced Workbench",
+      "desc": "Requires Atomic Lighter materials."
+    },
+    {
+      "id": "rec_chloro",
+      "name": "Chloro-armor / Living Armor",
+      "type": "Gear",
+      "station": "Advanced",
+      "desc": "Uses Heart Vine from Harveseed."
+    },
+    {
+      "id": "rec_weaver",
+      "name": "The Weaver",
+      "type": "Consumable",
+      "station": "Advanced",
+      "desc": "Uses Thread of Dreams from Dreamcatcher."
+    },
+    {
+      "id": "rec_thermal_tower",
+      "name": "Thermal Tower",
+      "type": "Structure",
+      "station": "Build",
+      "desc": "Way of Winter heat structure."
+    },
+    {
+      "id": "rec_generator",
+      "name": "Bio Fuel Generator",
+      "type": "Structure",
+      "station": "Build",
+      "desc": "Base power; boosted by Electric Eel."
+    },
+    {
+      "id": "rec_securement_pod",
+      "name": "Securement Pod",
+      "type": "Structure",
+      "station": "Build",
+      "desc": "Houses deviations in territory."
+    }
+  ],
+  "materials": [
+    {
+      "id": "mat_scrap",
+      "name": "Scrap",
+      "type": "Material",
+      "rarity": "Common",
+      "desc": "Basic salvage.",
+      "source": "Loot",
+      "tags": [
+        "craft"
+      ]
+    },
+    {
+      "id": "mat_metal",
+      "name": "Metal Scraps / Ingots",
+      "type": "Material",
+      "rarity": "Common",
+      "desc": "Core metal for weapons and structures.",
+      "source": "Loot, refine",
+      "tags": [
+        "metal"
+      ]
+    },
+    {
+      "id": "mat_starchrom",
+      "name": "Starchrom",
+      "type": "Currency",
+      "rarity": "Epic",
+      "desc": "Wish Machine / blueprint currency.",
+      "source": "BP, events",
+      "tags": [
+        "currency"
+      ]
+    },
+    {
+      "id": "mat_stardust",
+      "name": "Stardust Source / Sample",
+      "type": "Material",
+      "rarity": "Rare",
+      "desc": "Core anomaly material.",
+      "source": "World, silos",
+      "tags": [
+        "anomaly"
+      ]
+    },
+    {
+      "id": "mat_activator",
+      "name": "Activator",
+      "type": "Material",
+      "rarity": "Common",
+      "desc": "Vendor progression material.",
+      "source": "Vendors",
+      "tags": [
+        "consumable"
+      ]
+    },
+    {
+      "id": "mat_acid",
+      "name": "Acid",
+      "type": "Material",
+      "rarity": "Common",
+      "desc": "Ammo and chemical crafts.",
+      "source": "Scavenge",
+      "tags": [
+        "craft"
+      ]
+    },
+    {
+      "id": "mat_rubber",
+      "name": "Rubber",
+      "type": "Material",
+      "rarity": "Common",
+      "desc": "Building and gear.",
+      "source": "Scavenge",
+      "tags": [
+        "craft"
+      ]
+    },
+    {
+      "id": "mat_electronic",
+      "name": "Electronic Part",
+      "type": "Material",
+      "rarity": "Common",
+      "desc": "Benches, generators, mods.",
+      "source": "Loot",
+      "tags": [
+        "craft"
+      ]
+    },
+    {
+      "id": "mat_tungsten",
+      "name": "Tungsten Ingot",
+      "type": "Material",
+      "rarity": "Rare",
+      "desc": "Late-tier metal.",
+      "source": "Mining",
+      "tags": [
+        "metal"
+      ]
+    },
+    {
+      "id": "mat_aluminum",
+      "name": "Aluminum Ingot",
+      "type": "Material",
+      "rarity": "Rare",
+      "desc": "Mid-high metal; Digby Boy helps.",
+      "source": "Mining",
+      "tags": [
+        "metal"
+      ]
+    },
+    {
+      "id": "mat_crystgin",
+      "name": "Crystgin",
+      "type": "Currency",
+      "rarity": "Epic",
+      "desc": "Premium currency.",
+      "source": "Shop, events",
+      "tags": [
+        "currency"
+      ]
+    },
+    {
+      "id": "mat_mitsuko",
+      "name": "Mitsuko's Mark",
+      "type": "Currency",
+      "rarity": "Rare",
+      "desc": "Event/maintenance mark.",
+      "source": "Mail, events",
+      "tags": [
+        "currency"
+      ]
+    },
+    {
+      "id": "mat_lightforged",
+      "name": "Lightforged Medal",
+      "type": "Currency",
+      "rarity": "Rare",
+      "desc": "Settlement vendor currency.",
+      "source": "Activities",
+      "tags": [
+        "currency"
+      ]
+    },
+    {
+      "id": "mat_gunpowder",
+      "name": "Gunpowder",
+      "type": "Material",
+      "rarity": "Common",
+      "desc": "Ammo component.",
+      "source": "Craft, loot",
+      "tags": [
+        "ammo"
+      ]
+    },
+    {
+      "id": "mat_cloth",
+      "name": "Cloth",
+      "type": "Material",
+      "rarity": "Common",
+      "desc": "Medical and armor crafts.",
+      "source": "Scavenge",
+      "tags": [
+        "craft"
+      ]
+    },
+    {
+      "id": "mat_heart_vine",
+      "name": "Heart Vine",
+      "type": "Material",
+      "rarity": "Epic",
+      "desc": "From Harveseed; Chloro-armor.",
+      "source": "Harveseed",
+      "tags": [
+        "deviation"
+      ]
+    },
+    {
+      "id": "mat_thread_dreams",
+      "name": "Thread of Dreams",
+      "type": "Material",
+      "rarity": "Epic",
+      "desc": "From Dreamcatcher; The Weaver.",
+      "source": "Dreamcatcher",
+      "tags": [
+        "deviation"
+      ]
+    },
+    {
+      "id": "mat_split_core",
+      "name": "Split-Core Cotton",
+      "type": "Material",
+      "rarity": "Epic",
+      "desc": "From Atomic Lighter; Fusion Lighter.",
+      "source": "Atomic Lighter",
+      "tags": [
+        "deviation"
+      ]
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "sc_manibus",
+      "name": "Manibus",
+      "type": "Scenario",
+      "phase": "Season core",
+      "desc": "Základní PvE scénář — průzkum, silosy, monoliths.",
+      "rewards": "Standard progression, deviations",
+      "locations": "Dayton Wetlands → Iron River → Chalk Peak → Red Sands",
+      "tags": [
+        "pve",
+        "core"
+      ]
+    },
+    {
+      "id": "sc_winter",
+      "name": "The Way of Winter",
+      "type": "Scenario",
+      "phase": "Season",
+      "desc": "Zimní scénář — Onyx Tundra, frost builds, cold survival.",
+      "rewards": "Winter deviations, frost mods",
+      "locations": "Onyx Tundra, Tundra Monolith",
+      "tags": [
+        "winter",
+        "pve"
+      ]
+    },
+    {
+      "id": "sc_prism",
+      "name": "Prismverse's Clash",
+      "type": "Scenario",
+      "phase": "PvP/Season",
+      "desc": "Konfliktní scénář s PvP prvky.",
+      "rewards": "PvP rewards, exclusive deviations",
+      "locations": "Contested zones",
+      "tags": [
+        "pvp"
+      ]
+    },
+    {
+      "id": "sc_endless",
+      "name": "Endless Dreams",
+      "type": "Scenario",
+      "phase": "Season",
+      "desc": "Dream/anomaly focused season content.",
+      "rewards": "Dreamcatcher line, unique crafts",
+      "locations": "Anomaly sites",
+      "tags": [
+        "pve"
+      ]
+    },
+    {
+      "id": "sc_evolution",
+      "name": "Evolution's Call",
+      "type": "Scenario",
+      "phase": "Season",
+      "desc": "Evolution-focused progression path.",
+      "rewards": "Advanced territory deviations",
+      "locations": "Multiple regions",
+      "tags": [
+        "pve"
+      ]
+    },
+    {
+      "id": "sc_scp",
+      "name": "Deviation: Survive, Capture, Preserve",
+      "type": "Scenario",
+      "phase": "PvE · Deviation focus",
+      "desc": "Monster-collecting scenario. Weapons deal reduced damage; Deviations are primary combat.",
+      "rewards": "Deviation progression, mutagens, Peak Duel ranks",
+      "locations": "Eastern Snowy Realm + Eastern Nalcott",
+      "tags": [
+        "pve",
+        "deviation",
+        "scp"
+      ]
+    },
+    {
+      "id": "sc_raidzone",
+      "name": "RaidZone",
+      "type": "Scenario",
+      "phase": "PvP hardcore",
+      "desc": "Lawless PvP. Level cap start 50. Hollow accelerates realm destruction.",
+      "rewards": "Realm Crystals, PvP loot",
+      "locations": "Broken Delta (modified); Isles of Abyss: RaidZone ocean map planned Oct 2026",
+      "tags": [
+        "pvp",
+        "hardcore"
+      ]
+    },
+    {
+      "id": "sc_manibus_novice",
+      "name": "Manibus (Novice)",
+      "type": "Scenario",
+      "phase": "PvE beginner",
+      "desc": "Entry Manibus — lower difficulty, learns core systems.",
+      "rewards": "Standard early progression",
+      "locations": "Eastern Nalcott",
+      "tags": [
+        "pve",
+        "beginner"
+      ]
+    },
+    {
+      "id": "sc_abyss",
+      "name": "Isles of Abyss",
+      "type": "Scenario",
+      "phase": "Upcoming · Oct 21–22 2026",
+      "desc": "Ocean survival expansion: shipbuilding, 5 sea regions, The Sunken Lord. Cross-play.",
+      "rewards": "Ocean gear, ship tech, Abyss progression",
+      "locations": "Oceanic regions · islands · Abyssal Sea",
+      "tags": [
+        "upcoming",
+        "ocean",
+        "expansion"
+      ]
+    },
+    {
+      "id": "sc_abyss_raidzone",
+      "name": "Isles of Abyss: RaidZone",
+      "type": "Scenario",
+      "phase": "Upcoming · with Isles of Abyss",
+      "desc": "New RaidZone ocean map alongside Isles of Abyss launch.",
+      "rewards": "RaidZone ocean loot",
+      "locations": "Ocean RaidZone map",
+      "tags": [
+        "upcoming",
+        "pvp",
+        "raidzone",
+        "ocean"
+      ]
+    }
+  ],
+  "quests": [
+    {
+      "id": "q_tutorial",
+      "name": "Eve of Evolution",
+      "type": "Main",
+      "region": "Start",
+      "desc": "Tutorial — Butterfly's Emissary and securement basics.",
+      "rewards": "Butterfly's Emissary",
+      "tags": [
+        "main",
+        "beginner"
+      ]
+    },
+    {
+      "id": "q_lowe_igloo",
+      "name": "Lowe — Camp Igloo task",
+      "type": "Side",
+      "region": "Snow",
+      "desc": "Lowe task for combat deviation after Camp Igloo.",
+      "rewards": "Combat deviation",
+      "tags": [
+        "side",
+        "deviation"
+      ]
+    },
+    {
+      "id": "q_lowe_whalebone",
+      "name": "Lowe — Whalebone task",
+      "type": "Side",
+      "region": "Coastal",
+      "desc": "Lowe task near Whalebone for territory deviation.",
+      "rewards": "Territory deviation",
+      "tags": [
+        "side",
+        "deviation"
+      ]
+    },
+    {
+      "id": "q_h37",
+      "name": "H37 Quest (Greywater)",
+      "type": "Side",
+      "region": "Greywater",
+      "desc": "H37 questline for H37 deviation.",
+      "rewards": "H37",
+      "tags": [
+        "side",
+        "deviation"
+      ]
+    },
+    {
+      "id": "q_moving_house",
+      "name": "Hales' Moving House",
+      "type": "Side",
+      "region": "Settlement",
+      "desc": "Unlocks Disco Ball crafting deviation.",
+      "rewards": "Disco Ball",
+      "tags": [
+        "side",
+        "deviation"
+      ]
+    },
+    {
+      "id": "q_prime_intro",
+      "name": "Prime War Introduction",
+      "type": "Main",
+      "region": "Manibus",
+      "desc": "Unlock cooperative Prime War loop.",
+      "rewards": "Prime War access",
+      "tags": [
+        "main",
+        "raid"
+      ]
+    },
+    {
+      "id": "q_monolith_thirst",
+      "name": "Monolith of Thirst",
+      "type": "Main",
+      "region": "Chalk Peak",
+      "desc": "Shadow Hound / Lonewolf's Whisper path.",
+      "rewards": "Progression + deviation chance",
+      "tags": [
+        "main",
+        "monolith"
+      ]
+    },
+    {
+      "id": "q_silo_alpha",
+      "name": "Securement Silo Alpha",
+      "type": "Dungeon",
+      "region": "Various",
+      "desc": "Early silo — Butterfly secondary drops.",
+      "rewards": "Mods, deviations, gear",
+      "tags": [
+        "silo"
+      ]
+    },
+    {
+      "id": "q_silo_theta",
+      "name": "Securement Silo Theta",
+      "type": "Dungeon",
+      "region": "Various",
+      "desc": "Dr. Teddy / Enchanting Void farm.",
+      "rewards": "Deviations, mods",
+      "tags": [
+        "silo"
+      ]
+    },
+    {
+      "id": "q_silo_ex1",
+      "name": "Securement Silo EX1",
+      "type": "Dungeon",
+      "region": "Various",
+      "desc": "Atomic Lighter spawn chance after boss.",
+      "rewards": "Atomic Lighter chance",
+      "tags": [
+        "silo"
+      ]
+    },
+    {
+      "id": "q_carnival",
+      "name": "Carnival of Doom",
+      "type": "Side",
+      "region": "Various",
+      "desc": "Can unlock Artisan's Touch.",
+      "rewards": "Artisan's Touch",
+      "tags": [
+        "side",
+        "deviation"
+      ]
+    },
+    {
+      "id": "q_dragon",
+      "name": "There's A Dragon Here",
+      "type": "Side",
+      "region": "Various",
+      "desc": "Path toward Chefosaurus Rex.",
+      "rewards": "Chefosaurus Rex path",
+      "tags": [
+        "side",
+        "deviation"
+      ]
+    },
+    {
+      "id": "q_doors",
+      "name": "Doors Event / Strange Door",
+      "type": "World Event",
+      "region": "Open world",
+      "desc": "Can drop Strange Door deviation.",
+      "rewards": "Strange Door chance",
+      "tags": [
+        "event",
+        "deviation"
+      ]
+    },
+    {
+      "id": "q_season_goal_melee",
+      "name": "Season Goal — Melee 200",
+      "type": "Season",
+      "region": "Any",
+      "desc": "Defeat 200 enemies with melee for Zeno-Purifier.",
+      "rewards": "Zeno-Purifier",
+      "tags": [
+        "season",
+        "deviation"
+      ]
+    }
+  ],
+  "events": [
+    {
+      "id": "ev_autumn",
+      "name": "Golden Autumn Harvest",
+      "type": "Event",
+      "status": "Limited",
+      "desc": "Daily Golden Leaf — free 5/5 Deviation selectable box.",
+      "rewards": "Labrador / Blackback / Doberman / Flame Essence / Brave George / Rain Man / Whalepup / Soul Summoner",
+      "location": "Event hub",
+      "timer": "Sep 29 – Oct 14 2026",
+      "tags": [
+        "limited",
+        "deviation"
+      ]
+    },
+    {
+      "id": "ev_prime",
+      "name": "Prime War",
+      "type": "Event",
+      "status": "Recurring",
+      "desc": "Raid-style event — loot crates, Atomic Snail (PVE).",
+      "rewards": "Stardust crates, PVE exclusives",
+      "location": "Prime War zones",
+      "timer": "Season schedule",
+      "tags": [
+        "raid"
+      ]
+    },
+    {
+      "id": "ev_stardust",
+      "name": "Stardust's Advent",
+      "type": "Event",
+      "status": "Recurring",
+      "desc": "Loot crate event supporting exclusive deviations.",
+      "rewards": "Event crates",
+      "location": "World",
+      "timer": "Season schedule",
+      "tags": [
+        "loot"
+      ]
+    },
+    {
+      "id": "ev_frames",
+      "name": "Frames of Wonder",
+      "type": "Event",
+      "status": "Limited",
+      "desc": "3.0.7 limited event paired with Golden Autumn — daily photo check-in style tasks.",
+      "rewards": "Event cosmetics / progress rewards",
+      "location": "Event UI",
+      "timer": "September 29 – October 14 2026 (with Golden Autumn window)",
+      "tags": [
+        "limited",
+        "3.0.7"
+      ]
+    },
+    {
+      "id": "ev_abyss_reserve",
+      "name": "Isles of Abyss Reservation",
+      "type": "Event",
+      "status": "Pre-launch",
+      "desc": "In-game reservation for Isles of Abyss ocean expansion. Claim milestone gifts before Oct 21–22 2026 launch.",
+      "rewards": "Reservation gifts (official event page)",
+      "location": "Event UI",
+      "timer": "Until launch · Oct 21–22 2026",
+      "tags": [
+        "upcoming",
+        "ocean",
+        "reservation"
+      ]
+    }
+  ],
+  "creatures": [
+    {
+      "id": "cr_ravenous",
+      "name": "Ravenous Hunter",
+      "type": "Boss",
+      "threat": "Boss",
+      "desc": "Monolith of Greed story boss.",
+      "location": "Monolith of Greed",
+      "tags": [
+        "boss"
+      ]
+    },
+    {
+      "id": "cr_vulture",
+      "name": "Staroid / Vulture-type",
+      "type": "Enemy",
+      "threat": "Medium",
+      "desc": "Common open-world enemies.",
+      "location": "Wilderness",
+      "tags": [
+        "common"
+      ]
+    },
+    {
+      "id": "cr_spitter",
+      "name": "Spitter / Ranged Deviant",
+      "type": "Enemy",
+      "threat": "Medium",
+      "desc": "Ranged acid attackers in ruins and silos.",
+      "location": "Ruins, silos",
+      "tags": [
+        "ranged"
+      ]
+    },
+    {
+      "id": "cr_brute",
+      "name": "Brute Deviant",
+      "type": "Enemy",
+      "threat": "High",
+      "desc": "Heavy melee elite in strongholds.",
+      "location": "Strongholds",
+      "tags": [
+        "elite"
+      ]
+    },
+    {
+      "id": "cr_rossetta",
+      "name": "Rosetta Operative",
+      "type": "Enemy",
+      "threat": "High",
+      "desc": "Human faction in Rosetta facilities.",
+      "location": "Rosetta sites",
+      "tags": [
+        "faction"
+      ]
+    },
+    {
+      "id": "cr_mayfly",
+      "name": "Mayfly Operative",
+      "type": "Enemy",
+      "threat": "High",
+      "desc": "Faction troops in Prismverse PvP.",
+      "location": "PvP / contested",
+      "tags": [
+        "faction",
+        "pvp"
+      ]
+    },
+    {
+      "id": "cr_shadowhunter",
+      "name": "Foul Shadowhunter",
+      "type": "Boss-elite",
+      "threat": "Boss",
+      "desc": "Enables Festering Gel capture.",
+      "location": "Story / elite sites",
+      "tags": [
+        "boss"
+      ]
+    },
+    {
+      "id": "cr_mensdevoran",
+      "name": "Mensdevoran",
+      "type": "Boss",
+      "threat": "Boss",
+      "desc": "Enables Nutcracker capture.",
+      "location": "Boss arena",
+      "tags": [
+        "boss"
+      ]
+    },
+    {
+      "id": "cr_manibus_entity",
+      "name": "Manibus (Rift Entity)",
+      "type": "Raid Boss",
+      "threat": "Raid",
+      "desc": "Manibus Prime War endgame boss.",
+      "location": "Prime War",
+      "tags": [
+        "raid",
+        "story"
+      ]
+    },
+    {
+      "id": "cr_sunken_lord",
+      "name": "The Sunken Lord",
+      "type": "Raid Boss",
+      "threat": "Raid",
+      "desc": "Isles of Abyss final boss (Oct 2026).",
+      "location": "Ocean scenario",
+      "tags": [
+        "upcoming",
+        "raid",
+        "ocean"
+      ]
+    },
+    {
+      "id": "cr_silo_drone",
+      "name": "Silo Security Drone",
+      "type": "Enemy",
+      "threat": "Medium",
+      "desc": "Automated defenses in silos.",
+      "location": "Silos",
+      "tags": [
+        "silo"
+      ]
+    },
+    {
+      "id": "cr_silo_scientist",
+      "name": "Infected Researcher",
+      "type": "Enemy",
+      "threat": "Medium",
+      "desc": "Humanoid hostiles in silo interiors.",
+      "location": "Silos",
+      "tags": [
+        "silo"
+      ]
+    },
+    {
+      "id": "cr_elite_captain",
+      "name": "Rosetta Captain",
+      "type": "Elite",
+      "threat": "High",
+      "desc": "Elite Rosetta officer.",
+      "location": "Rosetta sites",
+      "tags": [
+        "elite",
+        "faction"
+      ]
+    },
+    {
+      "id": "cr_frost_beast",
+      "name": "Frost Beast",
+      "type": "Enemy",
+      "threat": "High",
+      "desc": "Cold-region fauna in Way of Winter.",
+      "location": "Onyx Tundra",
+      "tags": [
+        "winter"
+      ]
+    },
+    {
+      "id": "cr_dream_horror",
+      "name": "Dream Zone Horror",
+      "type": "Enemy",
+      "threat": "High",
+      "desc": "Hostile entities in Endless Dream zones.",
+      "location": "Dream Zones",
+      "tags": [
+        "dream"
+      ]
+    },
+    {
+      "id": "cr_ocean_leviathan",
+      "name": "Ocean Leviathan (Abyss)",
+      "type": "Enemy",
+      "threat": "Raid",
+      "desc": "Large sea threats for Isles of Abyss.",
+      "location": "Ocean",
+      "tags": [
+        "upcoming",
+        "ocean"
+      ]
+    }
+  ],
+  "npcs": [
+    {
+      "id": "npc_lowe",
+      "name": "Lowe",
+      "type": "NPC",
+      "desc": "Key quest giver — Camp Igloo, Meyer's Market tasks.",
+      "location": "Meyer's Market / Camp Igloo",
+      "tags": [
+        "quest"
+      ]
+    },
+    {
+      "id": "npc_hales",
+      "name": "Hales",
+      "type": "NPC",
+      "desc": "Moving House quest NPC.",
+      "location": "Broken Delta",
+      "tags": [
+        "quest"
+      ]
+    },
+    {
+      "id": "npc_vendor",
+      "name": "Settlement Vendor",
+      "type": "NPC",
+      "desc": "Generic settlement trader.",
+      "location": "Settlements",
+      "tags": [
+        "vendor"
+      ]
+    },
+    {
+      "id": "npc_weber",
+      "name": "Weber",
+      "type": "Vendor",
+      "location": "Deadsville (Dayton Wetlands)",
+      "desc": "Settlement vendor — food, activators, basic optics.",
+      "tags": [
+        "vendor",
+        "dayton"
+      ]
+    },
+    {
+      "id": "npc_zhao",
+      "name": "Zhao Jintan",
+      "type": "Vendor",
+      "location": "Meyer's Market (Broken Delta)",
+      "desc": "Vendor for meats, activators, advanced optics.",
+      "tags": [
+        "vendor",
+        "broken-delta"
+      ]
+    },
+    {
+      "id": "npc_mitsuko",
+      "name": "Mitsuko",
+      "type": "Story",
+      "location": "Story / events",
+      "desc": "Major story character; marks as event currency.",
+      "tags": [
+        "story"
+      ]
+    },
+    {
+      "id": "npc_maya",
+      "name": "Maya",
+      "type": "Quest",
+      "location": "Union path",
+      "desc": "Quest / faction related NPC.",
+      "tags": [
+        "quest"
+      ]
+    },
+    {
+      "id": "npc_vj",
+      "name": "V",
+      "type": "Quest",
+      "location": "Various",
+      "desc": "Recurring guide-style contact.",
+      "tags": [
+        "quest"
+      ]
+    },
+    {
+      "id": "npc_warden",
+      "name": "Silo Warden contacts",
+      "type": "World",
+      "location": "Securement Silos",
+      "desc": "Silo NPCs / terminals for dungeon entry.",
+      "tags": [
+        "silo"
+      ]
+    },
+    {
+      "id": "npc_wish_machine",
+      "name": "Wish Machine",
+      "type": "System",
+      "location": "Territory / hubs",
+      "desc": "Blueprint and cosmetic gacha using Starchrom.",
+      "tags": [
+        "system",
+        "blueprint"
+      ]
+    }
+  ],
+  "plants": [
+    {
+      "id": "pl_wheat",
+      "name": "Wheat",
+      "type": "Crop",
+      "desc": "Basic crop; vendor and farm plots.",
+      "uses": "Food recipes",
+      "tags": [
+        "crop"
+      ]
+    },
+    {
+      "id": "pl_corn",
+      "name": "Corn",
+      "type": "Crop",
+      "desc": "Soup and food recipes.",
+      "uses": "Corn Soup",
+      "tags": [
+        "crop"
+      ]
+    },
+    {
+      "id": "pl_mushroom",
+      "name": "Deviated Mushroom / Growshroom related",
+      "type": "Crop",
+      "desc": "Synergy with Growshroom territory deviation.",
+      "uses": "Farm automation",
+      "tags": [
+        "crop",
+        "deviation"
+      ]
+    },
+    {
+      "id": "pl_dracena",
+      "name": "Dracena Tree",
+      "type": "Tree",
+      "desc": "Chopping can drop Fetch-A-Lot Bunny.",
+      "uses": "Wood + deviation chance",
+      "tags": [
+        "tree",
+        "deviation"
+      ]
+    },
+    {
+      "id": "pl_onion",
+      "name": "Deviated Onion",
+      "type": "Crop",
+      "desc": "Harvest can yield Grumpy Bulb.",
+      "uses": "Grumpy Bulb",
+      "tags": [
+        "crop",
+        "deviation"
+      ]
+    }
+  ],
+  "fish": [
+    {
+      "id": "fi_common",
+      "name": "Common River Fish",
+      "type": "Fish",
+      "desc": "Basic fishing catch for food.",
+      "location": "Rivers, lakes",
+      "tags": [
+        "food"
+      ]
+    },
+    {
+      "id": "fi_electric",
+      "name": "Electric Eel (catch)",
+      "type": "Fish / Deviation",
+      "desc": "Fishing can yield Electric Eel territory deviation.",
+      "location": "Fishing spots",
+      "tags": [
+        "deviation"
+      ]
+    },
+    {
+      "id": "fi_abyss",
+      "name": "Abyssal Catch (upcoming)",
+      "type": "Fish",
+      "desc": "Ocean scenario fishing content with Isles of Abyss.",
+      "location": "Ocean",
+      "tags": [
+        "upcoming",
+        "ocean"
+      ]
+    }
+  ],
+  "animals": [
+    {
+      "id": "an_boar",
+      "name": "Wild Boar",
+      "type": "Animal",
+      "desc": "Meat and hide source.",
+      "drops": "Meat, hide",
+      "location": "Forests, plains",
+      "taming": "Possible with tamer support",
+      "tags": [
+        "farm"
+      ]
+    },
+    {
+      "id": "an_bird",
+      "name": "Wilderness Bird",
+      "type": "Animal",
+      "desc": "Feathers / light materials.",
+      "drops": "Feathers",
+      "location": "Open areas",
+      "taming": "Limited",
+      "tags": [
+        "material"
+      ]
+    },
+    {
+      "id": "an_dog",
+      "name": "Event Dog deviations",
+      "type": "Companion",
+      "desc": "Labrador, Blackback, Doberman from events.",
+      "drops": "—",
+      "location": "Event crates",
+      "taming": "Event obtain",
+      "tags": [
+        "event",
+        "deviation"
+      ]
+    },
+    {
+      "id": "an_buck",
+      "name": "Buck",
+      "type": "Animal",
+      "desc": "Territory animal — targeted breeding supported after 3.0.7.",
+      "drops": "Meat, hide",
+      "location": "Wilderness",
+      "taming": "Ranch / targeted breeding",
+      "tags": [
+        "farm",
+        "breeding",
+        "3.0.7"
+      ]
+    },
+    {
+      "id": "an_doe",
+      "name": "Doe",
+      "type": "Animal",
+      "desc": "Territory animal — breeding pair with Buck.",
+      "drops": "Meat, hide",
+      "location": "Wilderness",
+      "taming": "Ranch / targeted breeding",
+      "tags": [
+        "farm",
+        "breeding",
+        "3.0.7"
+      ]
+    },
+    {
+      "id": "an_buffalo",
+      "name": "Wild Buffalo",
+      "type": "Animal",
+      "desc": "Large territory animal; breeding system 3.0.7.",
+      "drops": "Meat, hide",
+      "location": "Plains",
+      "taming": "Ranch / targeted breeding",
+      "tags": [
+        "farm",
+        "breeding"
+      ]
+    },
+    {
+      "id": "an_bear",
+      "name": "Bear",
+      "type": "Animal",
+      "desc": "Dangerous wild animal; ranch list in 3.0.x notes.",
+      "drops": "Meat, hide",
+      "location": "Forests",
+      "taming": "Advanced ranch",
+      "tags": [
+        "farm",
+        "combat"
+      ]
+    }
+  ],
+  "flowers": [
+    {
+      "id": "fl_mood_green",
+      "name": "Green Light Flowers",
+      "type": "Mood",
+      "desc": "Mood booster for many combat deviations (e.g. Butterfly).",
+      "tags": [
+        "mood"
+      ]
+    },
+    {
+      "id": "fl_mood_music",
+      "name": "Music / Blue Light Flowers",
+      "type": "Mood",
+      "desc": "Territory and crafting deviation mood items.",
+      "tags": [
+        "mood"
+      ]
+    },
+    {
+      "id": "fl_high_temp",
+      "name": "High Temperature plants",
+      "type": "Mood",
+      "desc": "Required mood for some crafting deviations (Harveseed).",
+      "tags": [
+        "mood"
+      ]
+    }
+  ]
+}
