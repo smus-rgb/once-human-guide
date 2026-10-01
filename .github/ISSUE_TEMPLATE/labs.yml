@@ -1,0 +1,8 @@
+name: Labs request
+description: Požadavek Emergent Labs
+labels: ["collab"]
+body:
+  - type: textarea
+    attributes:
+      label: Požadavek
+      description: Branch labs/* nebo fork. UI experimenty nepatří rovnou do shellu.

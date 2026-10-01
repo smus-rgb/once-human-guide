@@ -1,9 +1,11 @@
 # Once Human Guide
 
 Adaptive game companion for **Once Human**  
-**App 5.2.0** · Shell **v18** · Data `2026-09-30-v18-372` · Patch **3.0.7** · 372 entit
+**App 5.3.0** · Shell **v19** · Data `2026-10-01-v19-372` · Patch **3.0.7** · 372 entit
 
 **Repo:** https://github.com/smus-rgb/once-human-guide
+
+Spolupráce jen přes GitHub: [docs/COLLAB.md](docs/COLLAB.md). Merge do `main` jen PR. Labs větve `labs/*`.
 
 ---
 
@@ -73,7 +75,7 @@ python3 updater.py
 
 ## Offline (no Python)
 
-Open `once_human_guide_v18.html` (needs `ohg_data.js` + `ohg_sw.js` vedle). Legacy: `once_human_guide_ui_v4.html`.
+Open `once_human_guide_v19.html` (needs `modules/`, `ohg_data.js`, `ohg_sw.js` vedle). Fallback: `once_human_guide_v18.html`.
 
 ---
 
@@ -81,7 +83,7 @@ Open `once_human_guide_v18.html` (needs `ohg_data.js` + `ohg_sw.js` vedle). Lega
 
 | URL | Description |
 |-----|-------------|
-| http://127.0.0.1:8000/ui | App |
+| http://127.0.0.1:8000/ui | App (v19 shell) |
 | http://127.0.0.1:8000/docs | OpenAPI |
 | http://127.0.0.1:8000/stats | Counts |
-| http://127.0.0.1:8000/update/check | Update check |
+| http://127.0.0.1:8000/update/check | Update check (shell + data) |

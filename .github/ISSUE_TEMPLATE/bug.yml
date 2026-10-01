@@ -1,0 +1,8 @@
+name: Bug
+description: Rozbitý shell, SW, installer nebo výpočet
+labels: ["bug"]
+body:
+  - type: textarea
+    attributes:
+      label: Co se děje
+      description: Kroky, očekávání, skutečnost. Uveď phone / tablet / desktop.

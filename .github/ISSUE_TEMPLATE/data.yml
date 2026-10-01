@@ -1,0 +1,8 @@
+name: Data gap
+description: Chybějící nebo špatná entita v packu
+labels: ["data"]
+body:
+  - type: textarea
+    attributes:
+      label: Entita
+      description: Kategorie, id, co je špatně. Diff proti JSON, ne přímá editace ohg_data.js.
