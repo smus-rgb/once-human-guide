@@ -1,7 +1,7 @@
 # Once Human Guide — Data
 
-**version:** `2026-09-30-v5-complete`  
-**app:** 5.0.0  
+**version:** `2026-10-01-v19.1-372`  
+**app:** 5.4.0  
 **patch_target:** 3.0.7 live · Isles of Abyss prep  
 
 ## Modules on GitHub (module JSON)
@@ -33,3 +33,7 @@ python3 updater.py
 Updater **assembles** `database_full.json` from module JSON when the monolithic file is not present, then rebuilds `once_human.db`.
 
 Full embedded SPA + SQLite dump: see **OnceHumanGuide_Complete.zip** in project artifacts.
+
+## Schema 19.1
+
+SQLite rebuild writes per-table indexes, `entity_index` (one row per entity) and FTS5 `entity_fts`. Integrity: `GET /integrity`.

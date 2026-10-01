@@ -1,12 +1,12 @@
 {
-  "app_version": "5.3.0",
-  "shell_version": "19.0",
-  "data_version": "2026-10-01-v19-372",
-  "released_at": "2026-10-01T12:00:00Z",
+  "app_version": "5.4.0",
+  "shell_version": "19.1",
+  "data_version": "2026-10-01-v19.1-372",
+  "released_at": "2026-10-01T13:00:00Z",
   "min_app_version": "5.0.0",
   "patch_target": "3.0.7",
   "records": 372,
-  "sw_cache": "ohg-v19-307",
+  "sw_cache": "ohg-v19.1-307",
   "files": {
     "database_full.json": "data",
     "ohg_data.js": "pack",
@@ -18,15 +18,15 @@
     "modules/ohg_pack_channel.js": "module",
     "ohg_sw.js": "sw",
     "api_main.py": "api",
-    "version.json": "meta"
+    "version.json": "meta",
+    "db_engine.py": "system"
   },
-  "notes": "v19 thin host + modules. Pack 372 beze změny. User layer nemění pack.",
+  "notes": "v19.1 shared SQLite engine: entity_index, FTS5 search, integrity report. Pack still 372. User layer unchanged.",
   "changelog": [
-    "Thin host once_human_guide_v19.html + modules/*.js",
-    "Pack channel: version.json diff do Agent queue",
-    "Map region filter + tile placeholder",
-    "Build slot validation + JSON export",
-    "API /ui serves v19; /update/check returns shell+data"
+    "Shared db_engine.py for installer and updater",
+    "SQLite indexes + entity_index + FTS5",
+    "API /search uses FTS, plus /health and /integrity",
+    "Client search ranks name prefix matches"
   ],
   "github": {
     "owner": "smus-rgb",

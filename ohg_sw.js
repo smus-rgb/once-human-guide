@@ -1,5 +1,5 @@
 /* Once Human Guide v19 — cache thin host + modules + pack */
-const CACHE = 'ohg-v19-307';
+const CACHE = 'ohg-v19.1-307';
 const PRECACHE = [
   './once_human_guide_v19.html',
   './once_human_guide_v18.html',

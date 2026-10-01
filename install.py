@@ -36,6 +36,7 @@ DEFAULT_DIR = Path.cwd() / "once-human-guide-app"
 CORE_FILES = [
     "version.json",
     "api_main.py",
+    "db_engine.py",
     "updater.py",
     "install.py",
     "requirements.txt",
@@ -189,40 +190,9 @@ def assemble_database(dest_dir: Path) -> Path | None:
 
 
 def rebuild_sqlite(json_path: Path, db_path: Path) -> int:
-    data = json.loads(json_path.read_text(encoding="utf-8"))
-    if db_path.exists():
-        db_path.unlink()
-    import sqlite3
-
-    conn = sqlite3.connect(str(db_path))
-    c = conn.cursor()
-    c.execute(
-        "CREATE TABLE data_versions (table_name TEXT PRIMARY KEY, version TEXT, updated_at TEXT)"
-    )
-    ver = data.get("version", "unknown")
-    c.execute(
-        "INSERT INTO data_versions VALUES ('all', ?, datetime('now'))", (ver,)
-    )
-    total = 0
-    for key, rows in data.items():
-        if key in ("version", "meta") or not isinstance(rows, list) or not rows:
-            continue
-        cols = list(rows[0].keys())
-        col_sql = ", ".join(f'"{col}" TEXT' for col in cols)
-        c.execute(f'CREATE TABLE IF NOT EXISTS "{key}" ({col_sql})')
-        for row in rows:
-            vals = []
-            for col in cols:
-                v = row.get(col)
-                if isinstance(v, (list, dict)):
-                    v = json.dumps(v, ensure_ascii=False)
-                vals.append(v)
-            placeholders = ",".join("?" * len(cols))
-            c.execute(f'INSERT INTO "{key}" VALUES ({placeholders})', vals)
-            total += 1
-    conn.commit()
-    conn.close()
-    return total
+    """Shared schema (indexes + FTS + entity_index) via db_engine."""
+    from db_engine import rebuild_sqlite as _rebuild
+    return _rebuild(json_path, db_path)
 
 
 def write_launchers(dest_dir: Path) -> None:
