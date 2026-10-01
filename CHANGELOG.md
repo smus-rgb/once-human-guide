@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- `/ui` načítá pack, moduly, version a offline shell assety z API
+- `POST /update/run` vyžaduje `OHG_ADMIN_TOKEN` v hlavičce `X-OHG-Admin-Token` (bez konfigurace vrací 403)
+- Výchozí host API a instalačních launcherů je `127.0.0.1`
+
 ## 5.3.0 / shell 19.0 — 2026-10-01
 
 - Tenký host `once_human_guide_v19.html`; runtime v `modules/ohg_runtime.js`

@@ -2,11 +2,13 @@
 from __future__ import annotations
 
 from datetime import datetime, timezone
+from hmac import compare_digest
 from pathlib import Path
 import json
+import os
 import sqlite3
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, Header, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
 
@@ -118,6 +120,30 @@ def serve_ui():
         if html.exists():
             return HTMLResponse(html.read_text(encoding="utf-8"))
     raise HTTPException(404, "UI HTML not found")
+
+
+@app.get("/once_human_guide_v19.html")
+@app.get("/once_human_guide_v18.html")
+@app.get("/ohg_data.js")
+@app.get("/ohg_sw.js")
+@app.get("/version.json")
+def serve_root_asset(request: Request):
+    asset = BASE / request.url.path.lstrip("/")
+    if not asset.is_file():
+        raise HTTPException(404, "Asset not found")
+    return FileResponse(asset)
+
+
+@app.get("/modules/{name}")
+def serve_module(name: str):
+    if name not in {
+        "ohg_runtime.js", "ohg_map.js", "ohg_builds.js", "ohg_pack_channel.js"
+    }:
+        raise HTTPException(404, "Module not found")
+    asset = BASE / "modules" / name
+    if not asset.is_file():
+        raise HTTPException(404, "Module not found")
+    return FileResponse(asset)
 
 
 @app.get("/version")
@@ -345,8 +371,13 @@ def update_check():
 
 
 @app.post("/update/run")
-def update_run(force: bool = False):
+def update_run(
+    force: bool = False, admin_token: str | None = Header(None, alias="X-OHG-Admin-Token")
+):
     """Run updater.py in-process (downloads from GitHub, rebuilds SQLite)."""
+    configured_token = os.environ.get("OHG_ADMIN_TOKEN")
+    if not configured_token or not admin_token or not compare_digest(admin_token, configured_token):
+        raise HTTPException(403, "Forbidden")
     import subprocess
     import sys
 
@@ -388,4 +419,4 @@ def get_item(table: str, item_id: str):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("api_main:app", host="0.0.0.0", port=8000, reload=False)
+    uvicorn.run("api_main:app", host="127.0.0.1", port=8000, reload=False)
