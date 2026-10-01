@@ -69,7 +69,7 @@ const MODULES=[
   {id:'agent',route:'/agent',offline:true,phone:'queue',tablet:'queue|item',desktop:'queue+diff'},
   {id:'settings',route:'/settings',offline:true,phone:'form',tablet:'form',desktop:'form+sync'}
 ];
-window.OHG={version:'19.0',modules:MODULES,nav:NAV,shell:'AdaptiveShell',host:'ModuleHost',sw:'ohg_sw.js',packChannel:'local+sw+remote'};
+window.OHG={version:'19.1',modules:MODULES,nav:NAV,shell:'AdaptiveShell',host:'ModuleHost',sw:'ohg_sw.js',packChannel:'local+sw+remote'};
 
 let DATA=window.OHG_DATA||{};
 let META=window.OHG_META||{entities:0,version:'local'};
@@ -107,7 +107,23 @@ function search(q){
   q=(q||'').toLowerCase().trim();
   const pool=allEntities();
   if(!q) return pool.slice(0,50);
-  return pool.filter(e=>[e.name,e.type,e.desc,e.region,e.location,e.rarity,e.slot,(e.tags||[]).join(' ')].join(' ').toLowerCase().includes(q)).slice(0,80);
+  const terms=q.split(/\s+/).filter(Boolean);
+  const scored=[];
+  pool.forEach(e=>{
+    const name=(e.name||'').toLowerCase();
+    const blob=[name,e.type,e.desc,e.region,e.location,e.rarity,e.slot,(e.tags||[]).join(' ')].join(' ').toLowerCase();
+    if(!terms.every(t=>blob.includes(t))) return;
+    let score=0;
+    terms.forEach(t=>{
+      if(name===t) score+=50;
+      else if(name.startsWith(t)) score+=30;
+      else if(name.includes(t)) score+=15;
+      else score+=1;
+    });
+    scored.push({e,score});
+  });
+  scored.sort((a,b)=>b.score-a.score||(a.e.name||'').localeCompare(b.e.name||''));
+  return scored.slice(0,80).map(x=>x.e);
 }
 function renderNav(){
   const sb=document.getElementById('sidebar');
@@ -204,7 +220,7 @@ function viewHome(){
   const done=Object.values(user.progress).filter(Boolean).length;
   const bp=typeof calcBuild==='function'?calcBuild():{power:0,filled:0};
   return `<div class="kicker">Dashboard</div><h1>Once Human Guide</h1>
-    <p class="sub">App 18.0 · ModuleHost · ${META.version||'pack'} · Patch ${META.patch||'3.0.7'} · ${n} entit · ${MODULES.length} modulů · AdaptiveShell ${device}</p>
+    <p class="sub">App 19.1 · ModuleHost · ${META.version||'pack'} · Patch ${META.patch||'3.0.7'} · ${n} entit · ${MODULES.length} modulů · AdaptiveShell ${device}</p>
     <div class="grid g4">
       <div class="card"><div class="kicker">Databáze</div><div class="stat">${n}</div><div class="muted">lokální pack</div></div>
       <div class="card"><div class="kicker">Build Power</div><div class="stat">${bp.power||'—'}</div><div class="muted">${bp.filled||0}/5 slotů</div></div>

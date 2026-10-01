@@ -1,7 +1,7 @@
 # Once Human Guide
 
 Adaptive game companion for **Once Human**  
-**App 5.2.0** · Shell **v18** · Data `2026-09-30-v18-372` · Patch **3.0.7** · 372 entit
+**App 5.4.0** · Shell **v19.1** · Data `2026-10-01-v19.1-372` · Patch **3.0.7** · 372 entit
 
 **Repo:** https://github.com/smus-rgb/once-human-guide
 
@@ -84,4 +84,7 @@ Open `once_human_guide_v18.html` (needs `ohg_data.js` + `ohg_sw.js` vedle). Lega
 | http://127.0.0.1:8000/ui | App |
 | http://127.0.0.1:8000/docs | OpenAPI |
 | http://127.0.0.1:8000/stats | Counts |
+| http://127.0.0.1:8000/search?q= | FTS search |
+| http://127.0.0.1:8000/integrity | Pack integrity |
+| http://127.0.0.1:8000/health | Health |
 | http://127.0.0.1:8000/update/check | Update check |

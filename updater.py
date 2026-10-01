@@ -39,6 +39,7 @@ UPDATE_MAP = {
     "CHANGELOG.md": "CHANGELOG.md",
     "Once_Human_Guide_v18_Modular_System.md": "Once_Human_Guide_v18_Modular_System.md",
     "api_main.py": "api_main.py",
+    "db_engine.py": "db_engine.py",
     "requirements.txt": "requirements.txt",
     "updater.py": "updater.py",
     "install.py": "install.py",
@@ -152,66 +153,9 @@ def assemble_database_full(base: Path) -> Path | None:
 
 
 def rebuild_sqlite(json_path: Path, db_path: Path) -> int:
-    """Rebuild SQLite from database_full.json. Returns total row count."""
-    data = json.loads(json_path.read_text(encoding="utf-8"))
-    if db_path.exists():
-        db_path.unlink()
-    conn = sqlite3.connect(str(db_path))
-    c = conn.cursor()
-    schemas = {
-        "deviations": ("id TEXT PRIMARY KEY, name TEXT, type TEXT, rarity TEXT, utility TEXT, desc TEXT, mood TEXT, source TEXT, tags TEXT",
-                       ["id", "name", "type", "rarity", "utility", "desc", "mood", "source", "tags"]),
-        "weapons": ("id TEXT PRIMARY KEY, name TEXT, type TEXT, rarity TEXT, style TEXT, desc TEXT, tags TEXT",
-                    ["id", "name", "type", "rarity", "style", "desc", "tags"]),
-        "armor": ("id TEXT PRIMARY KEY, name TEXT, type TEXT, rarity TEXT, style TEXT, desc TEXT, pieces INT, tags TEXT",
-                  ["id", "name", "type", "rarity", "style", "desc", "pieces", "tags"]),
-        "mods": ("id TEXT PRIMARY KEY, name TEXT, type TEXT, rarity TEXT, slot TEXT, desc TEXT, tags TEXT",
-                 ["id", "name", "type", "rarity", "slot", "desc", "tags"]),
-        "bosses": ("id TEXT PRIMARY KEY, name TEXT, type TEXT, region TEXT, location TEXT, desc TEXT, drops TEXT, tags TEXT",
-                   ["id", "name", "type", "region", "location", "desc", "drops", "tags"]),
-        "locations": ("id TEXT PRIMARY KEY, name TEXT, type TEXT, region TEXT, desc TEXT, tags TEXT",
-                      ["id", "name", "type", "region", "desc", "tags"]),
-        "recipes": ("id TEXT PRIMARY KEY, name TEXT, type TEXT, station TEXT, desc TEXT, ingredients TEXT, tags TEXT",
-                    ["id", "name", "type", "station", "desc", "ingredients", "tags"]),
-        "materials": ("id TEXT PRIMARY KEY, name TEXT, type TEXT, rarity TEXT, desc TEXT, source TEXT, tags TEXT",
-                      ["id", "name", "type", "rarity", "desc", "source", "tags"]),
-        "scenarios": ("id TEXT PRIMARY KEY, name TEXT, type TEXT, phase TEXT, desc TEXT, rewards TEXT, locations TEXT, tags TEXT",
-                      ["id", "name", "type", "phase", "desc", "rewards", "locations", "tags"]),
-        "quests": ("id TEXT PRIMARY KEY, name TEXT, type TEXT, region TEXT, desc TEXT, rewards TEXT, tags TEXT",
-                   ["id", "name", "type", "region", "desc", "rewards", "tags"]),
-        "events": ("id TEXT PRIMARY KEY, name TEXT, type TEXT, status TEXT, desc TEXT, rewards TEXT, location TEXT, timer TEXT, tags TEXT",
-                   ["id", "name", "type", "status", "desc", "rewards", "location", "timer", "tags"]),
-        "creatures": ("id TEXT PRIMARY KEY, name TEXT, type TEXT, threat TEXT, desc TEXT, location TEXT, tags TEXT",
-                      ["id", "name", "type", "threat", "desc", "location", "tags"]),
-        "npcs": ("id TEXT PRIMARY KEY, name TEXT, type TEXT, location TEXT, desc TEXT, tags TEXT",
-                 ["id", "name", "type", "location", "desc", "tags"]),
-        "plants": ("id TEXT PRIMARY KEY, name TEXT, type TEXT, desc TEXT, uses TEXT, tags TEXT",
-                   ["id", "name", "type", "desc", "uses", "tags"]),
-        "fish": ("id TEXT PRIMARY KEY, name TEXT, type TEXT, desc TEXT, location TEXT, tags TEXT",
-                 ["id", "name", "type", "desc", "location", "tags"]),
-        "animals": ("id TEXT PRIMARY KEY, name TEXT, type TEXT, desc TEXT, drops TEXT, location TEXT, taming TEXT, tags TEXT",
-                    ["id", "name", "type", "desc", "drops", "location", "taming", "tags"]),
-        "flowers": ("id TEXT PRIMARY KEY, name TEXT, type TEXT, desc TEXT, tags TEXT",
-                    ["id", "name", "type", "desc", "tags"]),
-    }
-    c.execute("CREATE TABLE data_versions (table_name TEXT PRIMARY KEY, version TEXT, updated_at TEXT)")
-    ver = data.get("version", "unknown")
-    c.execute("INSERT INTO data_versions VALUES ('all', ?, datetime('now'))", (ver,))
-    total = 0
-    for table, (schema, cols) in schemas.items():
-        c.execute(f"CREATE TABLE {table} ({schema})")
-        for row in data.get(table, []):
-            vals = []
-            for col in cols:
-                v = row.get(col)
-                if isinstance(v, list):
-                    v = json.dumps(v, ensure_ascii=False)
-                vals.append(v)
-            c.execute(f"INSERT INTO {table} VALUES ({','.join('?' * len(cols))})", vals)
-            total += 1
-    conn.commit()
-    conn.close()
-    return total
+    """Rebuild SQLite from database_full.json. Schema lives in db_engine.py."""
+    from db_engine import rebuild_sqlite as _rebuild
+    return _rebuild(json_path, db_path)
 
 
 def run(check_only: bool = False, force: bool = False) -> int:

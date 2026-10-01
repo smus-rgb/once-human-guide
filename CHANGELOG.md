@@ -1,5 +1,15 @@
 # Changelog
 
+## 5.4.0 / shell 19.1 — 2026-10-01
+
+- Sjednocené schéma SQLite v `db_engine.py` (installer i updater)
+- Indexy, `entity_index`, fulltext `entity_fts`
+- API: `/search` přes FTS, nové `/health` a `/integrity`
+- App: řazení hledání podle shody jména; home badge 19.1
+- Pack zůstává 372 entit, verze dat sladěná na `2026-10-01-v19.1-372`
+- User layer (favorites, inventory, builds) se nemění
+
+
 ## 5.3.0 / shell 19.0 — 2026-10-01
 
 - Tenký host `once_human_guide_v19.html`; runtime v `modules/ohg_runtime.js`

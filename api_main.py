@@ -15,8 +15,8 @@ DB_PATH = BASE / "once_human.db"
 if not DB_PATH.exists():
     DB_PATH = BASE.parent / "once_human.db"
 
-DATA_VERSION = "2026-10-01-v19-372"
-API_VERSION = "5.3.0"
+DATA_VERSION = "2026-10-01-v19.1-372"
+API_VERSION = "5.4.0"
 MAP_EMBEDS = {
     "thgl": "https://oncehuman.th.gl",
     "mapgenie": "https://mapgenie.io/once-human/maps/nalcott",
@@ -167,18 +167,78 @@ def stats():
     return out
 
 
+def _fts_query(q: str) -> str:
+    parts = [w for w in q.replace('"', " ").split() if w]
+    return " ".join(f'"{w}"*' for w in parts)
+
+
 @app.get("/search")
 def search(q: str = Query(..., min_length=1), limit: int = Query(50, ge=1, le=200)):
+    """Cross-table search. Prefers FTS5, then LIKE on entity_index, then full scan."""
+    conn = get_db()
+    fts = _fts_query(q)
+    try:
+        if fts:
+            rows = conn.execute(
+                """SELECT e.table_name, e.payload FROM entity_fts f
+                   JOIN entity_index e ON e.table_name=f.table_name AND e.id=f.id
+                   WHERE entity_fts MATCH ?
+                   ORDER BY rank LIMIT ?""",
+                (fts, limit),
+            ).fetchall()
+            if rows:
+                conn.close()
+                results = [{"table": r["table_name"], **json.loads(r["payload"])} for r in rows]
+                return {"q": q, "count": len(results), "engine": "fts5", "results": results}
+    except sqlite3.Error:
+        pass
+    like = f"%{q.lower()}%"
+    try:
+        rows = conn.execute(
+            "SELECT table_name, payload FROM entity_index WHERE search_text LIKE ? LIMIT ?",
+            (like, limit),
+        ).fetchall()
+        conn.close()
+        results = [{"table": r["table_name"], **json.loads(r["payload"])} for r in rows]
+        return {"q": q, "count": len(results), "engine": "like", "results": results}
+    except sqlite3.Error:
+        conn.close()
     s = q.lower()
-    results = []
+    out = []
     for table in TABLES:
         for item in fetch_all(table):
             blob = " ".join(str(v) for v in item.values() if v is not None).lower()
             if s in blob:
-                results.append({"table": table, **item})
-            if len(results) >= limit:
-                return {"q": q, "count": len(results), "results": results}
-    return {"q": q, "count": len(results), "results": results}
+                out.append({"table": table, **item})
+            if len(out) >= limit:
+                break
+        if len(out) >= limit:
+            break
+    return {"q": q, "count": len(out), "engine": "scan", "results": out}
+
+
+@app.get("/health")
+def health():
+    db_ok = DB_PATH.exists()
+    return {
+        "status": "ok" if db_ok else "degraded",
+        "api_version": API_VERSION,
+        "data_version": DATA_VERSION,
+        "db": str(DB_PATH),
+        "db_present": db_ok,
+    }
+
+
+@app.get("/integrity")
+def integrity():
+    full = BASE / "database_full.json"
+    if not full.exists():
+        raise HTTPException(404, "database_full.json missing")
+    from db_engine import pack_report
+    data = json.loads(full.read_text(encoding="utf-8"))
+    report = pack_report(data)
+    report["api_version"] = API_VERSION
+    return report
 
 
 @app.get("/export")
