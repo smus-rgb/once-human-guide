@@ -169,10 +169,10 @@ def rebuild_sqlite(json_path: Path, db_path: Path) -> int:
                  ["id", "name", "type", "rarity", "slot", "desc", "tags"]),
         "bosses": ("id TEXT PRIMARY KEY, name TEXT, type TEXT, region TEXT, location TEXT, desc TEXT, drops TEXT, tags TEXT",
                    ["id", "name", "type", "region", "location", "desc", "drops", "tags"]),
-        "locations": ("id TEXT PRIMARY KEY, name TEXT, type TEXT, region TEXT, desc TEXT, tags TEXT",
-                      ["id", "name", "type", "region", "desc", "tags"]),
-        "recipes": ("id TEXT PRIMARY KEY, name TEXT, type TEXT, station TEXT, desc TEXT, ingredients TEXT, tags TEXT",
-                    ["id", "name", "type", "station", "desc", "ingredients", "tags"]),
+        "locations": ("id TEXT PRIMARY KEY, name TEXT, type TEXT, region TEXT, desc TEXT, x REAL, y REAL, tags TEXT, extra TEXT",
+                      ["id", "name", "type", "region", "desc", "x", "y", "tags", "extra"]),
+        "recipes": ("id TEXT PRIMARY KEY, name TEXT, type TEXT, station TEXT, desc TEXT, ingredients TEXT, effect TEXT, tags TEXT, extra TEXT",
+                    ["id", "name", "type", "station", "desc", "ingredients", "effect", "tags", "extra"]),
         "materials": ("id TEXT PRIMARY KEY, name TEXT, type TEXT, rarity TEXT, desc TEXT, source TEXT, tags TEXT",
                       ["id", "name", "type", "rarity", "desc", "source", "tags"]),
         "scenarios": ("id TEXT PRIMARY KEY, name TEXT, type TEXT, phase TEXT, desc TEXT, rewards TEXT, locations TEXT, tags TEXT",
@@ -198,17 +198,37 @@ def rebuild_sqlite(json_path: Path, db_path: Path) -> int:
     ver = data.get("version", "unknown")
     c.execute("INSERT INTO data_versions VALUES ('all', ?, datetime('now'))", (ver,))
     total = 0
+    index_cols = ("name", "type", "region", "rarity", "location")
     for table, (schema, cols) in schemas.items():
+        if "extra TEXT" not in schema:
+            schema = schema + ", extra TEXT"
+            cols = cols + ["extra"]
         c.execute(f"CREATE TABLE {table} ({schema})")
+        for col in index_cols:
+            if col in cols:
+                c.execute(f"CREATE INDEX IF NOT EXISTS idx_{table}_{col} ON {table}({col})")
         for row in data.get(table, []):
             vals = []
+            known = set(cols) - {"extra"}
+            extra = {k: v for k, v in row.items() if k not in known}
             for col in cols:
-                v = row.get(col)
-                if isinstance(v, list):
+                if col == "extra":
+                    v = json.dumps(extra, ensure_ascii=False) if extra else None
+                else:
+                    v = row.get(col)
+                if isinstance(v, (list, dict)):
                     v = json.dumps(v, ensure_ascii=False)
                 vals.append(v)
             c.execute(f"INSERT INTO {table} VALUES ({','.join('?' * len(cols))})", vals)
             total += 1
+    # FTS across name/desc for fast search
+    c.execute("CREATE VIRTUAL TABLE IF NOT EXISTS search_fts USING fts5(table_name UNINDEXED, id UNINDEXED, name, body)")
+    for table in schemas:
+        rows = c.execute(f"SELECT id, name, desc FROM {table}").fetchall()
+        c.executemany(
+            "INSERT INTO search_fts(table_name, id, name, body) VALUES (?,?,?,?)",
+            [(table, r[0], r[1] or "", r[2] or "") for r in rows],
+        )
     conn.commit()
     conn.close()
     return total

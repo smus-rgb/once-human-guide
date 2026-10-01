@@ -3,6 +3,7 @@
 Po dokončení fáze se **hotová fáze z tohoto souboru maže**.
 Dokončeno 2026-09-30: **Fáze A — Stabilizace**.
 Dokončeno 2026-10-01: **Fáze B — Kompletní archivy** (`OnceHumanGuide_v18.0.0_complete.zip`, legacy v `archive/legacy/`, GitHub release `v18.0.0`).
+Dokončeno 2026-10-01: **Fáze C.1 — data/API integrity** (souřadnice, effect, FTS, `/integrity`, static shell).
 Dokončeno 2026-10-01: **Fáze C — Doladění systému** (tenký host v19 + `modules/*.js`, pack channel, mapa region/tiles, build export, API `/ui` + `/update/check`). GitHub `main` `e103185`.
 
 ---
