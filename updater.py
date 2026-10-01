@@ -43,6 +43,8 @@ UPDATE_MAP = {
     "updater.py": "updater.py",
     "install.py": "install.py",
     "version.json": "version.json",
+    "db_build.py": "db_build.py",
+    "modules/ohg_links.js": "modules/ohg_links.js",
     "start.sh": "start.sh",
     "deviations.json": "deviations.json",
     "weapons.json": "weapons.json",
@@ -264,8 +266,14 @@ def run(check_only: bool = False, force: bool = False) -> int:
         assemble_database_full(BASE)
         full = BASE / "database_full.json"
     if full.exists():
-        n = rebuild_sqlite(full, BASE / "once_human.db")
-        print(f"[updater] rebuilt once_human.db ({n} rows)")
+        try:
+            import db_build
+            info = db_build.build(BASE / "once_human.db")
+            print(f"[updater] rebuilt once_human.db via db_build ({info['records']} rows, {info['links']} links)")
+        except Exception as exc:
+            print(f"[updater] db_build skipped ({exc}); fallback schema")
+            n = rebuild_sqlite(full, BASE / "once_human.db")
+            print(f"[updater] rebuilt once_human.db ({n} rows)")
 
     print(f"[updater] done — {len(updated)} files updated")
     return 0
