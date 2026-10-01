@@ -1,5 +1,14 @@
 # Changelog
 
+## 5.4.0 / shell 19.1 — 2026-10-01
+
+- `/ui` servíruje shell i statické assety (`/modules`, `ohg_data.js`, `ohg_sw.js`) — SPA se na API opravdu spustí
+- SQLite: indexy, katalog `entities`, FTS5, odvozené `links` (recept → materiál/rostlina)
+- API: `/health`, `/integrity`, `/search` (FTS), `/links/{table}/{id}`, stránkování
+- `db_build.py`; updater ho preferuje před starým schématem
+- Badge v hostu v19; pack 372 beze změny
+
+
 ## 5.3.0 / shell 19.0 — 2026-10-01
 
 - Tenký host `once_human_guide_v19.html`; runtime v `modules/ohg_runtime.js`
