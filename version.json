@@ -1,12 +1,12 @@
 {
-  "app_version": "5.3.0",
+  "app_version": "5.3.1",
   "shell_version": "19.0",
   "data_version": "2026-10-01-v19-372",
-  "released_at": "2026-10-01T12:00:00Z",
+  "released_at": "2026-10-01T14:00:00Z",
   "min_app_version": "5.0.0",
   "patch_target": "3.0.7",
   "records": 372,
-  "sw_cache": "ohg-v19-307",
+  "sw_cache": "ohg-v19-308",
   "files": {
     "database_full.json": "data",
     "ohg_data.js": "pack",
@@ -20,13 +20,13 @@
     "api_main.py": "api",
     "version.json": "meta"
   },
-  "notes": "v19 thin host + modules. Pack 372 beze změny. User layer nemění pack.",
+  "notes": "v19.1: API serves modules+pack, SQLite keeps x/y and recipe effect, FTS + /integrity",
   "changelog": [
-    "Thin host once_human_guide_v19.html + modules/*.js",
-    "Pack channel: version.json diff do Agent queue",
-    "Map region filter + tile placeholder",
-    "Build slot validation + JSON export",
-    "API /ui serves v19; /update/check returns shell+data"
+    "API serves /ohg_data.js, /ohg_sw.js, /modules so /ui shell actually boots",
+    "SQLite keeps location x/y and recipe effect; unknown fields go to extra",
+    "Indexes + FTS search_fts; SQL search instead of full table scan",
+    "GET /integrity compares JSON vs SQLite",
+    "database_full.json version aligned to 2026-10-01-v19-372"
   ],
   "github": {
     "owner": "smus-rgb",

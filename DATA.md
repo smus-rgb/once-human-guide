@@ -1,7 +1,7 @@
 # Once Human Guide — Data
 
-**version:** `2026-09-30-v5-complete`  
-**app:** 5.0.0  
+**version:** `2026-10-01-v19-372`  
+**app:** 5.3.1  
 **patch_target:** 3.0.7 live · Isles of Abyss prep  
 
 ## Modules on GitHub (module JSON)
@@ -33,3 +33,10 @@ python3 updater.py
 Updater **assembles** `database_full.json` from module JSON when the monolithic file is not present, then rebuilds `once_human.db`.
 
 Full embedded SPA + SQLite dump: see **OnceHumanGuide_Complete.zip** in project artifacts.
+
+## Schema notes (5.3.1)
+
+- `locations` keep `x` and `y` in SQLite (map pins).
+- `recipes.effect` is stored, not dropped.
+- Any field outside the core schema is kept in `extra` JSON.
+- Rebuild: `python3 updater.py --force` then `GET /integrity`.

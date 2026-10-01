@@ -9,6 +9,7 @@ import sqlite3
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
+from fastapi.staticfiles import StaticFiles
 
 BASE = Path(__file__).resolve().parent
 DB_PATH = BASE / "once_human.db"
@@ -61,28 +62,51 @@ def rows_to_list(rows) -> list[dict]:
     return items
 
 
-def fetch_all(table: str, q: str | None = None) -> list[dict]:
+def fetch_all(table: str, q: str | None = None, limit: int = 200, offset: int = 0) -> list[dict]:
     if table not in TABLES:
         raise HTTPException(404, f"Unknown table: {table}")
     conn = get_db()
     try:
-        rows = conn.execute(f"SELECT * FROM {table}").fetchall()
+        if q:
+            like = f"%{q}%"
+            rows = conn.execute(
+                f"""SELECT * FROM {table}
+                    WHERE name LIKE ? OR IFNULL(desc,'') LIKE ? OR IFNULL(type,'') LIKE ?
+                       OR IFNULL(region,'') LIKE ? OR IFNULL(tags,'') LIKE ?
+                    ORDER BY name LIMIT ? OFFSET ?""",
+                (like, like, like, like, like, limit, offset),
+            ).fetchall()
+        else:
+            rows = conn.execute(
+                f"SELECT * FROM {table} ORDER BY name LIMIT ? OFFSET ?",
+                (limit, offset),
+            ).fetchall()
     except sqlite3.Error as e:
         conn.close()
         raise HTTPException(500, str(e))
     conn.close()
-    items = rows_to_list(rows)
-    if q:
-        s = q.lower()
-        def match(item: dict) -> bool:
-            blob = " ".join(
-                str(item.get(k) or "")
-                for k in ("name", "desc", "type", "region", "location", "source", "utility", "rarity", "style")
-            ).lower()
-            tags = item.get("tags") or []
-            return s in blob or any(s in str(t).lower() for t in tags)
-        items = [i for i in items if match(i)]
-    return items
+    return rows_to_list(rows)
+
+
+@app.get("/ohg_data.js")
+def serve_pack():
+    path = BASE / "ohg_data.js"
+    if not path.exists():
+        raise HTTPException(404, "pack missing")
+    return FileResponse(path, media_type="application/javascript")
+
+
+@app.get("/ohg_sw.js")
+def serve_sw_root():
+    return serve_sw()
+
+
+@app.get("/version.json")
+def serve_version_json():
+    path = BASE / "version.json"
+    if not path.exists():
+        raise HTTPException(404, "version.json missing")
+    return FileResponse(path, media_type="application/json")
 
 
 @app.get("/")
@@ -106,6 +130,14 @@ def root():
     }
 
 
+STATIC_ASSETS = {
+    "ohg_data.js": "application/javascript",
+    "ohg_sw.js": "application/javascript",
+    "version.json": "application/json",
+    "once_human_guide_v19.html": "text/html",
+    "once_human_guide_v18.html": "text/html",
+}
+
 @app.get("/ui")
 def serve_ui():
     for name in (
@@ -118,6 +150,28 @@ def serve_ui():
         if html.exists():
             return HTMLResponse(html.read_text(encoding="utf-8"))
     raise HTTPException(404, "UI HTML not found")
+
+
+@app.get("/sw.js")
+def serve_sw():
+    path = BASE / "ohg_sw.js"
+    if not path.exists():
+        raise HTTPException(404, "service worker missing")
+    return FileResponse(path, media_type="application/javascript")
+
+
+@app.get("/assets/{name}")
+def serve_asset(name: str):
+    if name not in STATIC_ASSETS:
+        raise HTTPException(404, "unknown asset")
+    path = BASE / name
+    if not path.exists():
+        raise HTTPException(404, name)
+    return FileResponse(path, media_type=STATIC_ASSETS[name])
+
+
+if (BASE / "modules").is_dir():
+    app.mount("/modules", StaticFiles(directory=BASE / "modules"), name="modules")
 
 
 @app.get("/version")
@@ -372,6 +426,42 @@ def update_run(force: bool = False):
         "stdout": proc.stdout[-4000:] if proc.stdout else "",
         "stderr": proc.stderr[-2000:] if proc.stderr else "",
     }
+
+
+@app.get("/integrity")
+def integrity():
+    """Compare SQLite row counts with database_full.json and report dropped fields."""
+    report = {"ok": True, "tables": {}, "issues": []}
+    json_path = BASE / "database_full.json"
+    if not json_path.exists():
+        raise HTTPException(404, "database_full.json missing")
+    data = json.loads(json_path.read_text(encoding="utf-8"))
+    conn = get_db()
+    try:
+        for table in TABLES:
+            expected = len(data.get(table) or [])
+            try:
+                got = conn.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]
+            except sqlite3.Error as e:
+                report["ok"] = False
+                report["issues"].append(f"{table}: {e}")
+                continue
+            cols = {r[1] for r in conn.execute(f"PRAGMA table_info({table})")}
+            sample = (data.get(table) or [{}])[0] if expected else {}
+            dropped = sorted(k for k in sample.keys() if k not in cols and k != "extra")
+            if got != expected:
+                report["ok"] = False
+                report["issues"].append(f"{table}: json={expected} sqlite={got}")
+            report["tables"][table] = {"json": expected, "sqlite": got, "dropped_sample_keys": dropped}
+    finally:
+        conn.close()
+    ver = data.get("version")
+    report["json_version"] = ver
+    report["api_data_version"] = DATA_VERSION
+    if ver and ver != DATA_VERSION:
+        report["issues"].append(f"version mismatch json={ver} api={DATA_VERSION}")
+        report["ok"] = False
+    return report
 
 
 @app.get("/{table}/{item_id}")

@@ -3351,7 +3351,7 @@
       ]
     }
   ],
-  "version": "2026-09-30-v5-complete",
+  "version": "2026-10-01-v19-372",
   "meta": {
     "online_search": true,
     "update_endpoint": "/api/version",
@@ -3384,7 +3384,10 @@
     "note_308": "Official version 3.0.8 not published as of 2026-09-30. Next major drop Oct 21 PT = Isles of Abyss. DB includes announced scenario/map + missing 3.0.1 armor sets.",
     "fill_note": "Expanded sparse modules: NPCs, quests, materials, recipes, mods, creatures, bosses, locations, plants/fish/flowers, weapon variants",
     "fill2": "Silo/monolith bosses, expanded mod pool, more locations/quests/materials",
-    "app": "Once Human Guide Complete"
+    "app": "5.3.1",
+    "shell": "19.0",
+    "schema": "locations.x/y + recipes.effect preserved; extra JSON column; FTS search_fts",
+    "note_schema": "2026-10-01: SQLite no longer drops map coordinates or recipe effects"
   },
   "scenarios": [
     {
