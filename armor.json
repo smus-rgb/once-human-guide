@@ -1,1 +1,236 @@
-[{"id":"set_lonewolf","name":"Lonewolf Set","type":"Armor Set","rarity":"Legendary","style":"Juggernaut","desc":"Magazine +10%, Crit Rate +5%. Crit → Lone Shadow stacks (až +60% Crit DMG). Univerzální endgame set.","pieces":4,"tags":["crit","dps","endgame","s-tier"]},{"id":"set_shelterer","name":"Shelterer Set","type":"Armor Set","rarity":"Legendary","style":"Wanderer","desc":"Status DMG Reduction + Element DMG. Základ pro elemental (Blaze/Frost/Shock/Blast) buildy.","pieces":4,"tags":["elemental","defense"]},{"id":"set_falcon","name":"Falcon Set","type":"Armor Set","rarity":"Epic","style":"Huntsman","desc":"Mid-game combat set. Crit a weapon DMG bonusy. Snadno z world crates.","pieces":4,"tags":["midgame","crit"]},{"id":"set_scout","name":"Scout Set","type":"Armor Set","rarity":"Rare","style":"Wanderer","desc":"Max HP + Weapon DMG, bonus při undetected. Early combat.","pieces":4,"tags":["early","stealth"]},{"id":"set_raid","name":"Raid Set","type":"Armor Set","rarity":"Rare","style":"Wanderer","desc":"Gathering Speed + Load, méně Staminy při glide/roll. Farm set.","pieces":4,"tags":["gathering"]},{"id":"set_rustic","name":"Rustic Set","type":"Armor Set","rarity":"Common","style":"Wanderer","desc":"Movement Speed, Melee DMG, HP, Gathering. Starter set.","pieces":5,"tags":["starter"]},{"id":"set_bastille","name":"Bastille Set","type":"Armor Set","rarity":"Legendary","style":"Beyonder","desc":"Obranný set se shield mechanikou a vulnerability při break.","pieces":4,"tags":["tank","defense"]},{"id":"set_blackstone","name":"Blackstone Set","type":"Armor Set","rarity":"Legendary","style":"Wanderer","desc":"Way of Winter legendary set. Vysoké HP / Pollution / Psi.","pieces":6,"tags":["winter","tank"]},{"id":"set_savior","name":"Savior Set","type":"Armor Set","rarity":"Legendary","style":"Operator","desc":"Support/heal oriented legendary set.","pieces":4,"tags":["heal","support"]},{"id":"set_stormweaver","name":"Stormweaver Set","type":"Armor Set","rarity":"Legendary","style":"Stranger","desc":"Shock/elemental focused set.","pieces":4,"tags":["shock","elemental"]},{"id":"set_renegade","name":"Renegade Set","type":"Armor Set","rarity":"Epic","style":"Huntsman","desc":"Aggressive mid-game huntsman set.","pieces":4,"tags":["midgame"]},{"id":"set_agent","name":"Agent Set","type":"Armor Set","rarity":"Epic","style":"Wanderer","desc":"Fragments from Mystical Crates – Iron River.","pieces":4,"tags":["midgame"]},{"id":"set_treacherous_tides","name":"Treacherous Tides Set","type":"Armor Set","rarity":"Legendary","style":"—","desc":"Reworked in 3.0.6: DMG bonus no longer scales with Sanity. Scales with HP instead. 2pc: when HP <70%, Weapon+Status DMG +12%. 3pc: base Weapon/Status DMG at 100% HP +8%, increases as HP drops (max 28%). 4pc: shield enhancement retained.","pieces":4,"tags":["hp-scaling","dps","3.0.6"]},{"id":"set_ghost_link","name":"Ghost Link Set","type":"Armor Set","rarity":"Legendary","style":"—","desc":"Added with 3.0.1 anniversary weapons. 1pc: Crit rate up. 2pc: Reload efficiency up. 3pc conditions adjusted in 3.0.4 balance pass. Synergizes with Unstable Bomber / QBJ97 line.","pieces":4,"tags":["crit","reload","3.0.1"]},{"id":"armor_wind_interpreter","name":"Wind Interpreter Cap","type":"Armor","rarity":"Legendary","style":"—","desc":"3.0.1 piece: When Unstable Bomber explodes, auto-load 1 bullet; Unstable Bomber DMG Rate +25%.","pieces":1,"tags":["unstable-bomber","3.0.1"]},{"id":"armor_ankh_mask","name":"Ankh Mask","type":"Armor","rarity":"Legendary","style":"—","desc":"3.0.1 piece: Emptying magazine has a chance to consume ammo stock and partially refill magazine.","pieces":1,"tags":["reload","3.0.1"]},{"id":"armor_glide_pants","name":"Glide Pants","type":"Armor","rarity":"Legendary","style":"—","desc":"May 2026 gear: Roll becomes slide; after slide Reload Speed + Movement Speed. With bow: slide loads 1 ammo, increases draw speed.","pieces":1,"tags":["mobility","bow"]},{"id":"armor_magnetic_moment","name":"Magnetic Moment Top","type":"Armor","rarity":"Legendary","style":"—","desc":"May 2026 gear: Units with Power Surge continuously pull nearby enemies. Pairs with AUG - Electron Cloud.","pieces":1,"tags":["power-surge","shock"]}]
+[
+  {
+    "id": "set_lonewolf",
+    "name": "Lonewolf Set",
+    "type": "Armor Set",
+    "rarity": "Legendary",
+    "style": "Juggernaut",
+    "desc": "Magazine +10%, Crit Rate +5%. Crit → Lone Shadow stacks (až +60% Crit DMG). Univerzální endgame set.",
+    "pieces": 4,
+    "tags": [
+      "crit",
+      "dps",
+      "endgame",
+      "s-tier"
+    ]
+  },
+  {
+    "id": "set_shelterer",
+    "name": "Shelterer Set",
+    "type": "Armor Set",
+    "rarity": "Legendary",
+    "style": "Wanderer",
+    "desc": "Status DMG Reduction + Element DMG. Základ pro elemental (Blaze/Frost/Shock/Blast) buildy.",
+    "pieces": 4,
+    "tags": [
+      "elemental",
+      "defense"
+    ]
+  },
+  {
+    "id": "set_falcon",
+    "name": "Falcon Set",
+    "type": "Armor Set",
+    "rarity": "Epic",
+    "style": "Huntsman",
+    "desc": "Mid-game combat set. Crit a weapon DMG bonusy. Snadno z world crates.",
+    "pieces": 4,
+    "tags": [
+      "midgame",
+      "crit"
+    ]
+  },
+  {
+    "id": "set_scout",
+    "name": "Scout Set",
+    "type": "Armor Set",
+    "rarity": "Rare",
+    "style": "Wanderer",
+    "desc": "Max HP + Weapon DMG, bonus při undetected. Early combat.",
+    "pieces": 4,
+    "tags": [
+      "early",
+      "stealth"
+    ]
+  },
+  {
+    "id": "set_raid",
+    "name": "Raid Set",
+    "type": "Armor Set",
+    "rarity": "Rare",
+    "style": "Wanderer",
+    "desc": "Gathering Speed + Load, méně Staminy při glide/roll. Farm set.",
+    "pieces": 4,
+    "tags": [
+      "gathering"
+    ]
+  },
+  {
+    "id": "set_rustic",
+    "name": "Rustic Set",
+    "type": "Armor Set",
+    "rarity": "Common",
+    "style": "Wanderer",
+    "desc": "Movement Speed, Melee DMG, HP, Gathering. Starter set.",
+    "pieces": 5,
+    "tags": [
+      "starter"
+    ]
+  },
+  {
+    "id": "set_bastille",
+    "name": "Bastille Set",
+    "type": "Armor Set",
+    "rarity": "Legendary",
+    "style": "Beyonder",
+    "desc": "Obranný set se shield mechanikou a vulnerability při break.",
+    "pieces": 4,
+    "tags": [
+      "tank",
+      "defense"
+    ]
+  },
+  {
+    "id": "set_blackstone",
+    "name": "Blackstone Set",
+    "type": "Armor Set",
+    "rarity": "Legendary",
+    "style": "Wanderer",
+    "desc": "Way of Winter legendary set. Vysoké HP / Pollution / Psi.",
+    "pieces": 6,
+    "tags": [
+      "winter",
+      "tank"
+    ]
+  },
+  {
+    "id": "set_savior",
+    "name": "Savior Set",
+    "type": "Armor Set",
+    "rarity": "Legendary",
+    "style": "Operator",
+    "desc": "Support/heal oriented legendary set.",
+    "pieces": 4,
+    "tags": [
+      "heal",
+      "support"
+    ]
+  },
+  {
+    "id": "set_stormweaver",
+    "name": "Stormweaver Set",
+    "type": "Armor Set",
+    "rarity": "Legendary",
+    "style": "Stranger",
+    "desc": "Shock/elemental focused set.",
+    "pieces": 4,
+    "tags": [
+      "shock",
+      "elemental"
+    ]
+  },
+  {
+    "id": "set_renegade",
+    "name": "Renegade Set",
+    "type": "Armor Set",
+    "rarity": "Epic",
+    "style": "Huntsman",
+    "desc": "Aggressive mid-game huntsman set.",
+    "pieces": 4,
+    "tags": [
+      "midgame"
+    ]
+  },
+  {
+    "id": "set_agent",
+    "name": "Agent Set",
+    "type": "Armor Set",
+    "rarity": "Epic",
+    "style": "Wanderer",
+    "desc": "Fragments from Mystical Crates – Iron River.",
+    "pieces": 4,
+    "tags": [
+      "midgame"
+    ]
+  },
+  {
+    "id": "set_treacherous_tides",
+    "name": "Treacherous Tides Set",
+    "type": "Armor Set",
+    "rarity": "Legendary",
+    "style": "—",
+    "desc": "Reworked in 3.0.6: DMG bonus no longer scales with Sanity. Scales with HP instead. 2pc: when HP <70%, Weapon+Status DMG +12%. 3pc: base Weapon/Status DMG at 100% HP +8%, increases as HP drops (max 28%). 4pc: shield enhancement retained.",
+    "pieces": 4,
+    "tags": [
+      "hp-scaling",
+      "dps",
+      "3.0.6"
+    ]
+  },
+  {
+    "id": "set_ghost_link",
+    "name": "Ghost Link Set",
+    "type": "Armor Set",
+    "rarity": "Legendary",
+    "style": "—",
+    "desc": "Added with 3.0.1 anniversary weapons. 1pc: Crit rate up. 2pc: Reload efficiency up. 3pc conditions adjusted in 3.0.4 balance pass. Synergizes with Unstable Bomber / QBJ97 line.",
+    "pieces": 4,
+    "tags": [
+      "crit",
+      "reload",
+      "3.0.1"
+    ]
+  },
+  {
+    "id": "armor_wind_interpreter",
+    "name": "Wind Interpreter Cap",
+    "type": "Armor",
+    "rarity": "Legendary",
+    "style": "—",
+    "desc": "3.0.1 piece: When Unstable Bomber explodes, auto-load 1 bullet; Unstable Bomber DMG Rate +25%.",
+    "pieces": 1,
+    "tags": [
+      "unstable-bomber",
+      "3.0.1"
+    ]
+  },
+  {
+    "id": "armor_ankh_mask",
+    "name": "Ankh Mask",
+    "type": "Armor",
+    "rarity": "Legendary",
+    "style": "—",
+    "desc": "3.0.1 piece: Emptying magazine has a chance to consume ammo stock and partially refill magazine.",
+    "pieces": 1,
+    "tags": [
+      "reload",
+      "3.0.1"
+    ]
+  },
+  {
+    "id": "armor_glide_pants",
+    "name": "Glide Pants",
+    "type": "Armor",
+    "rarity": "Legendary",
+    "style": "—",
+    "desc": "May 2026 gear: Roll becomes slide; after slide Reload Speed + Movement Speed. With bow: slide loads 1 ammo, increases draw speed.",
+    "pieces": 1,
+    "tags": [
+      "mobility",
+      "bow"
+    ]
+  },
+  {
+    "id": "armor_magnetic_moment",
+    "name": "Magnetic Moment Top",
+    "type": "Armor",
+    "rarity": "Legendary",
+    "style": "—",
+    "desc": "May 2026 gear: Units with Power Surge continuously pull nearby enemies. Pairs with AUG - Electron Cloud.",
+    "pieces": 1,
+    "tags": [
+      "power-surge",
+      "shock"
+    ]
+  }
+]

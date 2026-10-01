@@ -1,1 +1,561 @@
-[{"id":"mod_deadshot","name":"Deadshot","type":"Weapon Mod","rarity":"Legendary","slot":"Weapon","desc":"Precision / crit-oriented legendary mod.","tags":["crit","precision"]},{"id":"mod_shrapnel","name":"Shrapnel Core","type":"Weapon Mod","rarity":"Legendary","slot":"Weapon","desc":"Shrapnel trigger rate / damage — SOCR Last Valor family.","tags":["shrapnel","dps"]},{"id":"mod_blaze","name":"Blaze Amplifier","type":"Weapon Mod","rarity":"Legendary","slot":"Weapon","desc":"Burn stack and blaze pool damage.","tags":["blaze","status"]},{"id":"mod_frost","name":"Frost Vortex","type":"Weapon Mod","rarity":"Legendary","slot":"Weapon","desc":"Frost status / vortex control for winter builds.","tags":["frost"]},{"id":"mod_shock","name":"Shock Cascade","type":"Weapon Mod","rarity":"Legendary","slot":"Weapon","desc":"Shock chaining; pairs with Power Surge.","tags":["shock"]},{"id":"mod_fast_gunner","name":"Fast Gunner","type":"Weapon Mod","rarity":"Legendary","slot":"Weapon","desc":"Increases fire rate after trigger conditions.","tags":["fire-rate","dps"]},{"id":"mod_unstable_bomber","name":"Unstable Bomber","type":"Weapon Mod","rarity":"Legendary","slot":"Weapon","desc":"On-hit explosive status; QBJ97 / bomber builds.","tags":["explosion","status"]},{"id":"mod_fortress","name":"Fortress Warfare","type":"Weapon Mod","rarity":"Legendary","slot":"Weapon","desc":"Defensive/offensive fortress status (FP9, snipers).","tags":["status"]},{"id":"mod_bullseye","name":"The Bull's Eye","type":"Weapon Mod","rarity":"Legendary","slot":"Weapon","desc":"Weakspot mark / precision amplify — AWS Bullseye.","tags":["weakspot","precision"]},{"id":"mod_power_surge","name":"Power Surge","type":"Weapon Mod","rarity":"Legendary","slot":"Weapon","desc":"Shock-related surge stacks; AUG Electron Cloud.","tags":["shock","status"]},{"id":"mod_bounce_blast","name":"Bounce Blast","type":"Weapon Mod","rarity":"Epic","slot":"Weapon","desc":"Projectile bounce / multi-target.","tags":["aoe"]},{"id":"mod_magazine","name":"Extended Magazine","type":"Weapon Mod","rarity":"Rare","slot":"Weapon","desc":"Increases magazine capacity.","tags":["mag"]},{"id":"mod_reload","name":"Quick Reload","type":"Weapon Mod","rarity":"Rare","slot":"Weapon","desc":"Improves reload speed.","tags":["reload"]},{"id":"mod_crit_rate","name":"Precision Circuit","type":"Weapon Mod","rarity":"Epic","slot":"Weapon","desc":"Crit Rate boost mod.","tags":["crit"]},{"id":"mod_crit_dmg","name":"Devastator Chip","type":"Weapon Mod","rarity":"Epic","slot":"Weapon","desc":"Crit Damage boost mod.","tags":["crit"]},{"id":"mod_weakspot","name":"Weakspot Calibrator","type":"Weapon Mod","rarity":"Epic","slot":"Weapon","desc":"Weakspot damage multiplier.","tags":["precision"]},{"id":"mod_range","name":"Barrel Extension","type":"Weapon Mod","rarity":"Rare","slot":"Weapon","desc":"Effective range increase.","tags":["range"]},{"id":"mod_stability","name":"Stabilizer Grip","type":"Weapon Mod","rarity":"Rare","slot":"Weapon","desc":"Recoil / stability improvement.","tags":["stability"]},{"id":"mod_hipfire","name":"Hipfire Control","type":"Weapon Mod","rarity":"Rare","slot":"Weapon","desc":"Hipfire accuracy for CQC.","tags":["cqc"]},{"id":"mod_status_vuln","name":"Status Vulnerability","type":"Weapon Mod","rarity":"Legendary","slot":"Weapon","desc":"Amplifies status vulnerability windows.","tags":["status"]},{"id":"mod_weapon_vuln","name":"Weapon Vulnerability","type":"Weapon Mod","rarity":"Legendary","slot":"Weapon","desc":"Weapon DMG vulnerability application.","tags":["dps"]},{"id":"mod_melee","name":"Melee Edge","type":"Weapon Mod","rarity":"Epic","slot":"Weapon","desc":"Melee damage for Masamune / club lines.","tags":["melee"]},{"id":"mod_armor_hp","name":"Vital Plating","type":"Armor Mod","rarity":"Epic","slot":"Armor","desc":"Max HP increase for armor pieces.","tags":["hp"]},{"id":"mod_armor_res","name":"Status Guard","type":"Armor Mod","rarity":"Epic","slot":"Armor","desc":"Status DMG reduction on armor.","tags":["defense"]},{"id":"mod_psi","name":"Psi Intensity Booster","type":"Armor Mod","rarity":"Epic","slot":"Armor","desc":"Psi Intensity for deviation skill scaling.","tags":["psi","deviation"]},{"id":"mod_sanity","name":"Sanity Anchor","type":"Armor Mod","rarity":"Epic","slot":"Armor","desc":"Sanity sustain / reduction resistance.","tags":["sanity"]},{"id":"mod_pollution","name":"Pollution Resist","type":"Armor Mod","rarity":"Epic","slot":"Armor","desc":"Pollution resistance for contaminated zones.","tags":["pollution"]},{"id":"mod_move","name":"Light Stride","type":"Armor Mod","rarity":"Rare","slot":"Armor","desc":"Movement speed on armor.","tags":["mobility"]},{"id":"mod_shiny_stub","name":"Shiny Mod (Lv17+)","type":"Armor/Weapon Mod","rarity":"Legendary","slot":"Any","desc":"Peak mod tier with unique pin/display.","tags":["shiny","endgame"]},{"id":"mod_aberrant_mirror","name":"Aberrant Progeny — Mirror","type":"Armor Mod","rarity":"Legendary","slot":"Upper Body / Shoes","desc":"Exclusive Aberrant Progeny mod suffix (Mirror).","tags":["aberrant","3.0.x"]},{"id":"mod_aberrant_wild","name":"Aberrant Progeny — Wild","type":"Armor Mod","rarity":"Legendary","slot":"Upper Body / Shoes","desc":"Exclusive Aberrant Progeny mod suffix (Wild).","tags":["aberrant","3.0.x"]},{"id":"mod_aberrant_phantasmal","name":"Aberrant Progeny — Phantasmal","type":"Armor Mod","rarity":"Legendary","slot":"Upper Body / Shoes","desc":"Exclusive Aberrant Progeny mod suffix (Phantasmal).","tags":["aberrant","3.0.x"]}]
+[
+  {
+    "id": "mod_deadshot",
+    "name": "Deadshot",
+    "type": "Armor Mod",
+    "slot": "Various",
+    "rarity": "Legendary",
+    "desc": "S-tier armor mod. High crit/precision value.",
+    "source": "Silos (Hard/Pro)",
+    "tags": [
+      "s-tier",
+      "crit"
+    ]
+  },
+  {
+    "id": "mod_shrapnel_smash",
+    "name": "Shrapnel Smash",
+    "type": "Weapon Mod",
+    "slot": "Weapon",
+    "rarity": "Legendary",
+    "desc": "Core Shrapnel build mod.",
+    "source": "Monolith of Thirst",
+    "tags": [
+      "shrapnel",
+      "s-tier"
+    ]
+  },
+  {
+    "id": "mod_blaze_amp",
+    "name": "Blaze Amplifier",
+    "type": "Armor Mod",
+    "slot": "Mask",
+    "rarity": "Legendary",
+    "desc": "Every Burn stack grants extra DMG = 3% Psi Intensity.",
+    "source": "Silo EX1",
+    "tags": [
+      "blaze"
+    ]
+  },
+  {
+    "id": "mod_ruthless",
+    "name": "Ruthless Reaper",
+    "type": "Armor Mod",
+    "slot": "Shoes/Gloves",
+    "rarity": "Legendary",
+    "desc": "S-tier mobility/damage armor mod.",
+    "source": "Silo EX1 / Delta",
+    "tags": [
+      "s-tier"
+    ]
+  },
+  {
+    "id": "mod_three_strikes",
+    "name": "Three Strikes",
+    "type": "Armor Mod",
+    "slot": "Various",
+    "rarity": "Legendary",
+    "desc": "S-tier armor mod for sustained combat.",
+    "source": "Silos",
+    "tags": [
+      "s-tier"
+    ]
+  },
+  {
+    "id": "mod_flame_res",
+    "name": "Flame Resonance",
+    "type": "Weapon Mod",
+    "slot": "Weapon",
+    "rarity": "Legendary",
+    "desc": "Burn max layers +2, duration -20%.",
+    "source": "Monolith of Greed / Treant",
+    "tags": [
+      "blaze"
+    ]
+  },
+  {
+    "id": "mod_frostwave",
+    "name": "Frostwave",
+    "type": "Weapon Mod",
+    "slot": "Weapon",
+    "rarity": "Legendary",
+    "desc": "Frost Vortex increasing DMG over time up to +60%.",
+    "source": "Monolith of Greed",
+    "tags": [
+      "frost"
+    ]
+  },
+  {
+    "id": "mod_bullet_siphon",
+    "name": "Bullet Siphon",
+    "type": "Armor Mod",
+    "slot": "Various",
+    "rarity": "Epic",
+    "desc": "A-tier sustain mod.",
+    "source": "Silo Alpha",
+    "tags": [
+      "sustain"
+    ]
+  },
+  {
+    "id": "mod_weakspot",
+    "name": "Weakspot DMG Boost",
+    "type": "Armor Mod",
+    "slot": "Gloves/Shoes",
+    "rarity": "Epic",
+    "desc": "Boosts weakspot damage. Pairs with Butterfly.",
+    "source": "Silo Delta / Alpha",
+    "tags": [
+      "weakspot"
+    ]
+  },
+  {
+    "id": "mod_deviation_expert",
+    "name": "Deviation Expert",
+    "type": "Armor Mod",
+    "slot": "Helmet",
+    "rarity": "Epic",
+    "desc": "Range -25%, Fire Rate +10%, Status DMG +20%.",
+    "source": "Silo Alpha",
+    "tags": [
+      "status"
+    ]
+  },
+  {
+    "id": "mod_reckless",
+    "name": "Reckless Bomber",
+    "type": "Armor Mod",
+    "slot": "Various",
+    "rarity": "Legendary",
+    "desc": "S-tier armor mod for explosive/status builds.",
+    "source": "Silos Hard/Pro",
+    "tags": [
+      "s-tier"
+    ]
+  },
+  {
+    "id": "mod_boomerang",
+    "name": "Boomerang Bullet",
+    "type": "Armor Mod",
+    "slot": "Mask",
+    "rarity": "Legendary",
+    "desc": "6th Bounce is Precision Bounce +50% DMG, guaranteed crit.",
+    "source": "Silo EX1",
+    "tags": [
+      "bounce"
+    ]
+  },
+  {
+    "id": "mod_shooting_blitz",
+    "name": "Shooting Blitz",
+    "type": "Armor Mod",
+    "slot": "Various",
+    "rarity": "Epic",
+    "desc": "A-tier fire rate / combat flow mod.",
+    "source": "Silos",
+    "tags": [
+      "firerate"
+    ]
+  },
+  {
+    "id": "mod_crit_amp",
+    "name": "Crit Amplifier",
+    "type": "Armor Mod",
+    "slot": "Gloves/Shoes",
+    "rarity": "Epic",
+    "desc": "Amplifies critical damage.",
+    "source": "Silo Delta / Alpha",
+    "tags": [
+      "crit"
+    ]
+  },
+  {
+    "id": "mod_vortex_mult",
+    "name": "Vortex Multiplier",
+    "type": "Weapon Mod",
+    "slot": "Weapon",
+    "rarity": "Legendary",
+    "desc": "Frost Vortex multiplier – core frost build.",
+    "source": "Monolith of Greed",
+    "tags": [
+      "frost"
+    ]
+  },
+  {
+    "id": "mod_shrapnel_carnage",
+    "name": "Shrapnel Carnage",
+    "type": "Weapon Mod",
+    "slot": "Weapon",
+    "rarity": "Legendary",
+    "desc": "Shrapnel damage amplification.",
+    "source": "Monolith of Thirst",
+    "tags": [
+      "shrapnel"
+    ]
+  },
+  {
+    "id": "mod_precision_rush",
+    "name": "Precision Rush",
+    "type": "Weapon Mod",
+    "slot": "Weapon",
+    "rarity": "Legendary",
+    "desc": "Fast Gunner / Bullseye synergy.",
+    "source": "Mirage Monolith / Forsaken Giant",
+    "tags": [
+      "precision"
+    ]
+  },
+  {
+    "id": "mod_elemental_overload",
+    "name": "Elemental Overload",
+    "type": "Armor Mod",
+    "slot": "Gloves",
+    "rarity": "Epic",
+    "desc": "Boosts elemental damage output.",
+    "source": "Silo Delta",
+    "tags": [
+      "elemental"
+    ]
+  },
+  {
+    "id": "mod_fast_gunner",
+    "name": "Fast Gunner",
+    "type": "Weapon Mod",
+    "rarity": "Legendary",
+    "slot": "Weapon",
+    "desc": "Increases fire rate / multi-hit rhythm after trigger conditions. Common on shotguns and ARs.",
+    "tags": [
+      "fire-rate",
+      "dps"
+    ]
+  },
+  {
+    "id": "mod_unstable_bomber",
+    "name": "Unstable Bomber",
+    "type": "Weapon Mod",
+    "rarity": "Legendary",
+    "slot": "Weapon",
+    "desc": "On-hit explosive status; core of QBJ97 / bomber builds.",
+    "tags": [
+      "explosion",
+      "status"
+    ]
+  },
+  {
+    "id": "mod_fortress",
+    "name": "Fortress Warfare",
+    "type": "Weapon Mod",
+    "rarity": "Legendary",
+    "slot": "Weapon",
+    "desc": "Defensive/offensive fortress status used by FP9 and snipers.",
+    "tags": [
+      "status"
+    ]
+  },
+  {
+    "id": "mod_bullseye",
+    "name": "The Bull's Eye",
+    "type": "Weapon Mod",
+    "rarity": "Legendary",
+    "slot": "Weapon",
+    "desc": "Weakspot mark / precision amplify — AWS Bullseye line.",
+    "tags": [
+      "weakspot",
+      "precision"
+    ]
+  },
+  {
+    "id": "mod_power_surge",
+    "name": "Power Surge",
+    "type": "Weapon Mod",
+    "rarity": "Legendary",
+    "slot": "Weapon",
+    "desc": "Shock-related surge stacks; AUG Electron Cloud synergy.",
+    "tags": [
+      "shock",
+      "status"
+    ]
+  },
+  {
+    "id": "mod_bounce_blast",
+    "name": "Bounce Blast",
+    "type": "Weapon Mod",
+    "rarity": "Epic",
+    "slot": "Weapon",
+    "desc": "Projectile bounce / multi-target shotgun and bow synergy.",
+    "tags": [
+      "aoe"
+    ]
+  },
+  {
+    "id": "mod_magazine",
+    "name": "Extended Magazine",
+    "type": "Weapon Mod",
+    "rarity": "Rare",
+    "slot": "Weapon",
+    "desc": "Increases magazine capacity.",
+    "tags": [
+      "mag"
+    ]
+  },
+  {
+    "id": "mod_reload",
+    "name": "Quick Reload",
+    "type": "Weapon Mod",
+    "rarity": "Rare",
+    "slot": "Weapon",
+    "desc": "Improves reload speed.",
+    "tags": [
+      "reload"
+    ]
+  },
+  {
+    "id": "mod_crit_rate",
+    "name": "Precision Circuit",
+    "type": "Weapon Mod",
+    "rarity": "Epic",
+    "slot": "Weapon",
+    "desc": "Crit Rate boost mod.",
+    "tags": [
+      "crit"
+    ]
+  },
+  {
+    "id": "mod_crit_dmg",
+    "name": "Devastator Chip",
+    "type": "Weapon Mod",
+    "rarity": "Epic",
+    "slot": "Weapon",
+    "desc": "Crit Damage boost mod.",
+    "tags": [
+      "crit"
+    ]
+  },
+  {
+    "id": "mod_armor_hp",
+    "name": "Vital Plating",
+    "type": "Armor Mod",
+    "rarity": "Epic",
+    "slot": "Armor",
+    "desc": "Max HP increase for armor pieces.",
+    "tags": [
+      "hp"
+    ]
+  },
+  {
+    "id": "mod_armor_res",
+    "name": "Status Guard",
+    "type": "Armor Mod",
+    "rarity": "Epic",
+    "slot": "Armor",
+    "desc": "Status DMG reduction on armor.",
+    "tags": [
+      "defense"
+    ]
+  },
+  {
+    "id": "mod_shiny_stub",
+    "name": "Shiny Mod (Lv17+)",
+    "type": "Armor/Weapon Mod",
+    "rarity": "Legendary",
+    "slot": "Any",
+    "desc": "Peak mod tier with unique pin/display. Obtained via collection progress and Lv17 transforms (3.0.x system).",
+    "tags": [
+      "shiny",
+      "endgame"
+    ]
+  },
+  {
+    "id": "mod_shrapnel",
+    "name": "Shrapnel Core",
+    "type": "Weapon Mod",
+    "rarity": "Legendary",
+    "slot": "Weapon",
+    "desc": "Shrapnel trigger rate / damage — SOCR Last Valor family.",
+    "tags": [
+      "shrapnel",
+      "dps"
+    ]
+  },
+  {
+    "id": "mod_blaze",
+    "name": "Blaze Amplifier",
+    "type": "Weapon Mod",
+    "rarity": "Legendary",
+    "slot": "Weapon",
+    "desc": "Burn stack and blaze pool damage (ACS12 Pyroclasm, EBR Octopus).",
+    "tags": [
+      "blaze",
+      "status"
+    ]
+  },
+  {
+    "id": "mod_frost",
+    "name": "Frost Vortex",
+    "type": "Weapon Mod",
+    "rarity": "Legendary",
+    "slot": "Weapon",
+    "desc": "Frost status / vortex control for winter builds.",
+    "tags": [
+      "frost"
+    ]
+  },
+  {
+    "id": "mod_shock",
+    "name": "Shock Cascade",
+    "type": "Weapon Mod",
+    "rarity": "Legendary",
+    "slot": "Weapon",
+    "desc": "Shock chaining; pairs with Power Surge and AUG Electron Cloud.",
+    "tags": [
+      "shock"
+    ]
+  },
+  {
+    "id": "mod_range",
+    "name": "Barrel Extension",
+    "type": "Weapon Mod",
+    "rarity": "Rare",
+    "slot": "Weapon",
+    "desc": "Effective range increase.",
+    "tags": [
+      "range"
+    ]
+  },
+  {
+    "id": "mod_stability",
+    "name": "Stabilizer Grip",
+    "type": "Weapon Mod",
+    "rarity": "Rare",
+    "slot": "Weapon",
+    "desc": "Recoil / stability improvement.",
+    "tags": [
+      "stability"
+    ]
+  },
+  {
+    "id": "mod_hipfire",
+    "name": "Hipfire Control",
+    "type": "Weapon Mod",
+    "rarity": "Rare",
+    "slot": "Weapon",
+    "desc": "Hipfire accuracy for CQC SMGs/shotguns.",
+    "tags": [
+      "cqc"
+    ]
+  },
+  {
+    "id": "mod_status_vuln",
+    "name": "Status Vulnerability",
+    "type": "Weapon Mod",
+    "rarity": "Legendary",
+    "slot": "Weapon",
+    "desc": "Amplifies status vulnerability windows (Soul Summoner synergy notes).",
+    "tags": [
+      "status"
+    ]
+  },
+  {
+    "id": "mod_weapon_vuln",
+    "name": "Weapon Vulnerability",
+    "type": "Weapon Mod",
+    "rarity": "Legendary",
+    "slot": "Weapon",
+    "desc": "Weapon DMG vulnerability application.",
+    "tags": [
+      "dps"
+    ]
+  },
+  {
+    "id": "mod_psi",
+    "name": "Psi Intensity Booster",
+    "type": "Armor Mod",
+    "rarity": "Epic",
+    "slot": "Armor",
+    "desc": "Psi Intensity for deviation skill scaling.",
+    "tags": [
+      "psi",
+      "deviation"
+    ]
+  },
+  {
+    "id": "mod_sanity",
+    "name": "Sanity Anchor",
+    "type": "Armor Mod",
+    "rarity": "Epic",
+    "slot": "Armor",
+    "desc": "Sanity sustain / reduction resistance.",
+    "tags": [
+      "sanity"
+    ]
+  },
+  {
+    "id": "mod_pollution",
+    "name": "Pollution Resist",
+    "type": "Armor Mod",
+    "rarity": "Epic",
+    "slot": "Armor",
+    "desc": "Pollution resistance for contaminated zones.",
+    "tags": [
+      "pollution"
+    ]
+  },
+  {
+    "id": "mod_move",
+    "name": "Light Stride",
+    "type": "Armor Mod",
+    "rarity": "Rare",
+    "slot": "Armor",
+    "desc": "Movement speed on armor.",
+    "tags": [
+      "mobility"
+    ]
+  },
+  {
+    "id": "mod_melee",
+    "name": "Melee Edge",
+    "type": "Weapon Mod",
+    "rarity": "Epic",
+    "slot": "Weapon",
+    "desc": "Melee damage for Masamune / club lines.",
+    "tags": [
+      "melee"
+    ]
+  },
+  {
+    "id": "mod_aberrant_mirror",
+    "name": "Aberrant Progeny — Mirror",
+    "type": "Armor Mod",
+    "rarity": "Legendary",
+    "slot": "Upper Body / Shoes",
+    "desc": "Exclusive Aberrant Progeny mod suffix (Mirror).",
+    "tags": [
+      "aberrant",
+      "3.0.x"
+    ]
+  },
+  {
+    "id": "mod_aberrant_wild",
+    "name": "Aberrant Progeny — Wild",
+    "type": "Armor Mod",
+    "rarity": "Legendary",
+    "slot": "Upper Body / Shoes",
+    "desc": "Exclusive Aberrant Progeny mod suffix (Wild).",
+    "tags": [
+      "aberrant",
+      "3.0.x"
+    ]
+  },
+  {
+    "id": "mod_aberrant_phantasmal",
+    "name": "Aberrant Progeny — Phantasmal",
+    "type": "Armor Mod",
+    "rarity": "Legendary",
+    "slot": "Upper Body / Shoes",
+    "desc": "Exclusive Aberrant Progeny mod suffix (Phantasmal).",
+    "tags": [
+      "aberrant",
+      "3.0.x"
+    ]
+  }
+]

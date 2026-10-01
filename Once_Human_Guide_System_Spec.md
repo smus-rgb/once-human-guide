@@ -58,15 +58,51 @@ Pipeline: user query → intent detection → database retrieval → source/vers
 AI nesmí tiše měnit databázi. Návrhy změn jdou do review queue. Každá automatická aktualizace má audit log.
 
 ## 7. Adaptive UI engine
-Vstupy: viewport, orientation, pointer type, touch, safe-area, reduced motion, light/dark.
+Vstupy:
+- viewport width/height
+- orientation
+- pointer type / coarse vs fine
+- touch capability
+- safe-area insets
+- reduced motion preference
+- light/dark host preference
 
-Výstup: deviceClass, navMode, density, columns, drawerMode, mapControls, tableMode.
+Výstup:
+`deviceClass`, `navMode`, `density`, `columns`, `drawerMode`, `mapControls`, `tableMode`.
 
 ## 8. Design tokens
-Background: #07090C · Panels: #10151B / #151C23 · Borders: #27323C · Text: #E8EDF2 · Muted: #8D9AA6 · Accent cyan #63E6FF · Success #9DF58C · Warning #FFD166 · Danger #FF6575
+Background: #07090C
+Panels: #10151B / #151C23
+Borders: #27323C
+Text: #E8EDF2
+Muted: #8D9AA6
+Accent: cyan #63E6FF
+Success: green #9DF58C
+Warning: amber #FFD166
+Danger: red #FF6575
 
 ## 9. UX zásady
-- žádné důležité akce pouze hoverem; touch target min. 44×44 px; search z každé hlavní obrazovky; offline cache; verzovaná data.
+- žádné důležité akce pouze hoverem;
+- touch target min. 44×44 px;
+- search dostupný z každé hlavní obrazovky;
+- hluboké databázové obrazovky podporují split view na PC;
+- offline cache pro základní databázi;
+- změny dat jsou verzované;
+- uživatelská data jsou oddělena od globální databáze;
+- mapové a databázové filtry se ukládají per uživatel.
 
-## 10. Stack
-Frontend: React/Next.js nebo React Native/Expo. State: Zustand. Local: SQLite/IndexedDB. API: REST. Maps: embed + local markers.
+## 10. Doporučený technický stack
+Frontend: React/Next.js nebo React Native/Expo podle cílové platformy.
+State: Zustand.
+Local data: SQLite/IndexedDB podle platformy.
+API: REST/GraphQL podle backendu.
+AI: agent service s retrieval vrstvou.
+Maps: vlastní mapový renderer + tile/cache strategie.
+Auth/sync: token-based session + per-user data layer.
+
+## 11. Komponentový systém
+AppShell, AdaptiveSidebar, BottomNav, CommandSearch, StatCard, EntityCard, DataTable, FilterBar, MapLayerPanel, DetailDrawer, BuildSlot, RecipeTree, ProgressRing, AIChat, SourceBadge, SyncStatus, VersionBadge, EmptyState, ErrorState, OfflineBanner.
+
+## 12. Stavové režimy
+Loading / Ready / Offline / Syncing / Conflict / Error / Empty / PermissionDenied.
+Každý stav musí mít vlastní UI; aplikace nesmí působit jako rozbitá při ztrátě připojení.

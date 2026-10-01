@@ -1,1 +1,225 @@
-[{"id":"q_tutorial","name":"Eve of Evolution","type":"Main","region":"Start","desc":"Tutorial — Butterfly's Emissary and securement basics.","rewards":"Butterfly's Emissary","tags":["main","beginner"]},{"id":"q_lowe_igloo","name":"Lowe — Camp Igloo task","type":"Side","region":"Snow","desc":"Lowe task for combat deviation after Camp Igloo.","rewards":"Combat deviation","tags":["side","deviation"]},{"id":"q_lowe_whalebone","name":"Lowe — Whalebone task","type":"Side","region":"Coastal","desc":"Lowe task near Whalebone for territory deviation.","rewards":"Territory deviation","tags":["side","deviation"]},{"id":"q_h37","name":"H37 Quest (Greywater)","type":"Side","region":"Greywater","desc":"H37 questline for H37 deviation.","rewards":"H37","tags":["side","deviation"]},{"id":"q_moving_house","name":"Hales' Moving House","type":"Side","region":"Settlement","desc":"Unlocks Disco Ball crafting deviation.","rewards":"Disco Ball","tags":["side","deviation"]},{"id":"q_prime_intro","name":"Prime War Introduction","type":"Main","region":"Manibus","desc":"Unlock cooperative Prime War loop.","rewards":"Prime War access","tags":["main","raid"]},{"id":"q_monolith_thirst","name":"Monolith of Thirst","type":"Main","region":"Chalk Peak","desc":"Shadow Hound / Lonewolf's Whisper path.","rewards":"Progression + deviation chance","tags":["main","monolith"]},{"id":"q_silo_alpha","name":"Securement Silo Alpha","type":"Dungeon","region":"Various","desc":"Early silo — Butterfly secondary drops.","rewards":"Mods, deviations, gear","tags":["silo"]},{"id":"q_silo_theta","name":"Securement Silo Theta","type":"Dungeon","region":"Various","desc":"Dr. Teddy / Enchanting Void farm.","rewards":"Deviations, mods","tags":["silo"]},{"id":"q_silo_ex1","name":"Securement Silo EX1","type":"Dungeon","region":"Various","desc":"Atomic Lighter spawn chance after boss.","rewards":"Atomic Lighter chance","tags":["silo"]},{"id":"q_carnival","name":"Carnival of Doom","type":"Side","region":"Various","desc":"Can unlock Artisan's Touch.","rewards":"Artisan's Touch","tags":["side","deviation"]},{"id":"q_dragon","name":"There's A Dragon Here","type":"Side","region":"Various","desc":"Path toward Chefosaurus Rex.","rewards":"Chefosaurus Rex path","tags":["side","deviation"]},{"id":"q_doors","name":"Doors Event / Strange Door","type":"World Event","region":"Open world","desc":"Can drop Strange Door deviation.","rewards":"Strange Door chance","tags":["event","deviation"]},{"id":"q_season_goal_melee","name":"Season Goal — Melee 200","type":"Season","region":"Any","desc":"Defeat 200 enemies with melee for Zeno-Purifier.","rewards":"Zeno-Purifier","tags":["season","deviation"]}]
+[
+  {
+    "id": "q_tutorial",
+    "name": "Eve of Evolution",
+    "type": "Main",
+    "desc": "Tutorial quest chain — získání Butterfly's Emissary.",
+    "objectives": "Complete orientation, secure first deviation",
+    "rewards": "Butterfly's Emissary",
+    "location": "Starting area",
+    "prereq": "—",
+    "tags": [
+      "main",
+      "beginner"
+    ]
+  },
+  {
+    "id": "q_carnival",
+    "name": "Carnival of Doom",
+    "type": "Side",
+    "desc": "Junkyard side quest — Artisan's Touch path.",
+    "objectives": "Investigate Junkyard carnival",
+    "rewards": "Artisan's Touch chance",
+    "location": "Junkyard, Iron River",
+    "prereq": "Reach Iron River",
+    "tags": [
+      "side",
+      "crafting"
+    ]
+  },
+  {
+    "id": "q_dragon",
+    "name": "There's A Dragon Here",
+    "type": "Side",
+    "desc": "Lowe quest — Chefosaurus / Azure Melody.",
+    "objectives": "Talk to Lowe at Meyer's Market",
+    "rewards": "Chefosaurus Rex path",
+    "location": "Meyer's Market",
+    "prereq": "—",
+    "tags": [
+      "side",
+      "territory"
+    ]
+  },
+  {
+    "id": "q_hales",
+    "name": "Hales' Moving House",
+    "type": "Side",
+    "desc": "Disco Ball deviation quest.",
+    "objectives": "Help Hales relocate",
+    "rewards": "Disco Ball",
+    "location": "Broken Delta area",
+    "prereq": "—",
+    "tags": [
+      "side"
+    ]
+  },
+  {
+    "id": "q_space",
+    "name": "Space Turner calendar",
+    "type": "Side",
+    "desc": "Dayton Hospital calendar 9/15 puzzle.",
+    "objectives": "Find calendar clue at Dayton Hospital",
+    "rewards": "Space Turner path",
+    "location": "Dayton Hospital",
+    "prereq": "—",
+    "tags": [
+      "side",
+      "crafting"
+    ]
+  },
+  {
+    "id": "q_igloo",
+    "name": "Camp Igloo — Lowe task",
+    "type": "Main",
+    "desc": "Progress main task to Camp Igloo for territory unlocks.",
+    "objectives": "Reach Camp Igloo, complete Lowe task",
+    "rewards": "Territory deviation access",
+    "location": "Camp Igloo",
+    "prereq": "Main story progress",
+    "tags": [
+      "main"
+    ]
+  },
+  {
+    "id": "q_lowe_igloo",
+    "name": "Lowe — Camp Igloo task",
+    "type": "Side",
+    "region": "Snow / progression",
+    "desc": "Lowe task path that grants a combat deviation after reaching Camp Igloo.",
+    "rewards": "Combat deviation",
+    "tags": [
+      "side",
+      "deviation"
+    ]
+  },
+  {
+    "id": "q_lowe_whalebone",
+    "name": "Lowe — Whalebone task",
+    "type": "Side",
+    "region": "Coastal",
+    "desc": "Lowe task near Whalebone rewarding territory deviation line.",
+    "rewards": "Territory deviation",
+    "tags": [
+      "side",
+      "deviation"
+    ]
+  },
+  {
+    "id": "q_h37",
+    "name": "H37 Quest (Greywater)",
+    "type": "Side",
+    "region": "Greywater",
+    "desc": "Complete H37’s questline in Greywater to obtain H37 deviation.",
+    "rewards": "H37",
+    "tags": [
+      "side",
+      "deviation"
+    ]
+  },
+  {
+    "id": "q_moving_house",
+    "name": "Hales' Moving House",
+    "type": "Side",
+    "region": "Settlement",
+    "desc": "Side quest unlocking Disco Ball crafting deviation.",
+    "rewards": "Disco Ball",
+    "tags": [
+      "side",
+      "deviation"
+    ]
+  },
+  {
+    "id": "q_prime_intro",
+    "name": "Prime War Introduction",
+    "type": "Main",
+    "region": "Manibus",
+    "desc": "Unlock cooperative world boss Prime War loop.",
+    "rewards": "Prime War access",
+    "tags": [
+      "main",
+      "raid"
+    ]
+  },
+  {
+    "id": "q_monolith_thirst",
+    "name": "Monolith of Thirst",
+    "type": "Main",
+    "region": "Chalk Peak",
+    "desc": "Story monolith — Shadow Hound / Lonewolf's Whisper path.",
+    "rewards": "Progression + deviation chance",
+    "tags": [
+      "main",
+      "monolith"
+    ]
+  },
+  {
+    "id": "q_silo_alpha",
+    "name": "Securement Silo Alpha",
+    "type": "Dungeon",
+    "region": "Various",
+    "desc": "Early silo — Butterfly secondary drops, silo loot.",
+    "rewards": "Mods, deviations, gear",
+    "tags": [
+      "silo"
+    ]
+  },
+  {
+    "id": "q_silo_theta",
+    "name": "Securement Silo Theta",
+    "type": "Dungeon",
+    "region": "Various",
+    "desc": "Mid silo — Dr. Teddy / Enchanting Void farm route.",
+    "rewards": "Deviations, mods",
+    "tags": [
+      "silo"
+    ]
+  },
+  {
+    "id": "q_silo_ex1",
+    "name": "Securement Silo EX1",
+    "type": "Dungeon",
+    "region": "Various",
+    "desc": "Atomic Lighter spawn chance after boss.",
+    "rewards": "Atomic Lighter chance",
+    "tags": [
+      "silo"
+    ]
+  },
+  {
+    "id": "q_doors",
+    "name": "Doors Event / Strange Door",
+    "type": "World Event",
+    "region": "Open world",
+    "desc": "World event that can drop Strange Door deviation.",
+    "rewards": "Strange Door chance",
+    "tags": [
+      "event",
+      "deviation"
+    ]
+  },
+  {
+    "id": "q_eve",
+    "name": "Eve of Evolution",
+    "type": "Main",
+    "region": "Start",
+    "desc": "Opening main path teaching core systems.",
+    "rewards": "Progression unlocks",
+    "tags": [
+      "main",
+      "beginner"
+    ]
+  },
+  {
+    "id": "q_season_goal_melee",
+    "name": "Season Goal — Melee 200",
+    "type": "Season",
+    "region": "Any",
+    "desc": "Defeat 200 enemies with melee to obtain Zeno-Purifier.",
+    "rewards": "Zeno-Purifier",
+    "tags": [
+      "season",
+      "deviation"
+    ]
+  }
+]

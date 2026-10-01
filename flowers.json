@@ -1,1 +1,66 @@
-[{"id":"fl_mood_green","name":"Green Light Flowers","type":"Mood","desc":"Mood booster for many combat deviations (e.g. Butterfly).","tags":["mood"]},{"id":"fl_mood_music","name":"Music / Blue Light Flowers","type":"Mood","desc":"Territory and crafting deviation mood items.","tags":["mood"]},{"id":"fl_high_temp","name":"High Temperature plants","type":"Mood","desc":"Required mood for some crafting deviations (Harveseed).","tags":["mood"]}]
+[
+  {
+    "id": "fl_basic",
+    "name": "Basic Graft Stock",
+    "type": "Flower",
+    "desc": "Starting stock for grafting experiments.",
+    "genetics": "Common traits",
+    "mutations": "Color variants",
+    "result": "Decorative / mood items",
+    "tags": [
+      "graft"
+    ]
+  },
+  {
+    "id": "fl_rare",
+    "name": "Rare Bloom",
+    "type": "Flower",
+    "desc": "Higher tier grafting parent.",
+    "genetics": "Rare alleles",
+    "mutations": "Stat-related cosmetics",
+    "result": "Premium flora",
+    "tags": [
+      "graft",
+      "rare"
+    ]
+  },
+  {
+    "id": "fl_anomaly",
+    "name": "Anomaly Petal",
+    "type": "Flower",
+    "desc": "Stardust-touched flora.",
+    "genetics": "Unstable",
+    "mutations": "Anomaly visuals",
+    "result": "Special display",
+    "tags": [
+      "anomaly"
+    ]
+  },
+  {
+    "id": "fl_mood_green",
+    "name": "Green Light Flowers",
+    "type": "Mood",
+    "desc": "Mood booster for many combat deviations (e.g. Butterfly).",
+    "tags": [
+      "mood"
+    ]
+  },
+  {
+    "id": "fl_mood_music",
+    "name": "Music / Blue Light Flowers",
+    "type": "Mood",
+    "desc": "Territory and crafting deviation mood items.",
+    "tags": [
+      "mood"
+    ]
+  },
+  {
+    "id": "fl_high_temp",
+    "name": "High Temperature plants",
+    "type": "Mood",
+    "desc": "Required mood for some crafting deviations (Harveseed).",
+    "tags": [
+      "mood"
+    ]
+  }
+]

@@ -1,14 +1,20 @@
 #!/usr/bin/env python3
 """Once Human Guide — automatic installer (bootstrap)
 
-One command installs everything from GitHub:
-  downloads app + data, pip deps, SQLite, start scripts.
+One command installs everything:
+  - downloads all app files from GitHub
+  - installs Python dependencies (fastapi, uvicorn)
+  - builds SQLite database from module JSON
+  - creates start scripts (start.sh / start.bat)
+  - optionally launches the app
 
 Usage:
   python3 install.py
   python3 install.py --dir ~/once-human-guide-app
   python3 install.py --launch
-  python3 install.py --local
+  python3 install.py --local          # prefer files next to this script
+
+Requires: Python 3.10+
 """
 from __future__ import annotations
 
@@ -18,32 +24,74 @@ import os
 import shutil
 import subprocess
 import sys
+import urllib.error
 import urllib.request
 from pathlib import Path
 
 RAW = "https://raw.githubusercontent.com/smus-rgb/once-human-guide/main"
-UA = "OnceHumanGuide-Installer/5.1"
+UA = "OnceHumanGuide-Installer/5.2"
 SOURCE = Path(__file__).resolve().parent
 DEFAULT_DIR = Path.cwd() / "once-human-guide-app"
 
 CORE_FILES = [
-    "version.json", "api_main.py", "updater.py", "install.py",
-    "requirements.txt", "start.sh", "README.md",
+    "version.json",
+    "api_main.py",
+    "updater.py",
+    "install.py",
+    "requirements.txt",
+    "start.sh",
+    "README.md",
 ]
+
 DATA_JSON = [
-    "deviations.json", "weapons.json", "armor.json", "mods.json", "bosses.json",
-    "map_locations.json", "recipes.json", "materials.json", "scenarios.json",
-    "quests.json", "events.json", "creatures.json", "npcs.json", "plants.json",
-    "fish.json", "animals.json", "flowers.json",
+    "deviations.json",
+    "weapons.json",
+    "armor.json",
+    "mods.json",
+    "bosses.json",
+    "map_locations.json",
+    "recipes.json",
+    "materials.json",
+    "scenarios.json",
+    "quests.json",
+    "events.json",
+    "creatures.json",
+    "npcs.json",
+    "plants.json",
+    "fish.json",
+    "animals.json",
+    "flowers.json",
 ]
-OPTIONAL = ["database_full.json", "once_human_guide_ui_v4.html", "once_human_guide_app.html"]
+
+OPTIONAL = [
+    "database_full.json",
+    "once_human_guide_v18.html",
+    "ohg_data.js",
+    "ohg_sw.js",
+    "once_human_guide_ui_v4.html",
+    "once_human_guide_app.html",
+    "Once_Human_Guide_v18_Modular_System.md",
+    "CHANGELOG.md",
+]
+
 MODULE_KEYS = [
-    ("deviations", "deviations.json"), ("weapons", "weapons.json"), ("armor", "armor.json"),
-    ("mods", "mods.json"), ("bosses", "bosses.json"), ("locations", "map_locations.json"),
-    ("recipes", "recipes.json"), ("materials", "materials.json"), ("scenarios", "scenarios.json"),
-    ("quests", "quests.json"), ("events", "events.json"), ("creatures", "creatures.json"),
-    ("npcs", "npcs.json"), ("plants", "plants.json"), ("fish", "fish.json"),
-    ("animals", "animals.json"), ("flowers", "flowers.json"),
+    ("deviations", "deviations.json"),
+    ("weapons", "weapons.json"),
+    ("armor", "armor.json"),
+    ("mods", "mods.json"),
+    ("bosses", "bosses.json"),
+    ("locations", "map_locations.json"),
+    ("recipes", "recipes.json"),
+    ("materials", "materials.json"),
+    ("scenarios", "scenarios.json"),
+    ("quests", "quests.json"),
+    ("events", "events.json"),
+    ("creatures", "creatures.json"),
+    ("npcs", "npcs.json"),
+    ("plants", "plants.json"),
+    ("fish", "fish.json"),
+    ("animals", "animals.json"),
+    ("flowers", "flowers.json"),
 ]
 
 
@@ -89,32 +137,37 @@ def pip_install(dest_dir: Path) -> None:
     req = dest_dir / "requirements.txt"
     if not req.exists():
         req.write_text("fastapi>=0.110.0\nuvicorn[standard]>=0.27.0\n", encoding="utf-8")
+        log("[install] wrote default requirements.txt")
     log("[install] installing Python packages…")
-    for cmd in (
+    attempts = [
         [sys.executable, "-m", "pip", "install", "--user", "-q", "-r", str(req)],
         [sys.executable, "-m", "pip", "install", "-q", "-r", str(req)],
-    ):
+    ]
+    for cmd in attempts:
         try:
             subprocess.check_call(cmd)
             log("[install] pip OK")
             return
         except subprocess.CalledProcessError:
             continue
-    log("[install] WARNING: pip failed. Later: python -m pip install -r requirements.txt")
+    log("[install] WARNING: pip failed (network?). Install later with:")
+    log(f"  {sys.executable} -m pip install -r {req}")
 
 
-def assemble_database(dest_dir: Path):
+def assemble_database(dest_dir: Path) -> Path | None:
     full = dest_dir / "database_full.json"
-    modules = {}
+    modules: dict = {}
     for key, fname in MODULE_KEYS:
         fp = dest_dir / fname
         if fp.exists():
             try:
                 modules[key] = json.loads(fp.read_text(encoding="utf-8"))
-            except Exception:
-                pass
+            except Exception as e:
+                log(f"  warn: {fname}: {e}")
+    if not modules and full.exists():
+        return full
     if not modules:
-        return full if full.exists() else None
+        return None
     ver = "assembled"
     vp = dest_dir / "version.json"
     if vp.exists():
@@ -130,23 +183,36 @@ def assemble_database(dest_dir: Path):
 
 
 def rebuild_sqlite(json_path: Path, db_path: Path) -> int:
-    import sqlite3
     data = json.loads(json_path.read_text(encoding="utf-8"))
     if db_path.exists():
         db_path.unlink()
+    import sqlite3
+
     conn = sqlite3.connect(str(db_path))
     c = conn.cursor()
-    c.execute("CREATE TABLE data_versions (table_name TEXT PRIMARY KEY, version TEXT, updated_at TEXT)")
-    c.execute("INSERT INTO data_versions VALUES ('all', ?, datetime('now'))", (data.get("version", "unknown"),))
+    c.execute(
+        "CREATE TABLE data_versions (table_name TEXT PRIMARY KEY, version TEXT, updated_at TEXT)"
+    )
+    ver = data.get("version", "unknown")
+    c.execute(
+        "INSERT INTO data_versions VALUES ('all', ?, datetime('now'))", (ver,)
+    )
     total = 0
     for key, rows in data.items():
         if key in ("version", "meta") or not isinstance(rows, list) or not rows:
             continue
         cols = list(rows[0].keys())
-        c.execute(f'CREATE TABLE IF NOT EXISTS "{key}" (' + ", ".join(f'"{col}" TEXT' for col in cols) + ")")
+        col_sql = ", ".join(f'"{col}" TEXT' for col in cols)
+        c.execute(f'CREATE TABLE IF NOT EXISTS "{key}" ({col_sql})')
         for row in rows:
-            vals = [json.dumps(row.get(col), ensure_ascii=False) if isinstance(row.get(col), (list, dict)) else row.get(col) for col in cols]
-            c.execute(f'INSERT INTO "{key}" VALUES (' + ",".join("?" * len(cols)) + ")", vals)
+            vals = []
+            for col in cols:
+                v = row.get(col)
+                if isinstance(v, (list, dict)):
+                    v = json.dumps(v, ensure_ascii=False)
+                vals.append(v)
+            placeholders = ",".join("?" * len(cols))
+            c.execute(f'INSERT INTO "{key}" VALUES ({placeholders})', vals)
             total += 1
     conn.commit()
     conn.close()
@@ -156,9 +222,16 @@ def rebuild_sqlite(json_path: Path, db_path: Path) -> int:
 def write_launchers(dest_dir: Path) -> None:
     sh = dest_dir / "start.sh"
     sh.write_text(
-        "#!/usr/bin/env bash\nset -e\ncd \"$(dirname \"$0\")\"\n"
+        "#!/usr/bin/env bash\n"
+        "set -e\n"
+        "cd \"$(dirname \"$0\")\"\n"
         "python3 -m pip install -q -r requirements.txt 2>/dev/null || true\n"
-        "echo \"  Once Human Guide — http://127.0.0.1:8000/ui\"\n"
+        "echo \"\"\n"
+        "echo \"  Once Human Guide\"\n"
+        "echo \"  UI:  http://127.0.0.1:8000/ui\"\n"
+        "echo \"  API: http://127.0.0.1:8000/docs\"\n"
+        "echo \"  Offline: open once_human_guide_ui_v4.html (if present)\"\n"
+        "echo \"\"\n"
         "exec python3 -m uvicorn api_main:app --host 0.0.0.0 --port 8000\n",
         encoding="utf-8",
     )
@@ -166,98 +239,197 @@ def write_launchers(dest_dir: Path) -> None:
         sh.chmod(sh.stat().st_mode | 0o111)
     except Exception:
         pass
-    (dest_dir / "start.bat").write_text(
-        "@echo off\r\ncd /d %~dp0\r\npython -m pip install -q -r requirements.txt\r\n"
-        "echo   Once Human Guide — http://127.0.0.1:8000/ui\r\n"
-        "python -m uvicorn api_main:app --host 127.0.0.1 --port 8000\r\npause\r\n",
+
+    bat = dest_dir / "start.bat"
+    bat.write_text(
+        "@echo off\r\n"
+        "cd /d %~dp0\r\n"
+        "python -m pip install -q -r requirements.txt\r\n"
+        "echo.\r\n"
+        "echo   Once Human Guide\r\n"
+        "echo   UI:  http://127.0.0.1:8000/ui\r\n"
+        "echo   API: http://127.0.0.1:8000/docs\r\n"
+        "echo.\r\n"
+        "python -m uvicorn api_main:app --host 127.0.0.1 --port 8000\r\n"
+        "pause\r\n",
         encoding="utf-8",
     )
-    (dest_dir / "update.sh").write_text(
-        "#!/usr/bin/env bash\ncd \"$(dirname \"$0\")\"\npython3 updater.py \"$@\"\n", encoding="utf-8"
+
+    upd = dest_dir / "update.sh"
+    upd.write_text(
+        "#!/usr/bin/env bash\n"
+        "cd \"$(dirname \"$0\")\"\n"
+        "python3 updater.py \"$@\"\n",
+        encoding="utf-8",
     )
     try:
-        (dest_dir / "update.sh").chmod((dest_dir / "update.sh").stat().st_mode | 0o111)
+        upd.chmod(upd.stat().st_mode | 0o111)
     except Exception:
         pass
-    (dest_dir / "update.bat").write_text(
-        "@echo off\r\ncd /d %~dp0\r\npython updater.py %*\r\npause\r\n", encoding="utf-8"
+
+    updbat = dest_dir / "update.bat"
+    updbat.write_text(
+        "@echo off\r\n"
+        "cd /d %~dp0\r\n"
+        "python updater.py %*\r\n"
+        "pause\r\n",
+        encoding="utf-8",
     )
-    log("[install] wrote start.sh / start.bat / update.sh / update.bat")
+    log("[install] wrote start.sh, start.bat, update.sh, update.bat")
 
 
 def write_minimal_ui(dest_dir: Path) -> None:
+    """If SPA HTML was not downloaded, create a simple launcher page."""
     html = dest_dir / "once_human_guide_ui_v4.html"
     if html.exists() and html.stat().st_size > 1000:
         return
-    html.write_text(
-        "<!DOCTYPE html><html lang=cs><head><meta charset=utf-8><title>Once Human Guide</title></head>"
-        "<body style='font-family:system-ui;background:#0b0f14;color:#cde;padding:2rem'>"
-        "<h1>Once Human Guide</h1>"
-        "<p><a style='color:#3cf' href='http://127.0.0.1:8000/ui'>Open app http://127.0.0.1:8000/ui</a></p>"
-        "<p>Start: <code>./start.sh</code> or <code>start.bat</code></p></body></html>",
-        encoding="utf-8",
-    )
-    log("[install] wrote minimal UI launcher")
+    page = """<!DOCTYPE html>
+<html lang="cs"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Once Human Guide</title>
+<style>
+body{font-family:system-ui,sans-serif;background:#0b0f14;color:#cde;margin:0;padding:2rem}
+a{color:#3cf} .card{max-width:40rem;margin:auto;border:1px solid #234;padding:1.5rem;border-radius:12px}
+h1{color:#5ef} code{background:#123;padding:.2rem .4rem;border-radius:4px}
+</style></head><body><div class="card">
+<h1>Once Human Guide</h1>
+<p>Offline SPA HTML is optional. Use the API UI:</p>
+<p><a href="http://127.0.0.1:8000/ui">Open app at http://127.0.0.1:8000/ui</a></p>
+<p>Start server: <code>./start.sh</code> or <code>start.bat</code></p>
+<p>Update data: <code>python3 updater.py</code></p>
+</div></body></html>
+"""
+    html.write_text(page, encoding="utf-8")
+    log("[install] wrote minimal UI launcher HTML")
 
 
 def install(dest: Path, prefer_local: bool, launch: bool) -> int:
     ensure_python()
     dest = dest.expanduser().resolve()
     dest.mkdir(parents=True, exist_ok=True)
-    log("\n══════════════════════════════════════")
+    log("")
+    log("══════════════════════════════════════")
     log("  Once Human Guide — Auto Installer")
     log("══════════════════════════════════════")
-    log(f"  target: {dest}")
-    log(f"  python: {sys.version.split()[0]}\n")
+    log(f"  target:  {dest}")
+    log(f"  source:  {'local+GitHub' if prefer_local else 'GitHub'}")
+    log(f"  python:  {sys.version.split()[0]}")
+    log("")
+
     log("[1/5] Downloading core files…")
-    ok = sum(1 for n in CORE_FILES if fetch_file(n, dest, prefer_local))
+    ok = 0
+    for name in CORE_FILES:
+        if fetch_file(name, dest, prefer_local):
+            ok += 1
+
     log("[2/5] Downloading game data…")
-    ok += sum(1 for n in DATA_JSON if fetch_file(n, dest, prefer_local))
-    log("[3/5] Optional assets…")
-    for n in OPTIONAL:
-        fetch_file(n, dest, prefer_local)
+    for name in DATA_JSON:
+        if fetch_file(name, dest, prefer_local):
+            ok += 1
+
+    log("[3/5] Optional assets (UI / full DB)…")
+    for name in OPTIONAL:
+        fetch_file(name, dest, prefer_local)
+
     log(f"[install] {ok} required files ready")
+
     log("[4/5] Python dependencies…")
     pip_install(dest)
+
     log("[5/5] Building database…")
     full = assemble_database(dest)
     if full and full.exists():
         n = rebuild_sqlite(full, dest / "once_human.db")
         log(f"[install] SQLite once_human.db ({n} rows)")
+    else:
+        log("[install] WARNING: no data modules — DB empty")
+
     write_launchers(dest)
     write_minimal_ui(dest)
+
+    # ensure updater exists for later updates
+    if not (dest / "updater.py").exists():
+        fetch_file("updater.py", dest, prefer_local)
+
     ver = {}
-    if (dest / "version.json").exists():
+    vp = dest / "version.json"
+    if vp.exists():
         try:
-            ver = json.loads((dest / "version.json").read_text(encoding="utf-8"))
+            ver = json.loads(vp.read_text(encoding="utf-8"))
         except Exception:
             pass
-    log("\n══════════════════════════════════════")
+
+    log("")
+    log("══════════════════════════════════════")
     log("  INSTALL COMPLETE")
     log("══════════════════════════════════════")
-    log(f"  app:  {ver.get('app_version', '?')}")
-    log(f"  data: {ver.get('data_version', '?')}")
-    log(f"  dir:  {dest}\n")
-    log("  Start:  ./start.sh   or   start.bat")
-    log("  Open:   http://127.0.0.1:8000/ui")
-    log("  Update: python3 updater.py\n")
+    log(f"  app:   {ver.get('app_version', '?')}")
+    log(f"  data:  {ver.get('data_version', '?')}")
+    log(f"  dir:   {dest}")
+    log("")
+    log("  Start:")
+    if os.name == "nt":
+        log(f"    cd /d {dest}")
+        log("    start.bat")
+    else:
+        log(f"    cd {dest}")
+        log("    ./start.sh")
+    log("")
+    log("  Then open:  http://127.0.0.1:8000/ui")
+    log("  Update:     python3 updater.py")
+    log("")
+
     if launch:
-        log("[install] launching…")
+        log("[install] launching server…")
         os.chdir(dest)
-        os.execv(sys.executable, [sys.executable, "-m", "uvicorn", "api_main:app", "--host", "0.0.0.0", "--port", "8000"])
+        os.execv(
+            sys.executable,
+            [
+                sys.executable,
+                "-m",
+                "uvicorn",
+                "api_main:app",
+                "--host",
+                "0.0.0.0",
+                "--port",
+                "8000",
+            ],
+        )
     return 0
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser(description="Once Human Guide auto-installer")
-    ap.add_argument("--dir", type=Path, default=DEFAULT_DIR)
-    ap.add_argument("--local", action="store_true")
-    ap.add_argument("--from-github", action="store_true")
-    ap.add_argument("--launch", action="store_true")
+    ap = argparse.ArgumentParser(
+        description="Once Human Guide — automatic installer (downloads from GitHub)"
+    )
+    ap.add_argument(
+        "--dir",
+        type=Path,
+        default=DEFAULT_DIR,
+        help=f"Install directory (default: {DEFAULT_DIR})",
+    )
+    ap.add_argument(
+        "--local",
+        action="store_true",
+        help="Prefer files next to install.py, then GitHub",
+    )
+    ap.add_argument(
+        "--from-github",
+        action="store_true",
+        help="Force GitHub download (default behavior)",
+    )
+    ap.add_argument(
+        "--launch",
+        action="store_true",
+        help="Start API server after install",
+    )
     args = ap.parse_args()
     prefer_local = args.local and not args.from_github
     try:
         sys.exit(install(args.dir, prefer_local, args.launch))
+    except subprocess.CalledProcessError as e:
+        log(f"[install] failed: {e}")
+        sys.exit(1)
     except KeyboardInterrupt:
         log("\n[install] cancelled")
         sys.exit(130)

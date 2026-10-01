@@ -8,8 +8,10 @@ It downloads install.py from GitHub and runs a full automatic install.
 """
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
+import tempfile
 import urllib.request
 from pathlib import Path
 
@@ -32,6 +34,7 @@ def main() -> int:
     print(f"  saved {installer}")
     print("  running installer…")
     print()
+    # Default: GitHub install into once-human-guide-app next to cwd
     cmd = [sys.executable, str(installer), "--dir", str(dest_dir)]
     if "--launch" in sys.argv:
         cmd.append("--launch")

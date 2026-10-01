@@ -1,4 +1,4 @@
-"""Once Human Guide API — FastAPI + SQLite + search + export + update"""
+"""Once Human Guide API — FastAPI + SQLite + search + export"""
 from __future__ import annotations
 
 from datetime import datetime, timezone
@@ -15,8 +15,8 @@ DB_PATH = BASE / "once_human.db"
 if not DB_PATH.exists():
     DB_PATH = BASE.parent / "once_human.db"
 
-DATA_VERSION = "2026-09-30-v5-complete"
-API_VERSION = "5.0.0"
+DATA_VERSION = "2026-09-30-v18-372"
+API_VERSION = "5.2.0"
 MAP_EMBEDS = {
     "thgl": "https://oncehuman.th.gl",
     "mapgenie": "https://mapgenie.io/once-human/maps/nalcott",
@@ -28,8 +28,17 @@ TABLES = [
     "npcs", "plants", "fish", "animals", "flowers",
 ]
 
-app = FastAPI(title="Once Human Guide API", version=API_VERSION, description="Game companion data API")
-app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
+app = FastAPI(
+    title="Once Human Guide API",
+    version=API_VERSION,
+    description="Game companion data API for Once Human Guide",
+)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 def get_db() -> sqlite3.Connection:
@@ -40,7 +49,7 @@ def get_db() -> sqlite3.Connection:
     return conn
 
 
-def rows_to_list(rows) -> list:
+def rows_to_list(rows) -> list[dict]:
     items = [dict(r) for r in rows]
     for i in items:
         for key in ("tags", "ingredients"):
@@ -52,7 +61,7 @@ def rows_to_list(rows) -> list:
     return items
 
 
-def fetch_all(table: str, q: str | None = None) -> list:
+def fetch_all(table: str, q: str | None = None) -> list[dict]:
     if table not in TABLES:
         raise HTTPException(404, f"Unknown table: {table}")
     conn = get_db()
@@ -65,8 +74,11 @@ def fetch_all(table: str, q: str | None = None) -> list:
     items = rows_to_list(rows)
     if q:
         s = q.lower()
-        def match(item):
-            blob = " ".join(str(item.get(k) or "") for k in ("name", "desc", "type", "region", "location", "source", "utility", "rarity", "style")).lower()
+        def match(item: dict) -> bool:
+            blob = " ".join(
+                str(item.get(k) or "")
+                for k in ("name", "desc", "type", "region", "location", "source", "utility", "rarity", "style")
+            ).lower()
             tags = item.get("tags") or []
             return s in blob or any(s in str(t).lower() for t in tags)
         items = [i for i in items if match(i)]
@@ -75,7 +87,23 @@ def fetch_all(table: str, q: str | None = None) -> list:
 
 @app.get("/")
 def root():
-    return {"status": "ok", "app": "Once Human Guide API", "api_version": API_VERSION, "data_version": DATA_VERSION, "tables": TABLES}
+    return {
+        "status": "ok",
+        "app": "Once Human Guide API",
+        "api_version": API_VERSION,
+        "data_version": DATA_VERSION,
+        "tables": TABLES,
+        "endpoints": {
+            "ui": "/ui",
+            "version": "/version",
+            "stats": "/stats",
+            "search": "/search?q=",
+            "export": "/export",
+            "maps": "/maps",
+            "table": "/{table}",
+            "item": "/{table}/{id}",
+        },
+    }
 
 
 @app.get("/ui")
@@ -92,14 +120,23 @@ def serve_ui():
 def version():
     conn = get_db()
     try:
-        row = conn.execute("SELECT version, updated_at FROM data_versions WHERE table_name='all'").fetchone()
+        row = conn.execute(
+            "SELECT version, updated_at FROM data_versions WHERE table_name='all'"
+        ).fetchone()
         ver = row["version"] if row else DATA_VERSION
         updated = row["updated_at"] if row else None
     except Exception:
         ver, updated = DATA_VERSION, None
     finally:
         conn.close()
-    return {"data_version": ver, "api_version": API_VERSION, "updated_at": updated, "server_time": datetime.now(timezone.utc).isoformat(), "maps": MAP_EMBEDS}
+    return {
+        "data_version": ver,
+        "api_version": API_VERSION,
+        "updated_at": updated,
+        "server_time": datetime.now(timezone.utc).isoformat(),
+        "maps": MAP_EMBEDS,
+        "record_hint": "GET /stats",
+    }
 
 
 @app.get("/maps")
@@ -155,6 +192,7 @@ def db_file():
     return FileResponse(str(DB_PATH), filename="once_human.db")
 
 
+# Generic table routes
 @app.get("/deviations")
 def list_deviations(type: str | None = None, q: str | None = None):
     items = fetch_all("deviations", q)
@@ -245,32 +283,77 @@ def list_flowers(q: str | None = None):
 
 @app.get("/update/check")
 def update_check():
+    """Compare local version.json with GitHub remote."""
     import urllib.request
+
     local_path = BASE / "version.json"
-    local = json.loads(local_path.read_text(encoding="utf-8")) if local_path.exists() else {}
-    raw = (local.get("github") or {}).get("raw_base") or "https://raw.githubusercontent.com/smus-rgb/once-human-guide/main"
+    local = {}
+    if local_path.exists():
+        local = json.loads(local_path.read_text(encoding="utf-8"))
+    raw = (local.get("github") or {}).get("raw_base") or (
+        "https://raw.githubusercontent.com/smus-rgb/once-human-guide/main"
+    )
     try:
-        req = urllib.request.Request(f"{raw}/version.json", headers={"User-Agent": "OnceHumanGuide-API/5.0"})
+        req = urllib.request.Request(
+            f"{raw}/version.json",
+            headers={"User-Agent": "OnceHumanGuide-API/5.0"},
+        )
         with urllib.request.urlopen(req, timeout=20) as resp:
             remote = json.loads(resp.read().decode("utf-8"))
     except Exception as e:
-        return {"ok": False, "error": str(e), "local": local, "update_available": False}
-    available = (remote.get("data_version") != local.get("data_version")) or (remote.get("app_version") != local.get("app_version"))
-    return {"ok": True, "update_available": available, "local": {"app_version": local.get("app_version"), "data_version": local.get("data_version")}, "remote": {"app_version": remote.get("app_version"), "data_version": remote.get("data_version"), "released_at": remote.get("released_at"), "notes": remote.get("notes")}}
+        return {
+            "ok": False,
+            "error": str(e),
+            "local": local,
+            "update_available": False,
+        }
+    available = (remote.get("data_version") != local.get("data_version")) or (
+        remote.get("app_version") != local.get("app_version")
+    )
+    return {
+        "ok": True,
+        "update_available": available,
+        "local": {
+            "app_version": local.get("app_version"),
+            "data_version": local.get("data_version"),
+        },
+        "remote": {
+            "app_version": remote.get("app_version"),
+            "data_version": remote.get("data_version"),
+            "released_at": remote.get("released_at"),
+            "notes": remote.get("notes"),
+        },
+    }
 
 
 @app.post("/update/run")
 def update_run(force: bool = False):
-    import subprocess, sys
+    """Run updater.py in-process (downloads from GitHub, rebuilds SQLite)."""
+    import subprocess
+    import sys
+
     updater = BASE / "updater.py"
     if not updater.exists():
         raise HTTPException(404, "updater.py not found")
-    cmd = [sys.executable, str(updater)] + (["--force"] if force else [])
+    cmd = [sys.executable, str(updater)]
+    if force:
+        cmd.append("--force")
     try:
-        proc = subprocess.run(cmd, cwd=str(BASE), capture_output=True, text=True, timeout=180)
+        proc = subprocess.run(
+            cmd,
+            cwd=str(BASE),
+            capture_output=True,
+            text=True,
+            timeout=180,
+        )
     except subprocess.TimeoutExpired:
         raise HTTPException(504, "Update timed out")
-    return {"ok": proc.returncode == 0, "returncode": proc.returncode, "stdout": (proc.stdout or "")[-4000:], "stderr": (proc.stderr or "")[-2000:]}
+    return {
+        "ok": proc.returncode == 0,
+        "returncode": proc.returncode,
+        "stdout": proc.stdout[-4000:] if proc.stdout else "",
+        "stderr": proc.stderr[-2000:] if proc.stderr else "",
+    }
 
 
 @app.get("/{table}/{item_id}")

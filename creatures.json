@@ -1,1 +1,241 @@
-[{"id":"cr_ravenous","name":"Ravenous Hunter","type":"Boss","threat":"Boss","desc":"Monolith of Greed story boss.","location":"Monolith of Greed","tags":["boss"]},{"id":"cr_vulture","name":"Staroid / Vulture-type","type":"Enemy","threat":"Medium","desc":"Common open-world enemies.","location":"Wilderness","tags":["common"]},{"id":"cr_spitter","name":"Spitter / Ranged Deviant","type":"Enemy","threat":"Medium","desc":"Ranged acid attackers in ruins and silos.","location":"Ruins, silos","tags":["ranged"]},{"id":"cr_brute","name":"Brute Deviant","type":"Enemy","threat":"High","desc":"Heavy melee elite in strongholds.","location":"Strongholds","tags":["elite"]},{"id":"cr_rossetta","name":"Rosetta Operative","type":"Enemy","threat":"High","desc":"Human faction in Rosetta facilities.","location":"Rosetta sites","tags":["faction"]},{"id":"cr_mayfly","name":"Mayfly Operative","type":"Enemy","threat":"High","desc":"Faction troops in Prismverse PvP.","location":"PvP / contested","tags":["faction","pvp"]},{"id":"cr_shadowhunter","name":"Foul Shadowhunter","type":"Boss-elite","threat":"Boss","desc":"Enables Festering Gel capture.","location":"Story / elite sites","tags":["boss"]},{"id":"cr_mensdevoran","name":"Mensdevoran","type":"Boss","threat":"Boss","desc":"Enables Nutcracker capture.","location":"Boss arena","tags":["boss"]},{"id":"cr_manibus_entity","name":"Manibus (Rift Entity)","type":"Raid Boss","threat":"Raid","desc":"Manibus Prime War endgame boss.","location":"Prime War","tags":["raid","story"]},{"id":"cr_sunken_lord","name":"The Sunken Lord","type":"Raid Boss","threat":"Raid","desc":"Isles of Abyss final boss (Oct 2026).","location":"Ocean scenario","tags":["upcoming","raid","ocean"]},{"id":"cr_silo_drone","name":"Silo Security Drone","type":"Enemy","threat":"Medium","desc":"Automated defenses in silos.","location":"Silos","tags":["silo"]},{"id":"cr_silo_scientist","name":"Infected Researcher","type":"Enemy","threat":"Medium","desc":"Humanoid hostiles in silo interiors.","location":"Silos","tags":["silo"]},{"id":"cr_elite_captain","name":"Rosetta Captain","type":"Elite","threat":"High","desc":"Elite Rosetta officer.","location":"Rosetta sites","tags":["elite","faction"]},{"id":"cr_frost_beast","name":"Frost Beast","type":"Enemy","threat":"High","desc":"Cold-region fauna in Way of Winter.","location":"Onyx Tundra","tags":["winter"]},{"id":"cr_dream_horror","name":"Dream Zone Horror","type":"Enemy","threat":"High","desc":"Hostile entities in Endless Dream zones.","location":"Dream Zones","tags":["dream"]},{"id":"cr_ocean_leviathan","name":"Ocean Leviathan (Abyss)","type":"Enemy","threat":"Raid","desc":"Large sea threats for Isles of Abyss.","location":"Ocean","tags":["upcoming","ocean"]}]
+[
+  {
+    "id": "cr_ravenous",
+    "name": "Ravenous Hunter",
+    "type": "Boss",
+    "desc": "Monolith of Greed story boss. Sustained fire on stagger bar.",
+    "weaknesses": "Sustained DPS, stagger",
+    "drops": "Burn/Frost weapon mods",
+    "location": "Monolith of Greed",
+    "level": "—",
+    "tags": [
+      "boss"
+    ]
+  },
+  {
+    "id": "cr_treant",
+    "name": "Treant",
+    "type": "Boss",
+    "desc": "Avalanche Monolith — unlocks Harveseed.",
+    "weaknesses": "Fire recommended",
+    "drops": "Harveseed, Tar Pudding",
+    "location": "Avalanche Monolith",
+    "level": "—",
+    "tags": [
+      "boss"
+    ]
+  },
+  {
+    "id": "cr_shadow",
+    "name": "Shadow Hound",
+    "type": "Boss",
+    "desc": "Monolith of Thirst — Lonewolf's Whisper.",
+    "weaknesses": "High burst windows",
+    "drops": "Lonewolf's Whisper, Shrapnel mods",
+    "location": "Monolith of Thirst",
+    "level": "—",
+    "tags": [
+      "boss"
+    ]
+  },
+  {
+    "id": "cr_spiked",
+    "name": "Spiked Juvenile",
+    "type": "Enemy",
+    "desc": "Common early hostile.",
+    "weaknesses": "Any",
+    "drops": "Scrap, basic loot",
+    "location": "Dayton Wetlands",
+    "level": "Low",
+    "tags": [
+      "enemy"
+    ]
+  },
+  {
+    "id": "cr_rossetta",
+    "name": "Rosetta Operative",
+    "type": "Enemy",
+    "desc": "Faction enemy in facilities.",
+    "weaknesses": "Cover + precision",
+    "drops": "Facility loot",
+    "location": "Rosetta facilities",
+    "level": "Mid",
+    "tags": [
+      "enemy",
+      "faction"
+    ]
+  },
+  {
+    "id": "cr_anomaly",
+    "name": "Stardust Anomaly",
+    "type": "Anomaly",
+    "desc": "Environmental anomaly hazard.",
+    "weaknesses": "Avoid / specialized gear",
+    "drops": "Anomaly materials",
+    "location": "Contaminated zones",
+    "level": "—",
+    "tags": [
+      "anomaly"
+    ]
+  },
+  {
+    "id": "cr_vulture",
+    "name": "Staroid / Vulture-type",
+    "type": "Enemy",
+    "threat": "Medium",
+    "desc": "Common open-world aerial/ground staroid enemies.",
+    "location": "Wilderness",
+    "tags": [
+      "common"
+    ]
+  },
+  {
+    "id": "cr_spitter",
+    "name": "Spitter / Ranged Deviant",
+    "type": "Enemy",
+    "threat": "Medium",
+    "desc": "Ranged acid/spit attackers in ruins and silos.",
+    "location": "Ruins, silos",
+    "tags": [
+      "ranged"
+    ]
+  },
+  {
+    "id": "cr_brute",
+    "name": "Brute Deviant",
+    "type": "Enemy",
+    "threat": "High",
+    "desc": "Heavy melee elite in strongholds.",
+    "location": "Strongholds",
+    "tags": [
+      "elite"
+    ]
+  },
+  {
+    "id": "cr_mayfly",
+    "name": "Mayfly Operative",
+    "type": "Enemy",
+    "threat": "High",
+    "desc": "Faction troops in Prismverse contested content.",
+    "location": "PvP / contested",
+    "tags": [
+      "faction",
+      "pvp"
+    ]
+  },
+  {
+    "id": "cr_shadowhunter",
+    "name": "Foul Shadowhunter",
+    "type": "Boss-elite",
+    "threat": "Boss",
+    "desc": "Elite whose defeat enables Festering Gel capture.",
+    "location": "Story / elite sites",
+    "tags": [
+      "boss"
+    ]
+  },
+  {
+    "id": "cr_mensdevoran",
+    "name": "Mensdevoran",
+    "type": "Boss",
+    "threat": "Boss",
+    "desc": "Boss enabling Nutcracker capture.",
+    "location": "Boss arena",
+    "tags": [
+      "boss"
+    ]
+  },
+  {
+    "id": "cr_manibus_entity",
+    "name": "Manibus (Rift Entity)",
+    "type": "Raid Boss",
+    "threat": "Raid",
+    "desc": "Seasonal sky-bound Great One — focus of Manibus Prime War endgame.",
+    "location": "Prime War",
+    "tags": [
+      "raid",
+      "story"
+    ]
+  },
+  {
+    "id": "cr_sunken_lord",
+    "name": "The Sunken Lord",
+    "type": "Raid Boss",
+    "threat": "Raid",
+    "desc": "Isles of Abyss final boss (upcoming Oct 2026).",
+    "location": "Ocean scenario",
+    "tags": [
+      "upcoming",
+      "raid",
+      "ocean"
+    ]
+  },
+  {
+    "id": "cr_silo_drone",
+    "name": "Silo Security Drone",
+    "type": "Enemy",
+    "threat": "Medium",
+    "desc": "Automated defenses inside Securement Silos.",
+    "location": "Silos",
+    "tags": [
+      "silo"
+    ]
+  },
+  {
+    "id": "cr_silo_scientist",
+    "name": "Infected Researcher",
+    "type": "Enemy",
+    "threat": "Medium",
+    "desc": "Humanoid hostiles in silo interiors.",
+    "location": "Silos",
+    "tags": [
+      "silo"
+    ]
+  },
+  {
+    "id": "cr_elite_captain",
+    "name": "Rosetta Captain",
+    "type": "Elite",
+    "threat": "High",
+    "desc": "Elite Rosetta officer in facilities.",
+    "location": "Rosetta sites",
+    "tags": [
+      "elite",
+      "faction"
+    ]
+  },
+  {
+    "id": "cr_frost_beast",
+    "name": "Frost Beast",
+    "type": "Enemy",
+    "threat": "High",
+    "desc": "Cold-region aggressive fauna in Way of Winter.",
+    "location": "Onyx Tundra",
+    "tags": [
+      "winter"
+    ]
+  },
+  {
+    "id": "cr_dream_horror",
+    "name": "Dream Zone Horror",
+    "type": "Enemy",
+    "threat": "High",
+    "desc": "Hostile entities in Endless Dream high-density zones.",
+    "location": "Dream Zones",
+    "tags": [
+      "dream"
+    ]
+  },
+  {
+    "id": "cr_ocean_leviathan",
+    "name": "Ocean Leviathan (Abyss)",
+    "type": "Enemy",
+    "threat": "Raid",
+    "desc": "Large sea threats for Isles of Abyss naval combat.",
+    "location": "Ocean",
+    "tags": [
+      "upcoming",
+      "ocean"
+    ]
+  }
+]

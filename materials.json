@@ -1,1 +1,228 @@
-[{"id":"mat_scrap","name":"Scrap","type":"Material","rarity":"Common","desc":"Basic salvage.","source":"Loot","tags":["craft"]},{"id":"mat_metal","name":"Metal Scraps / Ingots","type":"Material","rarity":"Common","desc":"Core metal for weapons and structures.","source":"Loot, refine","tags":["metal"]},{"id":"mat_starchrom","name":"Starchrom","type":"Currency","rarity":"Epic","desc":"Wish Machine / blueprint currency.","source":"BP, events","tags":["currency"]},{"id":"mat_stardust","name":"Stardust Source / Sample","type":"Material","rarity":"Rare","desc":"Core anomaly material.","source":"World, silos","tags":["anomaly"]},{"id":"mat_activator","name":"Activator","type":"Material","rarity":"Common","desc":"Vendor progression material.","source":"Vendors","tags":["consumable"]},{"id":"mat_acid","name":"Acid","type":"Material","rarity":"Common","desc":"Ammo and chemical crafts.","source":"Scavenge","tags":["craft"]},{"id":"mat_rubber","name":"Rubber","type":"Material","rarity":"Common","desc":"Building and gear.","source":"Scavenge","tags":["craft"]},{"id":"mat_electronic","name":"Electronic Part","type":"Material","rarity":"Common","desc":"Benches, generators, mods.","source":"Loot","tags":["craft"]},{"id":"mat_tungsten","name":"Tungsten Ingot","type":"Material","rarity":"Rare","desc":"Late-tier metal.","source":"Mining","tags":["metal"]},{"id":"mat_aluminum","name":"Aluminum Ingot","type":"Material","rarity":"Rare","desc":"Mid-high metal; Digby Boy helps.","source":"Mining","tags":["metal"]},{"id":"mat_crystgin","name":"Crystgin","type":"Currency","rarity":"Epic","desc":"Premium currency.","source":"Shop, events","tags":["currency"]},{"id":"mat_mitsuko","name":"Mitsuko's Mark","type":"Currency","rarity":"Rare","desc":"Event/maintenance mark.","source":"Mail, events","tags":["currency"]},{"id":"mat_lightforged","name":"Lightforged Medal","type":"Currency","rarity":"Rare","desc":"Settlement vendor currency.","source":"Activities","tags":["currency"]},{"id":"mat_gunpowder","name":"Gunpowder","type":"Material","rarity":"Common","desc":"Ammo component.","source":"Craft, loot","tags":["ammo"]},{"id":"mat_cloth","name":"Cloth","type":"Material","rarity":"Common","desc":"Medical and armor crafts.","source":"Scavenge","tags":["craft"]},{"id":"mat_heart_vine","name":"Heart Vine","type":"Material","rarity":"Epic","desc":"From Harveseed; Chloro-armor.","source":"Harveseed","tags":["deviation"]},{"id":"mat_thread_dreams","name":"Thread of Dreams","type":"Material","rarity":"Epic","desc":"From Dreamcatcher; The Weaver.","source":"Dreamcatcher","tags":["deviation"]},{"id":"mat_split_core","name":"Split-Core Cotton","type":"Material","rarity":"Epic","desc":"From Atomic Lighter; Fusion Lighter.","source":"Atomic Lighter","tags":["deviation"]}]
+[
+  {
+    "id": "mat_scrap",
+    "name": "Scrap",
+    "type": "Material",
+    "desc": "Základní crafting materiál z lootů a recycle."
+  },
+  {
+    "id": "mat_metal",
+    "name": "Metal Scraps / Ingots",
+    "type": "Material",
+    "desc": "Tavení z rud. Digby Boy pomáhá."
+  },
+  {
+    "id": "mat_starchrom",
+    "name": "Starchrom",
+    "type": "Currency",
+    "desc": "Blueprint System – unlock a enhance."
+  },
+  {
+    "id": "mat_heart_vine",
+    "name": "Heart Vine",
+    "type": "Deviant Material",
+    "desc": "Z Harveseed → Living Armor."
+  },
+  {
+    "id": "mat_thread",
+    "name": "Thread of Dreams",
+    "type": "Deviant Material",
+    "desc": "Z Dreamcatcher → The Weaver."
+  },
+  {
+    "id": "mat_split",
+    "name": "Split-Core Cotton",
+    "type": "Deviant Material",
+    "desc": "Z Atomic Lighter → Fusion Lighter."
+  },
+  {
+    "id": "mat_balloon",
+    "name": "Small Balloons",
+    "type": "Deviant Material",
+    "desc": "Z Pup Buddy → Featherweight."
+  },
+  {
+    "id": "mat_silver_spring",
+    "name": "Silver Spring",
+    "type": "Deviant Material",
+    "desc": "Z Frog the Leaper → Spring Legs."
+  },
+  {
+    "id": "mat_stardust",
+    "name": "Stardust Source / Sample",
+    "type": "Material",
+    "rarity": "Rare",
+    "desc": "Core anomaly material used in advanced crafts and deviation systems.",
+    "source": "World, silos, events",
+    "tags": [
+      "craft",
+      "anomaly"
+    ]
+  },
+  {
+    "id": "mat_activator",
+    "name": "Activator",
+    "type": "Material",
+    "rarity": "Common",
+    "desc": "Common consumable / vendor material for progression tasks.",
+    "source": "Vendors, loot",
+    "tags": [
+      "consumable"
+    ]
+  },
+  {
+    "id": "mat_acid",
+    "name": "Acid",
+    "type": "Material",
+    "rarity": "Common",
+    "desc": "Crafting intermediate for ammo and chemical recipes.",
+    "source": "Scavenge, refine",
+    "tags": [
+      "craft"
+    ]
+  },
+  {
+    "id": "mat_rubber",
+    "name": "Rubber",
+    "type": "Material",
+    "rarity": "Common",
+    "desc": "Base building and gear craft material.",
+    "source": "Scavenge",
+    "tags": [
+      "craft"
+    ]
+  },
+  {
+    "id": "mat_electronic",
+    "name": "Electronic Part",
+    "type": "Material",
+    "rarity": "Common",
+    "desc": "Electronics for benches, generators, mods.",
+    "source": "Loot, disassemble",
+    "tags": [
+      "craft"
+    ]
+  },
+  {
+    "id": "mat_special_plastic",
+    "name": "Special Plastic",
+    "type": "Material",
+    "rarity": "Rare",
+    "desc": "Higher-tier craft plastic.",
+    "source": "Refine, loot",
+    "tags": [
+      "craft"
+    ]
+  },
+  {
+    "id": "mat_tungsten",
+    "name": "Tungsten Ingot",
+    "type": "Material",
+    "rarity": "Rare",
+    "desc": "Late-tier metal for high-end weapons/armor.",
+    "source": "Mining + refine",
+    "tags": [
+      "metal"
+    ]
+  },
+  {
+    "id": "mat_aluminum",
+    "name": "Aluminum Ingot",
+    "type": "Material",
+    "rarity": "Rare",
+    "desc": "Mid-high tier metal. Digby Boy / mining platforms help farm ore.",
+    "source": "Mining",
+    "tags": [
+      "metal"
+    ]
+  },
+  {
+    "id": "mat_starcore",
+    "name": "Starcore / Rift material",
+    "type": "Material",
+    "rarity": "Epic",
+    "desc": "Season/rift related currency-material hybrid for high-end unlocks.",
+    "source": "Season content",
+    "tags": [
+      "season"
+    ]
+  },
+  {
+    "id": "mat_crystgin",
+    "name": "Crystgin",
+    "type": "Currency",
+    "rarity": "Epic",
+    "desc": "Premium / conversion currency (e.g. Metamorphosis Token conversions in 3.0.7).",
+    "source": "Shop, events",
+    "tags": [
+      "currency"
+    ]
+  },
+  {
+    "id": "mat_mitsuko",
+    "name": "Mitsuko's Mark",
+    "type": "Currency",
+    "rarity": "Rare",
+    "desc": "Event/maintenance reward mark.",
+    "source": "Mail, events",
+    "tags": [
+      "currency",
+      "event"
+    ]
+  },
+  {
+    "id": "mat_lightforged",
+    "name": "Lightforged Medal",
+    "type": "Currency",
+    "rarity": "Rare",
+    "desc": "Vendor currency for cosmetics and gear at settlements.",
+    "source": "Activities, vendors",
+    "tags": [
+      "currency"
+    ]
+  },
+  {
+    "id": "mat_gunpowder",
+    "name": "Gunpowder",
+    "type": "Material",
+    "rarity": "Common",
+    "desc": "Ammo crafting component.",
+    "source": "Craft, loot",
+    "tags": [
+      "ammo"
+    ]
+  },
+  {
+    "id": "mat_cloth",
+    "name": "Cloth",
+    "type": "Material",
+    "rarity": "Common",
+    "desc": "Medical and armor crafts.",
+    "source": "Scavenge",
+    "tags": [
+      "craft"
+    ]
+  },
+  {
+    "id": "mat_thread_dreams",
+    "name": "Thread of Dreams",
+    "type": "Material",
+    "rarity": "Epic",
+    "desc": "Produced by Dreamcatcher; The Weaver formula.",
+    "source": "Dreamcatcher",
+    "tags": [
+      "deviation"
+    ]
+  },
+  {
+    "id": "mat_split_core",
+    "name": "Split-Core Cotton",
+    "type": "Material",
+    "rarity": "Epic",
+    "desc": "Produced by Atomic Lighter; Fusion Lighter tactical.",
+    "source": "Atomic Lighter",
+    "tags": [
+      "deviation"
+    ]
+  }
+]

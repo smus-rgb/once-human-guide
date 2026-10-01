@@ -1,26 +1,29 @@
 {
-  "app_version": "5.0.0",
-  "data_version": "2026-09-30-v5-complete",
-  "released_at": "2026-09-30T08:10:00Z",
+  "app_version": "5.2.0",
+  "shell_version": "18.0",
+  "data_version": "2026-09-30-v18-372",
+  "released_at": "2026-09-30T21:00:00Z",
   "min_app_version": "5.0.0",
   "patch_target": "3.0.7",
   "records": 372,
+  "sw_cache": "ohg-v18-307",
   "files": {
     "database_full.json": "data",
-    "once_human_guide_ui_v4.html": "ui",
+    "ohg_data.js": "pack",
+    "once_human_guide_v18.html": "ui",
+    "ohg_sw.js": "sw",
     "api_main.py": "api",
     "requirements.txt": "deps",
     "updater.py": "tool",
     "install.py": "tool",
     "version.json": "meta"
   },
-  "notes": "Complete app with installer + auto-updater. Patch 3.0.7 core + Isles of Abyss prep.",
+  "notes": "v18 AdaptiveShell + pack 372 + installer/updater stahují aktuální shell.",
   "changelog": [
-    "372 curated records across 17 modules",
-    "SQLite + JSON dual storage",
-    "FastAPI with /ui /search /export /update",
-    "install.py one-shot setup",
-    "updater.py GitHub data sync"
+    "Unify version.json / OHG_META / SW cache ohg-v18-307",
+    "Installer + updater pull v18 html + ohg_data.js + ohg_sw.js",
+    "372 curated records across 17 categories",
+    "Home badge App 18.0 (hotfix A1)"
   ],
   "github": {
     "owner": "smus-rgb",

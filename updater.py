@@ -2,7 +2,7 @@
 """Once Human Guide — auto-updater
 
 Checks GitHub for a newer version.json and downloads updated data/UI/API files.
-Rebuilds once_human.db from database_full.json (or assembled module JSON).
+Rebuilds once_human.db from database_full.json after data update.
 
 Usage:
   python updater.py              # check + update if newer
@@ -23,9 +23,16 @@ BASE = Path(__file__).resolve().parent
 LOCAL_VERSION = BASE / "version.json"
 DEFAULT_RAW = "https://raw.githubusercontent.com/smus-rgb/once-human-guide/main"
 
+# files the updater is allowed to replace
 UPDATE_MAP = {
     "database_full.json": "database_full.json",
+    "once_human_guide_v18.html": "once_human_guide_v18.html",
+    "ohg_data.js": "ohg_data.js",
+    "ohg_sw.js": "ohg_sw.js",
     "once_human_guide_ui_v4.html": "once_human_guide_ui_v4.html",
+    "once_human_guide_app.html": "once_human_guide_app.html",
+    "CHANGELOG.md": "CHANGELOG.md",
+    "Once_Human_Guide_v18_Modular_System.md": "Once_Human_Guide_v18_Modular_System.md",
     "api_main.py": "api_main.py",
     "requirements.txt": "requirements.txt",
     "updater.py": "updater.py",
@@ -51,6 +58,47 @@ UPDATE_MAP = {
     "flowers.json": "flowers.json",
 }
 
+
+def load_local() -> dict:
+    if LOCAL_VERSION.exists():
+        return json.loads(LOCAL_VERSION.read_text(encoding="utf-8"))
+    return {"app_version": "0.0.0", "data_version": "none"}
+
+
+def fetch_json(url: str, timeout: int = 30) -> dict:
+    req = urllib.request.Request(url, headers={"User-Agent": "OnceHumanGuide-Updater/5.0"})
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
+        return json.loads(resp.read().decode("utf-8"))
+
+
+def fetch_bytes(url: str, timeout: int = 60) -> bytes:
+    req = urllib.request.Request(url, headers={"User-Agent": "OnceHumanGuide-Updater/5.0"})
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
+        return resp.read()
+
+
+def ver_tuple(v: str) -> tuple:
+    """Compare app semver-ish or data version strings."""
+    # data versions like 2026-09-30-v5-complete sort lexicographically OK
+    parts = []
+    for p in v.replace("-", ".").split("."):
+        if p.isdigit():
+            parts.append((0, int(p)))
+        else:
+            parts.append((1, p))
+    return tuple(parts)
+
+
+def is_newer(remote: dict, local: dict) -> bool:
+    try:
+        if ver_tuple(remote.get("app_version", "0")) > ver_tuple(local.get("app_version", "0")):
+            return True
+    except Exception:
+        pass
+    return (remote.get("data_version") or "") != (local.get("data_version") or "")
+
+
+
 MODULE_FILES = [
     ("deviations", "deviations.json"),
     ("weapons", "weapons.json"),
@@ -72,31 +120,8 @@ MODULE_FILES = [
 ]
 
 
-def load_local() -> dict:
-    if LOCAL_VERSION.exists():
-        return json.loads(LOCAL_VERSION.read_text(encoding="utf-8"))
-    return {"app_version": "0.0.0", "data_version": "none"}
-
-
-def fetch_json(url: str, timeout: int = 30) -> dict:
-    req = urllib.request.Request(url, headers={"User-Agent": "OnceHumanGuide-Updater/5.0"})
-    with urllib.request.urlopen(req, timeout=timeout) as resp:
-        return json.loads(resp.read().decode("utf-8"))
-
-
-def fetch_bytes(url: str, timeout: int = 60) -> bytes:
-    req = urllib.request.Request(url, headers={"User-Agent": "OnceHumanGuide-Updater/5.0"})
-    with urllib.request.urlopen(req, timeout=timeout) as resp:
-        return resp.read()
-
-
-def is_newer(remote: dict, local: dict) -> bool:
-    return (remote.get("data_version") or "") != (local.get("data_version") or "") or (
-        remote.get("app_version") or "") != (local.get("app_version") or "")
-
-
 def assemble_database_full(base: Path) -> Path | None:
-    """Build database_full.json from module JSON files if missing."""
+    """Build database_full.json from module JSON files if missing or empty."""
     full = base / "database_full.json"
     modules = {}
     for key, fname in MODULE_FILES:
@@ -122,6 +147,7 @@ def assemble_database_full(base: Path) -> Path | None:
 
 
 def rebuild_sqlite(json_path: Path, db_path: Path) -> int:
+    """Rebuild SQLite from database_full.json. Returns total row count."""
     data = json.loads(json_path.read_text(encoding="utf-8"))
     if db_path.exists():
         db_path.unlink()
@@ -207,6 +233,7 @@ def run(check_only: bool = False, force: bool = False) -> int:
         return 1
 
     files = list(UPDATE_MAP.keys())
+    # prefer remote files list if present
     remote_files = remote.get("files") or {}
     if remote_files:
         files = list(dict.fromkeys(list(remote_files.keys()) + files))
@@ -225,6 +252,7 @@ def run(check_only: bool = False, force: bool = False) -> int:
         except Exception as e:
             print(f"[updater] skip {name}: {e}")
 
+    # rebuild sqlite if database_full present
     full = BASE / "database_full.json"
     if not full.exists() or full.stat().st_size < 100:
         assemble_database_full(BASE)

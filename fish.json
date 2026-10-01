@@ -1,1 +1,63 @@
-[{"id":"fi_common","name":"Common River Fish","type":"Fish","desc":"Basic fishing catch for food.","location":"Rivers, lakes","tags":["food"]},{"id":"fi_electric","name":"Electric Eel (catch)","type":"Fish / Deviation","desc":"Fishing can yield Electric Eel territory deviation.","location":"Fishing spots","tags":["deviation"]},{"id":"fi_abyss","name":"Abyssal Catch (upcoming)","type":"Fish","desc":"Ocean scenario fishing content with Isles of Abyss.","location":"Ocean","tags":["upcoming","ocean"]}]
+[
+  {
+    "id": "fi_eel",
+    "name": "Electric Eel (capture)",
+    "type": "Fish",
+    "desc": "Fishing can yield Electric Eel deviation.",
+    "bait": "Standard / region bait",
+    "location": "Water bodies, wetlands",
+    "conditions": "Fishing mini-game",
+    "rewards": "Electric Eel deviation chance",
+    "tags": [
+      "deviation"
+    ]
+  },
+  {
+    "id": "fi_jelly",
+    "name": "Polar Jelly (capture)",
+    "type": "Fish",
+    "desc": "Cold-region fishing related capture.",
+    "bait": "Winter bait",
+    "location": "Onyx Tundra waters",
+    "conditions": "Way of Winter",
+    "rewards": "Polar Jelly chance",
+    "tags": [
+      "winter",
+      "deviation"
+    ]
+  },
+  {
+    "id": "fi_common",
+    "name": "Common Fish",
+    "type": "Fish",
+    "desc": "Cooking ingredient fish.",
+    "bait": "Basic",
+    "location": "Rivers, coast",
+    "conditions": "Any",
+    "rewards": "Food materials",
+    "tags": [
+      "cooking"
+    ]
+  },
+  {
+    "id": "fi_electric",
+    "name": "Electric Eel (catch)",
+    "type": "Fish / Deviation",
+    "desc": "Fishing can yield Electric Eel territory deviation.",
+    "location": "Fishing spots",
+    "tags": [
+      "deviation"
+    ]
+  },
+  {
+    "id": "fi_abyss",
+    "name": "Abyssal Catch (upcoming)",
+    "type": "Fish",
+    "desc": "Ocean scenario fishing content with Isles of Abyss.",
+    "location": "Ocean",
+    "tags": [
+      "upcoming",
+      "ocean"
+    ]
+  }
+]

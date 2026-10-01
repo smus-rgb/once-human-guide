@@ -1,1 +1,86 @@
-[{"id":"pl_wheat","name":"Wheat","type":"Crop","desc":"Basic crop; vendor and farm plots.","uses":"Food recipes","tags":["crop"]},{"id":"pl_corn","name":"Corn","type":"Crop","desc":"Soup and food recipes.","uses":"Corn Soup","tags":["crop"]},{"id":"pl_mushroom","name":"Deviated Mushroom / Growshroom related","type":"Crop","desc":"Synergy with Growshroom territory deviation.","uses":"Farm automation","tags":["crop","deviation"]},{"id":"pl_dracena","name":"Dracena Tree","type":"Tree","desc":"Chopping can drop Fetch-A-Lot Bunny.","uses":"Wood + deviation chance","tags":["tree","deviation"]},{"id":"pl_onion","name":"Deviated Onion","type":"Crop","desc":"Harvest can yield Grumpy Bulb.","uses":"Grumpy Bulb","tags":["crop","deviation"]}]
+[
+  {
+    "id": "pl_corn",
+    "name": "Corn",
+    "type": "Crop",
+    "desc": "Basic farm crop — soups and cooking.",
+    "uses": "Corn Soup, cooking",
+    "location": "Farms, Citrus County",
+    "rarity": "Common",
+    "respawn": "Crop cycle",
+    "tags": [
+      "farm"
+    ]
+  },
+  {
+    "id": "pl_mushroom",
+    "name": "Growshroom host plants",
+    "type": "Flora",
+    "desc": "Related to Growshroom deviation farming.",
+    "uses": "Territory farming",
+    "location": "Sunbury cave area (~5125,-6838)",
+    "rarity": "Uncommon",
+    "respawn": "—",
+    "tags": [
+      "deviation"
+    ]
+  },
+  {
+    "id": "pl_flower",
+    "name": "Wild Flowers",
+    "type": "Flora",
+    "desc": "Mood booster for many deviations.",
+    "uses": "Deviation mood",
+    "location": "Wilderness",
+    "rarity": "Common",
+    "respawn": "World",
+    "tags": [
+      "mood"
+    ]
+  },
+  {
+    "id": "pl_herb",
+    "name": "Medicinal Herb",
+    "type": "Herb",
+    "desc": "Alchemy / medicine crafting input.",
+    "uses": "Consumables",
+    "location": "Wetlands, forest edges",
+    "rarity": "Common",
+    "respawn": "Node",
+    "tags": [
+      "alchemy"
+    ]
+  },
+  {
+    "id": "pl_wheat",
+    "name": "Wheat",
+    "type": "Crop",
+    "desc": "Basic crop; vendor and farm plots.",
+    "uses": "Food recipes",
+    "tags": [
+      "crop"
+    ]
+  },
+  {
+    "id": "pl_dracena",
+    "name": "Dracena Tree",
+    "type": "Tree",
+    "desc": "Chopping can drop Fetch-A-Lot Bunny.",
+    "uses": "Wood + deviation chance",
+    "tags": [
+      "tree",
+      "deviation"
+    ]
+  },
+  {
+    "id": "pl_onion",
+    "name": "Deviated Onion",
+    "type": "Crop",
+    "desc": "Harvest can yield Grumpy Bulb.",
+    "uses": "Grumpy Bulb",
+    "tags": [
+      "crop",
+      "deviation"
+    ]
+  }
+]

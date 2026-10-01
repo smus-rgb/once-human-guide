@@ -1,1 +1,392 @@
-[{"id":"loc_deadsville","name":"Deadsville","type":"Settlement","region":"Dayton Wetlands","desc":"Early hub; Weber vendor.","tags":["hub","dayton"]},{"id":"loc_meyers","name":"Meyer's Market","type":"Settlement","region":"Broken Delta","desc":"Mid hub; Zhao Jintan, Lowe tasks.","tags":["hub"]},{"id":"loc_citrus","name":"Citrus County","type":"Farm zone","region":"Dayton / Broken Delta","desc":"Farmland — Buzzy Bee spawn.","tags":["farm","deviation"]},{"id":"loc_silo_alpha","name":"Securement Silo Alpha","type":"Silo","region":"Various","desc":"Early silo dungeon.","tags":["silo"]},{"id":"loc_silo_theta","name":"Securement Silo Theta","type":"Silo","region":"Various","desc":"Dr. Teddy / Enchanting Void farm.","tags":["silo"]},{"id":"loc_silo_sigma","name":"Securement Silo Sigma","type":"Silo","region":"Various","desc":"Keycard room — Mr. Wish.","tags":["silo"]},{"id":"loc_silo_phi","name":"Securement Silo Phi","type":"Silo","region":"Various","desc":"Chefosaurus Rex possible drop.","tags":["silo"]},{"id":"loc_silo_ex1","name":"Securement Silo EX1","type":"Silo","region":"Various","desc":"Atomic Lighter after boss.","tags":["silo"]},{"id":"loc_onyx","name":"Onyx Tundra","type":"Region","region":"Way of Winter","desc":"Northern cold region; Thermal Tower required.","tags":["winter"]},{"id":"loc_broken_delta","name":"Broken Delta","type":"Region","region":"Nalcott","desc":"Mid region; RaidZone base; Meyer's Market.","tags":["region"]},{"id":"loc_iron_river","name":"Iron River","type":"Region","region":"Nalcott","desc":"Progression region; Agent set crates.","tags":["region"]},{"id":"loc_chalk","name":"Chalk Peak","type":"Region","region":"Nalcott","desc":"Highlands; monoliths.","tags":["region"]},{"id":"loc_red_sands","name":"Red Sands","type":"Region","region":"Nalcott","desc":"Late Manibus region.","tags":["region"]},{"id":"loc_monolith_thirst","name":"Monolith of Thirst","type":"Monolith","region":"Chalk Peak","desc":"Shadow Hound / Lonewolf path.","tags":["monolith"]},{"id":"loc_prime_war_zone","name":"Prime War Arena Zones","type":"Raid","region":"Manibus cycle","desc":"Co-op world boss spaces.","tags":["raid"]},{"id":"loc_gaia_ruins","name":"GAIA Research Center Ruins","type":"POI","region":"Start area","desc":"Butterfly's Emissary farm.","tags":["poi","deviation"]},{"id":"loc_whalebone","name":"Whalebone","type":"Settlement","region":"Coast","desc":"Lowe task destination.","tags":["quest","hub"]},{"id":"loc_camp_igloo","name":"Camp Igloo","type":"Camp","region":"Cold path","desc":"Lowe task for combat deviation.","tags":["quest","winter"]},{"id":"loc_greywater","name":"Greywater Camp","type":"Settlement","region":"Mid","desc":"H37 questline location.","tags":["quest","hub"]}]
+[
+  {
+    "id": "loc_meyer",
+    "name": "Meyer's Market",
+    "type": "Settlement",
+    "region": "Dayton Wetlands",
+    "desc": "Hlavní early settlement. Crates, vendori, Rift Anchor.",
+    "x": 18,
+    "y": 72
+  },
+  {
+    "id": "loc_greywater",
+    "name": "Greywater Camp",
+    "type": "Settlement",
+    "region": "Broken Delta",
+    "desc": "Lowe questy, Deviations, crafting.",
+    "x": 32,
+    "y": 58
+  },
+  {
+    "id": "loc_tallgrass",
+    "name": "Tall Grass Inn",
+    "type": "Settlement",
+    "region": "Iron River",
+    "desc": "Jeremiah questy, Disco Ball, Shattered Maiden.",
+    "x": 48,
+    "y": 48
+  },
+  {
+    "id": "loc_blackfell",
+    "name": "Blackfell",
+    "type": "Settlement",
+    "region": "Red Sands",
+    "desc": "Oil Fields, Pup Buddy farm, mid-game hub.",
+    "x": 65,
+    "y": 42
+  },
+  {
+    "id": "loc_raywood",
+    "name": "Ray Wood Camp",
+    "type": "Settlement",
+    "region": "Chalk Peak",
+    "desc": "Mid-region settlement.",
+    "x": 42,
+    "y": 40
+  },
+  {
+    "id": "loc_whalebone",
+    "name": "Whalebone",
+    "type": "Settlement",
+    "region": "Onyx Tundra",
+    "desc": "Way of Winter hub. Lowe questy pro tundra deviations.",
+    "x": 38,
+    "y": 20
+  },
+  {
+    "id": "loc_camp_igloo",
+    "name": "Camp Igloo",
+    "type": "Settlement",
+    "region": "Onyx Tundra",
+    "desc": "Severní settlement, Snowsprite quest line.",
+    "x": 55,
+    "y": 15
+  },
+  {
+    "id": "loc_oblivion",
+    "name": "Oblivion",
+    "type": "Settlement",
+    "region": "Onyx Tundra",
+    "desc": "Far north settlement.",
+    "x": 28,
+    "y": 12
+  },
+  {
+    "id": "loc_silo_alpha",
+    "name": "Securement Silo Alpha",
+    "type": "Silo",
+    "region": "Dayton Wetlands",
+    "desc": "Early silo. Armor mods (helmet), Butterfly secondary.",
+    "x": 22,
+    "y": 65
+  },
+  {
+    "id": "loc_silo_theta",
+    "name": "Securement Silo Theta",
+    "type": "Silo",
+    "region": "Chalk Peak",
+    "desc": "Enchanting Void / Dr. Teddy. Tops mods.",
+    "x": 50,
+    "y": 35
+  },
+  {
+    "id": "loc_silo_ex1",
+    "name": "Securement Silo EX1",
+    "type": "Silo",
+    "region": "Onyx Tundra / Chalk Peak",
+    "desc": "Atomic Lighter, mask mods, Hydronaut.",
+    "x": 58,
+    "y": 28
+  },
+  {
+    "id": "loc_silo_psi",
+    "name": "Securement Silo PSI",
+    "type": "Silo",
+    "region": "Onyx Tundra",
+    "desc": "Snow Globe, pants/tops mods.",
+    "x": 48,
+    "y": 18
+  },
+  {
+    "id": "loc_silo_phi",
+    "name": "Securement Silo Phi",
+    "type": "Silo",
+    "region": "Iron River",
+    "desc": "Pyro Dino, Chefosaurus, shoes mods.",
+    "x": 45,
+    "y": 45
+  },
+  {
+    "id": "loc_silo_delta",
+    "name": "Securement Silo Delta",
+    "type": "Silo",
+    "region": "Onyx Tundra",
+    "desc": "Invincible Sun, gloves/shoes mods.",
+    "x": 52,
+    "y": 22
+  },
+  {
+    "id": "loc_silo_sigma",
+    "name": "Securement Silo Sigma",
+    "type": "Silo",
+    "region": "Broken Delta",
+    "desc": "Mr. Wish (PVP), gloves mods.",
+    "x": 35,
+    "y": 55
+  },
+  {
+    "id": "loc_monolith_greed",
+    "name": "Monolith of Greed",
+    "type": "Boss",
+    "region": "Dayton Wetlands",
+    "desc": "Ravenous Hunter – Burn/Frost weapon mods.",
+    "x": 28,
+    "y": 70
+  },
+  {
+    "id": "loc_monolith_thirst",
+    "name": "Monolith of Thirst",
+    "type": "Boss",
+    "region": "Chalk Peak",
+    "desc": "Shadow Hound → Lonewolf's Whisper + Shrapnel mods.",
+    "x": 52,
+    "y": 42
+  },
+  {
+    "id": "loc_treant",
+    "name": "Avalanche Monolith (Treant)",
+    "type": "Boss",
+    "region": "—",
+    "desc": "Harveseed, Tar Pudding, Burn mods.",
+    "x": 40,
+    "y": 32
+  },
+  {
+    "id": "loc_firedust",
+    "name": "Firedust Monolith",
+    "type": "Boss",
+    "region": "—",
+    "desc": "Forsaken Giant – Brave George, Shrapnel mods.",
+    "x": 60,
+    "y": 38
+  },
+  {
+    "id": "loc_tundra_mono",
+    "name": "Tundra Monolith",
+    "type": "Boss",
+    "region": "Onyx Tundra",
+    "desc": "Secret Servitor → Snapshot.",
+    "x": 45,
+    "y": 16
+  },
+  {
+    "id": "loc_wishland",
+    "name": "Wish Land",
+    "type": "POI",
+    "region": "Various",
+    "desc": "Wish Machine, blueprint shop, street lamps for Gazocchio.",
+    "x": 55,
+    "y": 50
+  },
+  {
+    "id": "loc_gaia",
+    "name": "GAIA Research Center Ruins",
+    "type": "POI",
+    "region": "Dayton Wetlands",
+    "desc": "Butterfly farm location.",
+    "x": 20,
+    "y": 68
+  },
+  {
+    "id": "loc_sutherland",
+    "name": "Sutherland Chemical Plant",
+    "type": "POI",
+    "region": "Broken Delta",
+    "desc": "Flame Essence spawn (4975, -6194).",
+    "x": 38,
+    "y": 52
+  },
+  {
+    "id": "loc_citrus",
+    "name": "Citrus County",
+    "type": "POI",
+    "region": "Dayton Wetlands",
+    "desc": "Buzzy Bee farm location.",
+    "x": 25,
+    "y": 70
+  },
+  {
+    "id": "loc_sunbury",
+    "name": "Sunbury Middle School",
+    "type": "POI",
+    "region": "Broken Delta",
+    "desc": "Growshroom cave nearby (5125, -6838); Voodoo Doll roof.",
+    "x": 36,
+    "y": 56
+  },
+  {
+    "id": "loc_coastside",
+    "name": "Coastside Plaza",
+    "type": "POI",
+    "region": "Broken Delta",
+    "desc": "Voodoo Doll 2nd floor west building (7300, -4810).",
+    "x": 30,
+    "y": 60
+  },
+  {
+    "id": "loc_junkyard",
+    "name": "Junkyard",
+    "type": "POI",
+    "region": "Iron River",
+    "desc": "Carnival of Doom / Voodoo Doll quest start.",
+    "x": 50,
+    "y": 46
+  },
+  {
+    "id": "loc_lea",
+    "name": "LEA Research Lab",
+    "type": "POI",
+    "region": "Chalk Peak",
+    "desc": "Raid – Rebecca spawn chance.",
+    "x": 48,
+    "y": 36
+  },
+  {
+    "id": "loc_mirage",
+    "name": "Mirage Monolith",
+    "type": "Boss",
+    "region": "Iron River",
+    "desc": "Fast Gunner / Bullseye mods.",
+    "x": 54,
+    "y": 44
+  },
+  {
+    "id": "loc_gaia_cliff",
+    "name": "Gaia Cliff Monolith",
+    "type": "Boss",
+    "region": "Broken Delta",
+    "desc": "Power Surge / Unstable Bomber mods.",
+    "x": 34,
+    "y": 54
+  },
+  {
+    "id": "loc_blackheart",
+    "name": "Blackheart Region",
+    "type": "POI",
+    "region": "Blackheart",
+    "desc": "Late-game region, Behemoth spawns.",
+    "x": 72,
+    "y": 35
+  },
+  {
+    "id": "loc_wish_east",
+    "name": "Wish Land East",
+    "type": "POI",
+    "region": "Various",
+    "desc": "Popcorn recipe kitchen (~2515, 5925).",
+    "x": 58,
+    "y": 48
+  },
+  {
+    "id": "loc_dayhospital",
+    "name": "Dayton Hospital",
+    "type": "POI",
+    "region": "Dayton Wetlands",
+    "desc": "Space Turner quest – calendar 9/15.",
+    "x": 20,
+    "y": 74
+  },
+  {
+    "id": "loc_deadsville",
+    "name": "Deadsville",
+    "type": "Settlement",
+    "region": "Dayton Wetlands",
+    "desc": "Early hub; Weber vendor.",
+    "tags": [
+      "hub",
+      "dayton"
+    ]
+  },
+  {
+    "id": "loc_monolith_empty",
+    "name": "Empty Monolith (tutorial)",
+    "type": "Monolith",
+    "region": "Start",
+    "desc": "Tutorial Butterfly's Emissary floor spawn (~165, -3708).",
+    "tags": [
+      "monolith",
+      "beginner"
+    ]
+  },
+  {
+    "id": "loc_onyx",
+    "name": "Onyx Tundra",
+    "type": "Region",
+    "region": "Way of Winter",
+    "desc": "Northern cold region; Thermal Tower required.",
+    "tags": [
+      "winter"
+    ]
+  },
+  {
+    "id": "loc_broken_delta",
+    "name": "Broken Delta",
+    "type": "Region",
+    "region": "Nalcott",
+    "desc": "Mid region; RaidZone map base; Meyer's Market.",
+    "tags": [
+      "region"
+    ]
+  },
+  {
+    "id": "loc_iron_river",
+    "name": "Iron River",
+    "type": "Region",
+    "region": "Nalcott",
+    "desc": "Progression region; Agent set crates.",
+    "tags": [
+      "region"
+    ]
+  },
+  {
+    "id": "loc_chalk",
+    "name": "Chalk Peak",
+    "type": "Region",
+    "region": "Nalcott",
+    "desc": "Highlands; monoliths and logging beaver notes.",
+    "tags": [
+      "region"
+    ]
+  },
+  {
+    "id": "loc_red_sands",
+    "name": "Red Sands",
+    "type": "Region",
+    "region": "Nalcott",
+    "desc": "Desert-side late Manibus region.",
+    "tags": [
+      "region"
+    ]
+  },
+  {
+    "id": "loc_gaia_ruins",
+    "name": "GAIA Research Center Ruins",
+    "type": "POI",
+    "region": "Start area",
+    "desc": "Butterfly's Emissary farm / tutorial-adjacent ruins.",
+    "tags": [
+      "poi",
+      "deviation"
+    ]
+  },
+  {
+    "id": "loc_prime_war_zone",
+    "name": "Prime War Arena Zones",
+    "type": "Raid",
+    "region": "Manibus cycle",
+    "desc": "Co-op world boss encounter spaces.",
+    "tags": [
+      "raid"
+    ]
+  }
+]

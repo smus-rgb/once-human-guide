@@ -1,1 +1,329 @@
-[{"id":"rec_roasted_meat","name":"Roasted Meat","type":"Food","station":"Campfire / Stove","desc":"Starter food."},{"id":"rec_corn_soup","name":"Corn Soup","type":"Food","station":"Stove","desc":"Basic recipe."},{"id":"rec_fruit_tea","name":"Fruit Tea","type":"Drink","station":"Stove","desc":"Basic drink."},{"id":"rec_ammo_556","name":"5.56mm Ammo","type":"Ammo","station":"Workbench","desc":"Standard AR ammunition."},{"id":"rec_ammo_shotgun","name":"Shotgun Shells","type":"Ammo","station":"Workbench","desc":"Shells for ACS12 / DBSG."},{"id":"rec_ammo_338","name":".338 Ammo","type":"Ammo","station":"Workbench","desc":"Sniper ammo for AWS.338."},{"id":"rec_bandages","name":"Bandage / Med Kit","type":"Consumable","station":"Medical Bench","desc":"Basic healing."},{"id":"rec_portable_mixed","name":"Portable Mixed Fuel","type":"Fuel","station":"Workbench","desc":"Generator and vehicle fuel."},{"id":"rec_fusion_lighter","name":"Fusion Lighter","type":"Tactical","station":"Advanced Workbench","desc":"Requires Atomic Lighter materials."},{"id":"rec_chloro","name":"Chloro-armor / Living Armor","type":"Gear","station":"Advanced","desc":"Uses Heart Vine from Harveseed."},{"id":"rec_weaver","name":"The Weaver","type":"Consumable","station":"Advanced","desc":"Uses Thread of Dreams from Dreamcatcher."},{"id":"rec_thermal_tower","name":"Thermal Tower","type":"Structure","station":"Build","desc":"Way of Winter heat structure."},{"id":"rec_generator","name":"Bio Fuel Generator","type":"Structure","station":"Build","desc":"Base power; boosted by Electric Eel."},{"id":"rec_securement_pod","name":"Securement Pod","type":"Structure","station":"Build","desc":"Houses deviations in territory."}]
+[
+  {
+    "id": "rec_roasted_meat",
+    "name": "Roasted Meat",
+    "type": "Food",
+    "station": "Campfire / Stove",
+    "ingredients": [
+      "Meat"
+    ],
+    "effect": "Základní HP regen",
+    "desc": "Starter food."
+  },
+  {
+    "id": "rec_corn_soup",
+    "name": "Corn Soup",
+    "type": "Food",
+    "station": "Stove",
+    "ingredients": [
+      "Corn",
+      "Water"
+    ],
+    "effect": "HP + stamina",
+    "desc": "Basic recipe class."
+  },
+  {
+    "id": "rec_fruit_tea",
+    "name": "Fruit Tea",
+    "type": "Drink",
+    "station": "Stove",
+    "ingredients": [
+      "Fruit",
+      "Water"
+    ],
+    "effect": "Sanity / mild buff",
+    "desc": "Základní nápoj."
+  },
+  {
+    "id": "rec_popcorn",
+    "name": "Popcorn",
+    "type": "Food",
+    "station": "Stove",
+    "ingredients": [
+      "Corn"
+    ],
+    "effect": "Buff",
+    "desc": "Wish Land East – Kores building kitchen (~2515, 5925)."
+  },
+  {
+    "id": "rec_hug_bowl",
+    "name": "Hug-In-A-Bowl",
+    "type": "Food",
+    "station": "Stove",
+    "ingredients": [
+      "Noodles",
+      "Deviated Peppercorn"
+    ],
+    "effect": "Special dish",
+    "desc": "Vyžaduje Deviated Peppercorn."
+  },
+  {
+    "id": "rec_chloro",
+    "name": "Living Armor / Chloro-armor",
+    "type": "Whim Potion",
+    "station": "Alchemy",
+    "ingredients": [
+      "Heart Vine"
+    ],
+    "effect": "Armor whim",
+    "desc": "Vyžaduje Harveseed (Heart Vine)."
+  },
+  {
+    "id": "rec_weaver",
+    "name": "The Weaver",
+    "type": "Whim Potion",
+    "station": "Alchemy",
+    "ingredients": [
+      "Thread of Dreams"
+    ],
+    "effect": "Whim potion",
+    "desc": "Vyžaduje Dreamcatcher."
+  },
+  {
+    "id": "rec_feather",
+    "name": "Featherweight",
+    "type": "Whim Potion",
+    "station": "Alchemy",
+    "ingredients": [
+      "Small Balloons"
+    ],
+    "effect": "Nosnost",
+    "desc": "Vyžaduje Pup Buddy."
+  },
+  {
+    "id": "rec_fusion",
+    "name": "Fusion Lighter",
+    "type": "Tactical",
+    "station": "Workbench",
+    "ingredients": [
+      "Split-Core Cotton"
+    ],
+    "effect": "Tactical item",
+    "desc": "Vyžaduje Atomic Lighter."
+  },
+  {
+    "id": "rec_spring",
+    "name": "Spring Legs",
+    "type": "Gear",
+    "station": "Workbench",
+    "ingredients": [
+      "Silver Spring"
+    ],
+    "effect": "Mobility",
+    "desc": "Vyžaduje Frog the Leaper."
+  },
+  {
+    "id": "rec_utter",
+    "name": "Utter Delight",
+    "type": "Whim Potion",
+    "station": "Alchemy",
+    "ingredients": [
+      "Inspiration Fragment"
+    ],
+    "effect": "Whim potion",
+    "desc": "Vyžaduje Disco Ball."
+  },
+  {
+    "id": "rec_space_twist",
+    "name": "Space Twister",
+    "type": "Tactical",
+    "station": "Workbench",
+    "ingredients": [
+      "Spatial Keystone"
+    ],
+    "effect": "Teleport utility",
+    "desc": "Vyžaduje Space Turner."
+  },
+  {
+    "id": "rec_lightning",
+    "name": "Lightning Bottle",
+    "type": "Tactical",
+    "station": "Workbench",
+    "ingredients": [
+      "Plasma"
+    ],
+    "effect": "Tactical lightning",
+    "desc": "Requires Orb Lightning (Plasma)."
+  },
+  {
+    "id": "rec_snowball",
+    "name": "Snowball",
+    "type": "Tactical",
+    "station": "Workbench",
+    "ingredients": [
+      "Snowdust"
+    ],
+    "effect": "Frost tactical",
+    "desc": "Requires Snow Globe."
+  },
+  {
+    "id": "rec_transform_cookie",
+    "name": "Transformation Cookie",
+    "type": "Food",
+    "station": "Stove",
+    "ingredients": [
+      "Cracker Crumbs"
+    ],
+    "effect": "Transformation",
+    "desc": "Requires Gingerbread House."
+  },
+  {
+    "id": "rec_upper_prot",
+    "name": "Upper World Protection",
+    "type": "Tactical",
+    "station": "Workbench",
+    "ingredients": [
+      "Upper World Feather"
+    ],
+    "effect": "Protection",
+    "desc": "Requires Upper World Spawn (PVP)."
+  },
+  {
+    "id": "rec_ammo_556",
+    "name": "5.56mm Ammo",
+    "type": "Ammo",
+    "station": "Workbench",
+    "desc": "Standard AR ammunition.",
+    "ingredients": [
+      "Metal Scraps",
+      "Gunpowder"
+    ],
+    "tags": [
+      "ammo"
+    ]
+  },
+  {
+    "id": "rec_ammo_shotgun",
+    "name": "Shotgun Shells",
+    "type": "Ammo",
+    "station": "Workbench",
+    "desc": "Shells for ACS12 / DBSG lines.",
+    "ingredients": [
+      "Metal Scraps",
+      "Gunpowder"
+    ],
+    "tags": [
+      "ammo"
+    ]
+  },
+  {
+    "id": "rec_ammo_338",
+    "name": ".338 Ammo",
+    "type": "Ammo",
+    "station": "Workbench",
+    "desc": "Sniper ammunition for AWS.338.",
+    "ingredients": [
+      "Metal Scraps",
+      "Gunpowder",
+      "Advanced parts"
+    ],
+    "tags": [
+      "ammo"
+    ]
+  },
+  {
+    "id": "rec_bandages",
+    "name": "Bandage / Med Kit",
+    "type": "Consumable",
+    "station": "Medical Bench",
+    "desc": "Basic healing items.",
+    "ingredients": [
+      "Cloth",
+      "Alcohol"
+    ],
+    "tags": [
+      "heal"
+    ]
+  },
+  {
+    "id": "rec_energy_drink",
+    "name": "Energy Drink",
+    "type": "Consumable",
+    "station": "Kitchen",
+    "desc": "Stamina / temporary combat buff food-drink.",
+    "ingredients": [
+      "Water",
+      "Sugar",
+      "Herbs"
+    ],
+    "tags": [
+      "buff"
+    ]
+  },
+  {
+    "id": "rec_portable_mixed",
+    "name": "Portable Mixed Fuel",
+    "type": "Fuel",
+    "station": "Workbench",
+    "desc": "Generator and vehicle fuel.",
+    "ingredients": [
+      "Acid",
+      "Rubber"
+    ],
+    "tags": [
+      "fuel"
+    ]
+  },
+  {
+    "id": "rec_fusion_lighter",
+    "name": "Fusion Lighter (tactical)",
+    "type": "Tactical",
+    "station": "Advanced Workbench",
+    "desc": "Unlocked via Atomic Lighter deviation materials (Split-Core Cotton).",
+    "ingredients": [
+      "Split-Core Cotton",
+      "Electronics"
+    ],
+    "tags": [
+      "tactical",
+      "deviation"
+    ]
+  },
+  {
+    "id": "rec_thermal_tower",
+    "name": "Thermal Tower",
+    "type": "Structure",
+    "station": "Build",
+    "desc": "Way of Winter heat structure for base survival.",
+    "ingredients": [
+      "Metal",
+      "Electronics",
+      "Fuel"
+    ],
+    "tags": [
+      "winter",
+      "base"
+    ]
+  },
+  {
+    "id": "rec_generator",
+    "name": "Bio Fuel Generator",
+    "type": "Structure",
+    "station": "Build",
+    "desc": "Base power. Boosted by Electric Eel deviation.",
+    "ingredients": [
+      "Metal",
+      "Electronics"
+    ],
+    "tags": [
+      "base",
+      "power"
+    ]
+  },
+  {
+    "id": "rec_securement_pod",
+    "name": "Securement Pod",
+    "type": "Structure",
+    "station": "Build",
+    "desc": "Houses deviations in territory.",
+    "ingredients": [
+      "Metal",
+      "Electronics",
+      "Stardust materials"
+    ],
+    "tags": [
+      "deviation",
+      "base"
+    ]
+  }
+]
