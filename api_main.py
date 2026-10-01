@@ -15,8 +15,8 @@ DB_PATH = BASE / "once_human.db"
 if not DB_PATH.exists():
     DB_PATH = BASE.parent / "once_human.db"
 
-DATA_VERSION = "2026-09-30-v18-372"
-API_VERSION = "5.2.0"
+DATA_VERSION = "2026-10-01-v19-372"
+API_VERSION = "5.3.0"
 MAP_EMBEDS = {
     "thgl": "https://oncehuman.th.gl",
     "mapgenie": "https://mapgenie.io/once-human/maps/nalcott",
@@ -108,12 +108,16 @@ def root():
 
 @app.get("/ui")
 def serve_ui():
-    html = BASE / "once_human_guide_ui_v4.html"
-    if not html.exists():
-        html = BASE / "once_human_guide_app.html"
-    if not html.exists():
-        raise HTTPException(404, "UI HTML not found")
-    return HTMLResponse(html.read_text(encoding="utf-8"))
+    for name in (
+        "once_human_guide_v19.html",
+        "once_human_guide_v18.html",
+        "once_human_guide_ui_v4.html",
+        "once_human_guide_app.html",
+    ):
+        html = BASE / name
+        if html.exists():
+            return HTMLResponse(html.read_text(encoding="utf-8"))
+    raise HTTPException(404, "UI HTML not found")
 
 
 @app.get("/version")
@@ -319,9 +323,23 @@ def update_check():
         },
         "remote": {
             "app_version": remote.get("app_version"),
+            "shell_version": remote.get("shell_version"),
             "data_version": remote.get("data_version"),
+            "records": remote.get("records"),
+            "sw_cache": remote.get("sw_cache"),
             "released_at": remote.get("released_at"),
             "notes": remote.get("notes"),
+        },
+        "shell": {
+            "ui": "/ui",
+            "host": "once_human_guide_v19.html",
+            "fallback": "once_human_guide_v18.html",
+            "modules": [
+                "modules/ohg_runtime.js",
+                "modules/ohg_map.js",
+                "modules/ohg_builds.js",
+                "modules/ohg_pack_channel.js",
+            ],
         },
     }
 

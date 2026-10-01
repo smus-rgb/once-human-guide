@@ -1,0 +1,5 @@
+# CODEOWNERS — Emergent Labs jen review, merge do main jen owner
+* @smus-rgb
+/data/ @smus-rgb
+/modules/ @smus-rgb
+/docs/ @smus-rgb

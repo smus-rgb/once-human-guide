@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>Once Human Guide · v19 Thin Host</title>
+<style>
+:root{
+  --bg:#090c10;--bg2:#12171e;--bg3:#1a212b;--line:#2a3a4e;
+  --txt:#e8eef6;--mut:#8b9bb0;--acc:#3ee0c2;--acc2:#7aa2ff;--warn:#f0c14b;--bad:#ff6b7a;
+  --r:14px;--safe-b:env(safe-area-inset-bottom);--nav-h:64px;--side:252px;--ctx:340px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--txt);font:15px/1.45 system-ui,Segoe UI,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+.app{display:grid;min-height:100%;height:100%}
+.app.phone{grid-template-rows:auto 1fr var(--nav-h)}
+.app.phone .sidebar,.app.phone .ctx,.app.phone .list-col{display:none!important}
+.app.tablet{grid-template-columns:72px 1fr;grid-template-rows:auto 1fr}
+.app.tablet .bottomnav{display:none}
+.app.tablet .ctx{display:none}
+.app.tablet.ctx-open{grid-template-columns:72px 1fr min(400px,44vw)}
+.app.tablet.ctx-open .ctx{display:flex}
+.app.desktop{grid-template-columns:var(--side) 1fr var(--ctx);grid-template-rows:auto 1fr}
+.app.desktop .bottomnav{display:none}
+.app.ultrawide{grid-template-columns:var(--side) minmax(280px,360px) 1fr var(--ctx);grid-template-rows:auto 1fr}
+.app.ultrawide .bottomnav{display:none}
+.app.desktop .list-col,.app.ultrawide .list-col{display:flex}
+.topbar{grid-column:1/-1;display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--bg2);min-height:52px}
+.brand{font-weight:800;letter-spacing:.06em;color:var(--acc);white-space:nowrap}
+.searchbox{flex:1;max-width:620px;background:var(--bg3);border:1px solid var(--line);border-radius:10px;padding:8px 12px;display:flex;gap:8px;align-items:center}
+.searchbox input{flex:1;background:none;border:0;outline:none}
+.badge{font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--mut)}
+.badge.on{color:#0b0e12;background:var(--acc);border-color:var(--acc)}
+.sidebar{background:var(--bg2);border-right:1px solid var(--line);overflow:auto;padding:8px}
+.navg{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--mut);padding:12px 10px 4px}
+.navi{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;color:var(--mut);width:100%;text-align:left}
+.navi:hover{background:var(--bg3);color:var(--txt)}
+.navi.active{background:#16352f;color:var(--acc)}
+.navi .ic{width:22px;text-align:center}
+.app.tablet .sidebar .lbl,.app.tablet .navg{display:none}
+.app.tablet .navi{justify-content:center;padding:10px}
+.workspace{overflow:auto;padding:16px;min-width:0}
+.list-col{flex-direction:column;border-right:1px solid var(--line);overflow:auto;padding:12px;background:var(--bg2);display:none}
+.ctx{background:var(--bg2);border-left:1px solid var(--line);flex-direction:column;overflow:auto;display:flex}
+.app.desktop .ctx,.app.ultrawide .ctx{display:flex}
+.ctx h3{margin:0;padding:14px 16px;border-bottom:1px solid var(--line);font-size:14px}
+.ctx .body{padding:14px 16px;flex:1}
+.bottomnav{display:flex;border-top:1px solid var(--line);background:var(--bg2);padding-bottom:var(--safe-b)}
+.bottomnav button{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:10px;color:var(--mut)}
+.bottomnav button.active{color:var(--acc)}
+h1{font-size:22px;margin:0 0 6px}
+.sub{color:var(--mut);margin:0 0 16px}
+.grid{display:grid;gap:12px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.app.phone .g2,.app.phone .g3,.app.phone .g4{grid-template-columns:1fr}
+.app.tablet .g4{grid-template-columns:repeat(2,1fr)}
+.card{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);padding:14px;text-align:left;width:100%}
+.card:hover{border-color:#35506c}
+.kicker{font-size:11px;color:var(--acc);text-transform:uppercase;letter-spacing:.08em}
+.muted{color:var(--mut)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{font-size:12px;padding:3px 8px;border-radius:8px;background:var(--bg3);border:1px solid var(--line)}
+.btn{background:#16352f;color:var(--acc);border:1px solid #1f5a4e;padding:8px 12px;border-radius:10px}
+.btn.ghost{background:var(--bg3);color:var(--txt);border-color:var(--line)}
+.btn.danger{background:#3a1520;color:var(--bad);border-color:#5a2432}
+.list{display:flex;flex-direction:column;gap:8px}
+.item{display:flex;justify-content:space-between;gap:10px;padding:10px 12px;background:var(--bg2);border:1px solid var(--line);border-radius:12px;text-align:left;width:100%}
+.item:hover,.item.sel{border-color:var(--acc)}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.filters input,.filters select,textarea{background:var(--bg3);border:1px solid var(--line);border-radius:8px;padding:7px 10px}
+.mapbox{height:min(62vh,560px);background:radial-gradient(ellipse at 40% 40%,#16352f,var(--bg3));border:1px solid var(--line);border-radius:var(--r);position:relative;overflow:hidden}
+.pin{position:absolute;transform:translate(-50%,-100%);font-size:16px;cursor:pointer;filter:drop-shadow(0 2px 4px #000)}
+.sheet{position:fixed;inset:auto 0 0 0;background:var(--bg2);border-top:1px solid var(--line);border-radius:18px 18px 0 0;max-height:78vh;overflow:auto;padding:16px;z-index:40;display:none}
+.sheet.on{display:block}
+.overlay{position:fixed;inset:0;background:#0008;z-index:30;display:none}
+.overlay.on{display:block}
+.cmd{position:fixed;left:50%;top:12vh;transform:translateX(-50%);width:min(640px,92vw);background:var(--bg2);border:1px solid var(--line);border-radius:16px;z-index:50;display:none;overflow:hidden}
+.cmd.on{display:block}
+.cmd input{width:100%;padding:14px 16px;background:transparent;border:0;outline:none;border-bottom:1px solid var(--line)}
+table{width:100%;border-collapse:collapse}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;font-size:13px}
+th{color:var(--mut);font-weight:600}
+.progress{height:8px;background:var(--bg3);border-radius:99px;overflow:hidden}
+.progress>i{display:block;height:100%;background:var(--acc)}
+.toast{position:fixed;bottom:calc(var(--nav-h) + 12px);left:50%;transform:translateX(-50%);background:#16352f;border:1px solid #1f5a4e;color:var(--acc);padding:8px 14px;border-radius:99px;z-index:60;display:none}
+.slot{min-height:64px;border:1px dashed var(--line);border-radius:12px;padding:10px;background:var(--bg3);display:flex;justify-content:space-between;align-items:center;gap:8px}
+.slot.filled{border-style:solid;border-color:#1f5a4e}
+.stat{font-size:28px;font-weight:700;color:var(--acc)}
+.score-box{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.app.phone .score-box{grid-template-columns:1fr}
+.score-box .card{text-align:center;padding:14px}
+.chip.acc{color:var(--acc);border-color:#1f5a4e}
+.tagrow{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+
+.tile{display:inline-flex;width:11.5%;aspect-ratio:1;margin:0.4%;background:#101820;border:1px solid #2a3a4e;border-radius:4px;font-size:10px;align-items:center;justify-content:center;color:#8b9bb0}
+.tile.on{background:#16352f;color:#3ee0c2;border-color:#1f5a4e}
+.mapbox{position:relative}
+</style>
+</head>
+<body>
+<div class="app phone" id="app">
+  <header class="topbar">
+    <div class="brand">OH GUIDE v18</div>
+    <div class="searchbox" id="qbox">
+      <span>⌕</span>
+      <input id="q" placeholder="Hledat entity, recepty, lokace… (Ctrl+K)" autocomplete="off"/>
+    </div>
+    <span class="badge" id="syncBadge">LOCAL</span>
+    <span class="badge" id="devBadge">PHONE</span>
+    <button class="btn ghost" id="lockBtn">AUTO</button>
+  </header>
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="list-col" id="listCol"></div>
+  <main class="workspace" id="ws"></main>
+  <aside class="ctx" id="ctx"><h3>Kontext</h3><div class="body muted">Vyber entitu.</div></aside>
+  <nav class="bottomnav" id="bn">
+    <button data-r="home" class="active">⌂<span>Home</span></button>
+    <button data-r="search">⌕<span>Search</span></button>
+    <button data-r="map">◎<span>Map</span></button>
+    <button data-r="db">☰<span>Database</span></button>
+    <button data-r="more">⋯<span>More</span></button>
+  </nav>
+</div>
+<div class="overlay" id="ov"></div>
+<div class="sheet" id="sheet"></div>
+<div class="cmd" id="cmd">
+  <input id="cmdq" placeholder="Command search — všechny entity"/>
+  <div id="cmdres" class="list" style="max-height:50vh;overflow:auto;padding:8px"></div>
+</div>
+<div class="toast" id="toast"></div>
+<script src="ohg_data.js"></script>
+<script src="modules/ohg_runtime.js"></script>
+<script src="modules/ohg_map.js"></script>
+<script src="modules/ohg_builds.js"></script>
+<script src="modules/ohg_pack_channel.js"></script>
+</body>
+</html>

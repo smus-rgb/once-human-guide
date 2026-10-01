@@ -1,11 +1,15 @@
-/* Once Human Guide v18 — cache pack + shell */
-const CACHE = 'ohg-v18-307';
+/* Once Human Guide v19 — cache thin host + modules + pack */
+const CACHE = 'ohg-v19-307';
 const PRECACHE = [
+  './once_human_guide_v19.html',
   './once_human_guide_v18.html',
-  './once_human_guide_v17.html',
   './ohg_data.js',
   './ohg_sw.js',
-  './version.json'
+  './version.json',
+  './modules/ohg_runtime.js',
+  './modules/ohg_map.js',
+  './modules/ohg_builds.js',
+  './modules/ohg_pack_channel.js'
 ];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(PRECACHE)).then(() => self.skipWaiting()));
@@ -26,6 +30,6 @@ self.addEventListener('fetch', e => {
         caches.open(CACHE).then(c => c.put(req, copy));
       }
       return res;
-    }).catch(() => caches.match('./once_human_guide_v18.html')))
+    }).catch(() => caches.match('./once_human_guide_v19.html')))
   );
 });

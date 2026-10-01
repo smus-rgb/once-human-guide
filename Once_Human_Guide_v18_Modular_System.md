@@ -66,6 +66,6 @@ Lock layoutu: AUTO / phone / tablet / desktop / ultrawide (Settings).
 | `ohg_sw.js` | Offline cache ohg-v18-307 |
 | `Once_Human_Guide_v18_Modular_System.md` | Spec |
 
-## Další krok (v19)
+## Další krok (v19) — hotovo 2026-10-01
 
-Rozdělení `modules/*.js`, tile mapa s region filtrem, remote pack update (`version.json` + diff do Agent queue).
+Tenký host `once_human_guide_v19.html` načítá `modules/ohg_runtime.js`, `ohg_map.js`, `ohg_builds.js`, `ohg_pack_channel.js`. v18 zůstává offline fallback. Pack 372 beze změny.

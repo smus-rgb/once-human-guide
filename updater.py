@@ -26,9 +26,14 @@ DEFAULT_RAW = "https://raw.githubusercontent.com/smus-rgb/once-human-guide/main"
 # files the updater is allowed to replace
 UPDATE_MAP = {
     "database_full.json": "database_full.json",
+    "once_human_guide_v19.html": "once_human_guide_v19.html",
     "once_human_guide_v18.html": "once_human_guide_v18.html",
     "ohg_data.js": "ohg_data.js",
     "ohg_sw.js": "ohg_sw.js",
+    "modules/ohg_runtime.js": "modules/ohg_runtime.js",
+    "modules/ohg_map.js": "modules/ohg_map.js",
+    "modules/ohg_builds.js": "modules/ohg_builds.js",
+    "modules/ohg_pack_channel.js": "modules/ohg_pack_channel.js",
     "once_human_guide_ui_v4.html": "once_human_guide_ui_v4.html",
     "once_human_guide_app.html": "once_human_guide_app.html",
     "CHANGELOG.md": "CHANGELOG.md",
@@ -244,6 +249,7 @@ def run(check_only: bool = False, force: bool = False) -> int:
             continue
         url = f"{raw_base}/{name}"
         dest = BASE / UPDATE_MAP[name]
+        dest.parent.mkdir(parents=True, exist_ok=True)
         try:
             data = fetch_bytes(url)
             dest.write_bytes(data)

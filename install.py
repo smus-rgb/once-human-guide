@@ -65,9 +65,14 @@ DATA_JSON = [
 
 OPTIONAL = [
     "database_full.json",
+    "once_human_guide_v19.html",
     "once_human_guide_v18.html",
     "ohg_data.js",
     "ohg_sw.js",
+    "modules/ohg_runtime.js",
+    "modules/ohg_map.js",
+    "modules/ohg_builds.js",
+    "modules/ohg_pack_channel.js",
     "once_human_guide_ui_v4.html",
     "once_human_guide_app.html",
     "Once_Human_Guide_v18_Modular_System.md",
@@ -113,6 +118,7 @@ def download(url: str, dest: Path, timeout: int = 90) -> bool:
 
 def fetch_file(name: str, dest_dir: Path, prefer_local: bool) -> bool:
     dest = dest_dir / name
+    dest.parent.mkdir(parents=True, exist_ok=True)
     local = SOURCE / name
     if prefer_local and local.exists() and local.resolve() != dest.resolve():
         shutil.copy2(local, dest)
