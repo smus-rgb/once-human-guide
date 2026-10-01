@@ -238,7 +238,7 @@ def write_launchers(dest_dir: Path) -> None:
         "echo \"  API: http://127.0.0.1:8000/docs\"\n"
         "echo \"  Offline: open once_human_guide_ui_v4.html (if present)\"\n"
         "echo \"\"\n"
-        "exec python3 -m uvicorn api_main:app --host 0.0.0.0 --port 8000\n",
+        "exec python3 -m uvicorn api_main:app --host 127.0.0.1 --port 8000\n",
         encoding="utf-8",
     )
     try:
@@ -396,7 +396,7 @@ def install(dest: Path, prefer_local: bool, launch: bool) -> int:
                 "uvicorn",
                 "api_main:app",
                 "--host",
-                "0.0.0.0",
+                "127.0.0.1",
                 "--port",
                 "8000",
             ],
