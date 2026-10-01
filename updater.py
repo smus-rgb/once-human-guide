@@ -209,6 +209,27 @@ def rebuild_sqlite(json_path: Path, db_path: Path) -> int:
                 vals.append(v)
             c.execute(f"INSERT INTO {table} VALUES ({','.join('?' * len(cols))})", vals)
             total += 1
+    # Lookup indexes — user layer stays out of this pack DB.
+    for table in schemas:
+        c.execute(f"CREATE INDEX IF NOT EXISTS idx_{table}_name ON {table}(name)")
+    c.execute(
+        "CREATE VIRTUAL TABLE IF NOT EXISTS search_fts USING fts5("
+        "table_name UNINDEXED, item_id UNINDEXED, name, body)"
+    )
+    for table in schemas:
+        for row in data.get(table, []):
+            body_parts = []
+            for col in schemas[table][1]:
+                v = row.get(col)
+                if v is None:
+                    continue
+                if isinstance(v, list):
+                    v = " ".join(str(x) for x in v)
+                body_parts.append(str(v))
+            c.execute(
+                "INSERT INTO search_fts(table_name, item_id, name, body) VALUES (?,?,?,?)",
+                (table, row.get("id"), row.get("name") or "", " ".join(body_parts)),
+            )
     conn.commit()
     conn.close()
     return total
