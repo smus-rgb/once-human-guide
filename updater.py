@@ -56,6 +56,8 @@ UPDATE_MAP = {
     "fish.json": "fish.json",
     "animals.json": "animals.json",
     "flowers.json": "flowers.json",
+    "tech.json": "tech.json",
+    "db_layer.py": "db_layer.py",
 }
 
 
@@ -117,6 +119,7 @@ MODULE_FILES = [
     ("fish", "fish.json"),
     ("animals", "animals.json"),
     ("flowers", "flowers.json"),
+    ("tech", "tech.json"),
 ]
 
 
@@ -147,8 +150,17 @@ def assemble_database_full(base: Path) -> Path | None:
 
 
 def rebuild_sqlite(json_path: Path, db_path: Path) -> int:
-    """Rebuild SQLite from database_full.json. Returns total row count."""
+    """Rebuild SQLite from database_full.json. Returns total row count.
+
+    User tables (favorites, progress, builds, markers) are snapshotted and restored.
+    """
     data = json.loads(json_path.read_text(encoding="utf-8"))
+    try:
+        from db_layer import snapshot_user, restore_user
+    except ImportError:
+        snapshot_user = lambda _p: {}
+        restore_user = lambda _c, _s: None
+    snap = snapshot_user(db_path)
     if db_path.exists():
         db_path.unlink()
     conn = sqlite3.connect(str(db_path))
@@ -188,6 +200,8 @@ def rebuild_sqlite(json_path: Path, db_path: Path) -> int:
                     ["id", "name", "type", "desc", "drops", "location", "taming", "tags"]),
         "flowers": ("id TEXT PRIMARY KEY, name TEXT, type TEXT, desc TEXT, tags TEXT",
                     ["id", "name", "type", "desc", "tags"]),
+        "tech": ("id TEXT PRIMARY KEY, name TEXT, type TEXT, branch TEXT, desc TEXT, source TEXT, tags TEXT",
+                 ["id", "name", "type", "branch", "desc", "source", "tags"]),
     }
     c.execute("CREATE TABLE data_versions (table_name TEXT PRIMARY KEY, version TEXT, updated_at TEXT)")
     ver = data.get("version", "unknown")
@@ -204,6 +218,7 @@ def rebuild_sqlite(json_path: Path, db_path: Path) -> int:
                 vals.append(v)
             c.execute(f"INSERT INTO {table} VALUES ({','.join('?' * len(cols))})", vals)
             total += 1
+    restore_user(conn, snap)
     conn.commit()
     conn.close()
     return total

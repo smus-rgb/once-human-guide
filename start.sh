@@ -20,6 +20,6 @@ echo "  UI:      http://127.0.0.1:8000/ui"
 echo "  API:     http://127.0.0.1:8000/"
 echo "  Stats:   http://127.0.0.1:8000/stats"
 echo "  Search:  http://127.0.0.1:8000/search?q=socr"
-echo "  Offline: open once_human_guide_ui_v4.html in browser"
+echo "  Offline: open once_human_guide_v18.html in browser"
 echo ""
 exec python3 -m uvicorn api_main:app --host 0.0.0.0 --port 8000
