@@ -1,8 +1,8 @@
 {
-  "app_version": "5.4.0",
-  "shell_version": "19.1",
-  "data_version": "2026-10-01-v19.1-372",
-  "released_at": "2026-10-01T14:00:00Z",
+  "app_version": "5.5.0",
+  "shell_version": "19.2",
+  "data_version": "2026-10-03-v19.2-372",
+  "released_at": "2026-10-03T13:00:00Z",
   "min_app_version": "5.0.0",
   "patch_target": "3.0.7",
   "records": 372,
@@ -22,12 +22,12 @@
     "api_main.py": "api",
     "version.json": "meta"
   },
-  "notes": "v19.1: static shell assets, FTS search, recipe links. Pack 372 beze změny. User layer nemění pack.",
+  "notes": "v19.2: DB keeps quest/creature/flower fields, location links, diacritic search. Pack 372 unchanged. User layer does not edit pack.",
   "changelog": [
-    "API serves /modules, /ohg_data.js, /ohg_sw.js so /ui actually boots",
-    "SQLite FTS5 catalog + indexes + /search /integrity /links",
-    "db_build.py derives ingredient links without editing pack",
-    "Brand badge v19"
+    "db_build preserves objectives, weaknesses, genetics and unknown keys in extra",
+    "location links for bosses, creatures, quests, NPCs",
+    "API reads version.json and serves /entity/{table}/{id}",
+    "Search folds Czech diacritics and scans drops/objectives"
   ],
   "github": {
     "owner": "smus-rgb",

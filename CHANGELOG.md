@@ -1,5 +1,15 @@
 # Changelog
 
+## 5.5.0 / shell 19.2 — 2026-10-03
+
+- SQLite už nezahazuje pole z packu: quests (`objectives`, `prereq`, `location`), creatures (`weaknesses`, `drops`, `level`), flowers (`genetics`, `mutations`, `result`), plants/fish/NPC extras
+- Neznámé klíče jdou do sloupce `extra`
+- Odkazy `located_at` na lokace podle jména (boss, creature, quest, NPC, event, gatherable)
+- API čte `version.json`; nový `GET /entity/{table}/{id}`; FTS query se sanitizuje
+- Runtime: vyhledávání bez diakritiky, související lokace v detailu, badge verze z packu
+- Pack pořád 372 entit, user layer nemění pack
+
+
 ## 5.4.0 / shell 19.1 — 2026-10-01
 
 - `/ui` servíruje shell i statické assety (`/modules`, `ohg_data.js`, `ohg_sw.js`) — SPA se na API opravdu spustí

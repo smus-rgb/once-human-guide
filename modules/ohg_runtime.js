@@ -103,11 +103,17 @@ function catList(key,extra){
   if(extra) arr=arr.concat((DATA[extra]||[]).map(e=>({...e,_cat:extra})));
   return arr;
 }
+function fold(s){
+  return String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
+}
 function search(q){
-  q=(q||'').toLowerCase().trim();
+  q=fold(q);
   const pool=allEntities();
   if(!q) return pool.slice(0,50);
-  return pool.filter(e=>[e.name,e.type,e.desc,e.region,e.location,e.rarity,e.slot,(e.tags||[]).join(' ')].join(' ').toLowerCase().includes(q)).slice(0,80);
+  return pool.filter(e=>{
+    const blob=[e.name,e.type,e.desc,e.region,e.location,e.rarity,e.slot,e.utility,e.station,e.objectives,e.weaknesses,e.drops,e.bait,(e.tags||[]).join(' ')].join(' ');
+    return fold(blob).includes(q);
+  }).slice(0,80);
 }
 function renderNav(){
   const sb=document.getElementById('sidebar');
@@ -164,8 +170,16 @@ function entityDetail(e){
       <button class="btn ghost" onclick="addInv('${e.id}')">${inv?'V inventáři +1':'Do inventáře'}</button>
     </div>
     ${keys.map(k=>`<div style="margin:6px 0"><span class="muted">${k}</span><div>${pretty(e[k])}</div></div>`).join('')}
+    ${relatedHtml(e)}
     <textarea id="note_${e.id}" placeholder="Poznámka…" style="width:100%;margin-top:8px;min-height:70px">${user.notes[e.id]||''}</textarea>
     <button class="btn ghost" style="margin-top:6px" onclick="saveNote('${e.id}')">Uložit poznámku</button>`;
+}
+function relatedHtml(e){
+  const names=fold(e.location||e.region||'');
+  if(!names) return '';
+  const hits=allEntities().filter(x=>x.id!==e.id && fold(x.name) && names.includes(fold(x.name))).slice(0,4);
+  if(!hits.length) return '';
+  return `<div class="kicker" style="margin-top:10px">Související</div>`+hits.map(h=>`<button class="item" onclick='openEntity(${JSON.stringify(h).replace(/'/g,"&#39;")})'><b>${h.name}</b><span class="chip">${h._cat}</span></button>`).join('');
 }
 function toggleFav(id){
   const i=user.fav.indexOf(id);
@@ -204,7 +218,7 @@ function viewHome(){
   const done=Object.values(user.progress).filter(Boolean).length;
   const bp=typeof calcBuild==='function'?calcBuild():{power:0,filled:0};
   return `<div class="kicker">Dashboard</div><h1>Once Human Guide</h1>
-    <p class="sub">App 18.0 · ModuleHost · ${META.version||'pack'} · Patch ${META.patch||'3.0.7'} · ${n} entit · ${MODULES.length} modulů · AdaptiveShell ${device}</p>
+    <p class="sub">App ${META.app||'5.5'} · shell ${META.shell||'19.2'} · ${META.version||'pack'} · Patch ${META.patch||'3.0.7'} · ${n} entit · ${MODULES.length} modulů · AdaptiveShell ${device}</p>
     <div class="grid g4">
       <div class="card"><div class="kicker">Databáze</div><div class="stat">${n}</div><div class="muted">lokální pack</div></div>
       <div class="card"><div class="kicker">Build Power</div><div class="stat">${bp.power||'—'}</div><div class="muted">${bp.filled||0}/5 slotů</div></div>

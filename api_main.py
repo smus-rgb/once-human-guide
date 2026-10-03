@@ -16,8 +16,18 @@ DB_PATH = BASE / "once_human.db"
 if not DB_PATH.exists():
     DB_PATH = BASE.parent / "once_human.db"
 
-DATA_VERSION = "2026-10-01-v19.1-372"
-API_VERSION = "5.4.0"
+def _meta() -> dict:
+    path = BASE / "version.json"
+    if path.exists():
+        try:
+            return json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            return {}
+    return {}
+
+_META = _meta()
+DATA_VERSION = _META.get("data_version", "2026-10-03-v19.2-372")
+API_VERSION = _META.get("app_version", "5.5.0")
 MAP_EMBEDS = {
     "thgl": "https://oncehuman.th.gl",
     "mapgenie": "https://mapgenie.io/once-human/maps/nalcott",
@@ -56,12 +66,16 @@ def get_db() -> sqlite3.Connection:
 def rows_to_list(rows) -> list[dict]:
     items = [dict(r) for r in rows]
     for item in items:
-        for key in ("tags", "ingredients", "drops", "locations", "pieces"):
-            if key in item and isinstance(item[key], str):
+        for key in ("tags", "ingredients", "drops", "locations", "pieces", "objectives", "rewards", "weaknesses", "services", "quests", "genetics", "mutations", "extra"):
+            if key in item and isinstance(item[key], str) and item[key][:1] in "[{":
                 try:
-                    item[key] = json.loads(item[key] or "[]")
+                    item[key] = json.loads(item[key])
                 except Exception:
                     pass
+        extra = item.pop("extra", None)
+        if isinstance(extra, dict):
+            for k, v in extra.items():
+                item.setdefault(k, v)
     return items
 
 
@@ -233,7 +247,7 @@ def search(q: str = Query(..., min_length=1), limit: int = Query(50, ge=1, le=20
                FROM entities_fts
                WHERE entities_fts MATCH ?
                LIMIT ?""",
-            (q.replace('"', " ") + "*", limit),
+            ("".join(ch if ch.isalnum() or ch.isspace() else " " for ch in q).strip() + "*", limit),
         ).fetchall()
         mode = "fts"
     except sqlite3.Error:
@@ -250,6 +264,24 @@ def search(q: str = Query(..., min_length=1), limit: int = Query(50, ge=1, le=20
         for r in rows
     ]
     return {"q": q, "mode": mode, "count": len(results), "results": results}
+
+
+@app.get("/entity/{table}/{item_id}")
+def entity(table: str, item_id: str):
+    if table not in TABLES:
+        raise HTTPException(404, f"Unknown table: {table}")
+    conn = get_db()
+    try:
+        row = conn.execute(f"SELECT * FROM {table} WHERE id=?", (item_id,)).fetchone()
+    except sqlite3.Error as exc:
+        conn.close()
+        raise HTTPException(500, str(exc)) from exc
+    conn.close()
+    if not row:
+        raise HTTPException(404, "Not found")
+    item = rows_to_list([row])[0]
+    item["_table"] = table
+    return item
 
 
 @app.get("/links/{table}/{item_id}")
