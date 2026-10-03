@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.5.0 / shell 19.2 — 2026-10-03
+
+- Databáze schema 5.5: aliasy, drop vazby, `data_issues`, indexy type/rarity/region
+- Verze DB se bere z `version.json`, ne ze starého pole v `database_full.json`
+- API: FTS řazené podle bm25, `/facets`, user vrstva `once_human_user.db` (oblíbené + poznámky)
+- Shell v19.2: health badge a tlačítko Oblíbené. Pack 372 se nemění
+
+
 ## 5.4.0 / shell 19.1 — 2026-10-01
 
 - `/ui` servíruje shell i statické assety (`/modules`, `ohg_data.js`, `ohg_sw.js`) — SPA se na API opravdu spustí

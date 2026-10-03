@@ -89,6 +89,11 @@ def load_pack() -> dict:
     if full.exists():
         data = json.loads(full.read_text(encoding="utf-8"))
         if isinstance(data, dict) and any(k in data for k in MODULES):
+            ver_path = BASE / "version.json"
+            if ver_path.exists():
+                data["version"] = json.loads(ver_path.read_text(encoding="utf-8")).get(
+                    "data_version", data.get("version")
+                )
             return data
     data = _load_modules()
     ver_path = BASE / "version.json"
@@ -211,13 +216,103 @@ def build(db_path: Path | None = None) -> dict:
     c.execute(
         "INSERT INTO entities_fts(table_name, id, name, blob) SELECT table_name, id, name, blob FROM entities"
     )
+    # Derived links: boss/animal drops and location names. Pack JSON is not rewritten.
+    for src_table, field, relation in (
+        ("bosses", "drops", "drop"),
+        ("animals", "drops", "drop"),
+        ("weapons", "name", "same-name"),
+    ):
+        for row in data.get(src_table, []):
+            raw = row.get(field) or []
+            if isinstance(raw, str):
+                try:
+                    raw = json.loads(raw)
+                except json.JSONDecodeError:
+                    raw = [raw]
+            if not isinstance(raw, list):
+                raw = [raw]
+            for item in raw:
+                label = item.get("name") if isinstance(item, dict) else str(item)
+                hit = by_name.get(_norm(label))
+                if not hit:
+                    continue
+                for dst_table, dst_id in hit:
+                    if dst_table == src_table and dst_id == row.get("id"):
+                        continue
+                    c.execute(
+                        "INSERT OR IGNORE INTO links VALUES (?,?,?,?,?,?)",
+                        (src_table, row.get("id"), dst_table, dst_id, relation, 0.8),
+                    )
+                    link_count += 1
     c.execute(
-        "INSERT INTO data_versions VALUES ('schema', '5.4-fts-links', ?)",
+        """CREATE TABLE aliases (
+            alias TEXT NOT NULL,
+            table_name TEXT NOT NULL,
+            id TEXT NOT NULL,
+            PRIMARY KEY (alias, table_name, id)
+        )"""
+    )
+    c.execute("CREATE INDEX idx_aliases_alias ON aliases(alias)")
+    for table, row in catalog:
+        name = _norm(row.get("name") or "")
+        if len(name) < 3:
+            continue
+        c.execute(
+            "INSERT OR IGNORE INTO aliases VALUES (?,?,?)",
+            (name, table, row.get("id")),
+        )
+    c.execute(
+        """CREATE TABLE data_issues (
+            severity TEXT,
+            table_name TEXT,
+            id TEXT,
+            message TEXT
+        )"""
+    )
+    seen = {}
+    issue_count = 0
+    for table, row in catalog:
+        eid = row.get("id")
+        key = (table, eid)
+        if not eid:
+            c.execute(
+                "INSERT INTO data_issues VALUES ('error', ?, '', 'missing id')",
+                (table,),
+            )
+            issue_count += 1
+        elif key in seen:
+            c.execute(
+                "INSERT INTO data_issues VALUES ('error', ?, ?, 'duplicate id')",
+                (table, eid),
+            )
+            issue_count += 1
+        else:
+            seen[key] = True
+        if not (row.get("name") or "").strip():
+            c.execute(
+                "INSERT INTO data_issues VALUES ('warn', ?, ?, 'empty name')",
+                (table, eid or ""),
+            )
+            issue_count += 1
+    for table in SCHEMAS:
+        cols = {row[1] for row in c.execute(f"PRAGMA table_info({table})")}
+        if "type" in cols:
+            c.execute(f"CREATE INDEX IF NOT EXISTS idx_{table}_type ON {table}(type)")
+        if "rarity" in cols:
+            c.execute(f"CREATE INDEX IF NOT EXISTS idx_{table}_rarity ON {table}(rarity)")
+        if "region" in cols:
+            c.execute(f"CREATE INDEX IF NOT EXISTS idx_{table}_region ON {table}(region)")
+    c.execute(
+        "INSERT INTO data_versions VALUES ('schema', '5.5-fts-links-aliases', ?)",
         (now,),
+    )
+    c.execute(
+        "INSERT INTO data_versions VALUES ('issues', ?, ?)",
+        (str(issue_count), now),
     )
     conn.commit()
     conn.close()
-    return {"records": total, "links": link_count, "version": ver, "db": str(path)}
+    return {"records": total, "links": link_count, "issues": issue_count, "version": ver, "db": str(path)}
 
 
 if __name__ == "__main__":

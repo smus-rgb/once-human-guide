@@ -10,14 +10,26 @@ from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel
 
 BASE = Path(__file__).resolve().parent
 DB_PATH = BASE / "once_human.db"
 if not DB_PATH.exists():
     DB_PATH = BASE.parent / "once_human.db"
 
-DATA_VERSION = "2026-10-01-v19.1-372"
-API_VERSION = "5.4.0"
+def _meta() -> dict:
+    path = BASE / "version.json"
+    if path.exists():
+        try:
+            return json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            return {}
+    return {}
+
+_META = _meta()
+DATA_VERSION = _META.get("data_version", "2026-10-01-v19.1-372")
+API_VERSION = _META.get("app_version", "5.4.0")
+USER_DB = BASE / "once_human_user.db"
 MAP_EMBEDS = {
     "thgl": "https://oncehuman.th.gl",
     "mapgenie": "https://mapgenie.io/once-human/maps/nalcott",
@@ -51,6 +63,41 @@ def get_db() -> sqlite3.Connection:
     conn = sqlite3.connect(str(DB_PATH))
     conn.row_factory = sqlite3.Row
     return conn
+
+
+def user_db() -> sqlite3.Connection:
+    conn = sqlite3.connect(str(USER_DB))
+    conn.row_factory = sqlite3.Row
+    conn.execute(
+        """CREATE TABLE IF NOT EXISTS favorites (
+            table_name TEXT NOT NULL,
+            id TEXT NOT NULL,
+            created_at TEXT NOT NULL,
+            PRIMARY KEY (table_name, id)
+        )"""
+    )
+    conn.execute(
+        """CREATE TABLE IF NOT EXISTS notes (
+            table_name TEXT NOT NULL,
+            id TEXT NOT NULL,
+            body TEXT NOT NULL,
+            updated_at TEXT NOT NULL,
+            PRIMARY KEY (table_name, id)
+        )"""
+    )
+    conn.commit()
+    return conn
+
+
+class FavoriteIn(BaseModel):
+    table: str
+    id: str
+
+
+class NoteIn(BaseModel):
+    table: str
+    id: str
+    body: str
 
 
 def rows_to_list(rows) -> list[dict]:
@@ -196,6 +243,87 @@ def stats():
     return out
 
 
+def _fts_query(q: str) -> str:
+    cleaned = "".join(ch if ch.isalnum() or ch in " -_" else " " for ch in q)
+    parts = [p for p in cleaned.split() if p]
+    if not parts:
+        return ""
+    return " ".join(p + "*" for p in parts[:8])
+
+
+@app.get("/facets")
+def facets():
+    conn = get_db()
+    out = {}
+    try:
+        for table, col in (("deviations", "rarity"), ("weapons", "type"), ("mods", "slot"), ("bosses", "region")):
+            rows = conn.execute(
+                f"SELECT coalesce({col}, '') AS k, COUNT(*) AS n FROM {table} GROUP BY k ORDER BY n DESC"
+            ).fetchall()
+            out[f"{table}.{col}"] = [{"value": r["k"], "count": r["n"]} for r in rows]
+    except sqlite3.Error as exc:
+        conn.close()
+        raise HTTPException(500, str(exc)) from exc
+    conn.close()
+    return out
+
+
+@app.get("/user/favorites")
+def list_favorites():
+    conn = user_db()
+    rows = conn.execute("SELECT table_name, id, created_at FROM favorites ORDER BY created_at DESC").fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+
+@app.post("/user/favorites")
+def add_favorite(body: FavoriteIn):
+    if body.table not in TABLES:
+        raise HTTPException(404, f"Unknown table: {body.table}")
+    conn = user_db()
+    conn.execute(
+        "INSERT OR REPLACE INTO favorites VALUES (?,?,?)",
+        (body.table, body.id, datetime.now(timezone.utc).isoformat()),
+    )
+    conn.commit()
+    conn.close()
+    return {"ok": True}
+
+
+@app.delete("/user/favorites/{table}/{item_id}")
+def delete_favorite(table: str, item_id: str):
+    conn = user_db()
+    conn.execute("DELETE FROM favorites WHERE table_name=? AND id=?", (table, item_id))
+    conn.commit()
+    conn.close()
+    return {"ok": True}
+
+
+@app.get("/user/notes/{table}/{item_id}")
+def get_note(table: str, item_id: str):
+    conn = user_db()
+    row = conn.execute(
+        "SELECT body, updated_at FROM notes WHERE table_name=? AND id=?",
+        (table, item_id),
+    ).fetchone()
+    conn.close()
+    return {"table": table, "id": item_id, "body": row["body"] if row else "", "updated_at": row["updated_at"] if row else None}
+
+
+@app.put("/user/notes")
+def put_note(body: NoteIn):
+    if body.table not in TABLES:
+        raise HTTPException(404, f"Unknown table: {body.table}")
+    conn = user_db()
+    conn.execute(
+        "INSERT OR REPLACE INTO notes VALUES (?,?,?,?)",
+        (body.table, body.id, body.body[:4000], datetime.now(timezone.utc).isoformat()),
+    )
+    conn.commit()
+    conn.close()
+    return {"ok": True}
+
+
 @app.get("/integrity")
 def integrity():
     conn = get_db()
@@ -213,10 +341,16 @@ def integrity():
         counts[table] = n
         if empty:
             issues.append({"table": table, "empty_names": empty})
+    try:
+        for row in conn.execute("SELECT severity, table_name, id, message FROM data_issues"):
+            issues.append(dict(row))
+    except sqlite3.Error:
+        pass
     quick = conn.execute("PRAGMA quick_check").fetchone()[0]
     conn.close()
+    errors = [i for i in issues if i.get("severity") == "error" or "error" in i]
     return {
-        "ok": quick == "ok" and not issues,
+        "ok": quick == "ok" and not errors,
         "quick_check": quick,
         "counts": counts,
         "issues": issues,
@@ -228,13 +362,18 @@ def integrity():
 def search(q: str = Query(..., min_length=1), limit: int = Query(50, ge=1, le=200)):
     conn = get_db()
     try:
-        rows = conn.execute(
-            """SELECT table_name, id, name, blob
-               FROM entities_fts
-               WHERE entities_fts MATCH ?
-               LIMIT ?""",
-            (q.replace('"', " ") + "*", limit),
-        ).fetchall()
+        match = _fts_query(q)
+        if not match:
+            rows = []
+        else:
+            rows = conn.execute(
+                """SELECT table_name, id, name, blob, bm25(entities_fts) AS rank
+                   FROM entities_fts
+                   WHERE entities_fts MATCH ?
+                   ORDER BY rank
+                   LIMIT ?""",
+                (match, limit),
+            ).fetchall()
         mode = "fts"
     except sqlite3.Error:
         rows = conn.execute(
