@@ -4,6 +4,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from pathlib import Path
 import json
+import os
 import sqlite3
 
 from fastapi import FastAPI, HTTPException, Query
@@ -560,10 +561,13 @@ def update_check():
 
 
 @app.post("/update/run")
-def update_run(force: bool = False):
+def update_run(force: bool = False, token: str | None = None):
     import subprocess
     import sys
 
+    expected = os.environ.get("OHG_UPDATE_TOKEN", "")
+    if not expected or token != expected:
+        raise HTTPException(403, "Set OHG_UPDATE_TOKEN and pass ?token= to run updates")
     updater = BASE / "updater.py"
     if not updater.exists():
         raise HTTPException(404, "updater.py not found")
@@ -596,4 +600,4 @@ def get_item(table: str, item_id: str):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("api_main:app", host="0.0.0.0", port=8000, reload=False)
+    uvicorn.run("api_main:app", host="127.0.0.1", port=8000, reload=False)
