@@ -1,8 +1,8 @@
 {
-  "app_version": "5.4.0",
-  "shell_version": "19.1",
-  "data_version": "2026-10-01-v19.1-372",
-  "released_at": "2026-10-01T14:00:00Z",
+  "app_version": "5.5.0",
+  "shell_version": "19.2",
+  "data_version": "2026-10-03-v19.2-372",
+  "released_at": "2026-10-03T15:00:00Z",
   "min_app_version": "5.0.0",
   "patch_target": "3.0.7",
   "records": 372,
@@ -20,14 +20,15 @@
     "db_build.py": "db",
     "ohg_sw.js": "sw",
     "api_main.py": "api",
-    "version.json": "meta"
+    "version.json": "meta",
+    "modules/ohg_system.js": "module"
   },
-  "notes": "v19.1: static shell assets, FTS search, recipe links. Pack 372 beze změny. User layer nemění pack.",
+  "notes": "v19.2: schema 5.5 (aliases, drop links, data_issues), user DB odděleně, FTS bm25, facets. Pack 372 beze změny.",
   "changelog": [
-    "API serves /modules, /ohg_data.js, /ohg_sw.js so /ui actually boots",
-    "SQLite FTS5 catalog + indexes + /search /integrity /links",
-    "db_build.py derives ingredient links without editing pack",
-    "Brand badge v19"
+    "db_build overlays data_version from version.json",
+    "aliases + drop links + data_issues, extra indexes",
+    "API ranked search, /facets, /user/favorites and notes",
+    "shell chip for DB health and favorite button"
   ],
   "github": {
     "owner": "smus-rgb",
