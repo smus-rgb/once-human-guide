@@ -1,7 +1,7 @@
 # Once Human Guide — Data
 
-**version:** `2026-09-30-v5-complete`  
-**app:** 5.0.0  
+**version:** `2026-10-04-v19.2-372`  
+**app:** 5.5.0  
 **patch_target:** 3.0.7 live · Isles of Abyss prep  
 
 ## Modules on GitHub (module JSON)
@@ -33,3 +33,7 @@ python3 updater.py
 Updater **assembles** `database_full.json` from module JSON when the monolithic file is not present, then rebuilds `once_human.db`.
 
 Full embedded SPA + SQLite dump: see **OnceHumanGuide_Complete.zip** in project artifacts.
+
+## Integrity
+
+`python3 validate_data.py` checks module JSON. `python3 db_build.py` rebuilds SQLite (aliases, FTS, links) without touching the user layer.

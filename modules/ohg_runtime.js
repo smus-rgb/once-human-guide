@@ -69,7 +69,7 @@ const MODULES=[
   {id:'agent',route:'/agent',offline:true,phone:'queue',tablet:'queue|item',desktop:'queue+diff'},
   {id:'settings',route:'/settings',offline:true,phone:'form',tablet:'form',desktop:'form+sync'}
 ];
-window.OHG={version:'19.0',modules:MODULES,nav:NAV,shell:'AdaptiveShell',host:'ModuleHost',sw:'ohg_sw.js',packChannel:'local+sw+remote'};
+window.OHG={version:'19.2',modules:MODULES,nav:NAV,shell:'AdaptiveShell',host:'ModuleHost',sw:'ohg_sw.js',packChannel:'local+sw+remote'};
 
 let DATA=window.OHG_DATA||{};
 let META=window.OHG_META||{entities:0,version:'local'};
@@ -103,11 +103,17 @@ function catList(key,extra){
   if(extra) arr=arr.concat((DATA[extra]||[]).map(e=>({...e,_cat:extra})));
   return arr;
 }
+function fold(s){
+  return (s||'').toString().toLowerCase()
+    .replace(/[áä]/g,'a').replace(/[č]/g,'c').replace(/[ď]/g,'d').replace(/[éě]/g,'e')
+    .replace(/[í]/g,'i').replace(/[ň]/g,'n').replace(/[óö]/g,'o').replace(/[ř]/g,'r')
+    .replace(/[š]/g,'s').replace(/[ť]/g,'t').replace(/[úůü]/g,'u').replace(/[ý]/g,'y').replace(/[ž]/g,'z');
+}
 function search(q){
-  q=(q||'').toLowerCase().trim();
+  q=fold(q).trim();
   const pool=allEntities();
   if(!q) return pool.slice(0,50);
-  return pool.filter(e=>[e.name,e.type,e.desc,e.region,e.location,e.rarity,e.slot,(e.tags||[]).join(' ')].join(' ').toLowerCase().includes(q)).slice(0,80);
+  return pool.filter(e=>fold([e.name,e.id,e.type,e.desc,e.region,e.location,e.rarity,e.slot,(e.tags||[]).join(' ')].join(' ')).includes(q)).slice(0,80);
 }
 function renderNav(){
   const sb=document.getElementById('sidebar');

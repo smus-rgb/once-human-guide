@@ -33,6 +33,10 @@ Zbývá (blokuje uzavření fáze):
 
 ## Fáze E — Provoz a data (měsíční rytmus)
 
+Hotovo 2026-10-04 (část): validace JSON (`validate_data.py`), schema 5.5 (aliases, data_issues), shell 19.2 DB badge. Pack 372 beze změny obsahu.
+
+
+
 1. Po herním patchi: JSON → regenerace packu → bump version → Agent queue
 2. Měsíční archive freeze
 3. Čtvrtletní review AdaptiveShell / SW
