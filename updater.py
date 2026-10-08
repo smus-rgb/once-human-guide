@@ -30,6 +30,7 @@ UPDATE_MAP = {
     "once_human_guide_v18.html": "once_human_guide_v18.html",
     "ohg_data.js": "ohg_data.js",
     "ohg_sw.js": "ohg_sw.js",
+    "search_aliases.json": "search_aliases.json",
     "modules/ohg_runtime.js": "modules/ohg_runtime.js",
     "modules/ohg_map.js": "modules/ohg_map.js",
     "modules/ohg_builds.js": "modules/ohg_builds.js",

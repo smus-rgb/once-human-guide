@@ -40,6 +40,8 @@ CORE_FILES = [
     "install.py",
     "requirements.txt",
     "start.sh",
+    "db_build.py",
+    "search_aliases.json",
     "README.md",
 ]
 
@@ -73,6 +75,7 @@ OPTIONAL = [
     "modules/ohg_map.js",
     "modules/ohg_builds.js",
     "modules/ohg_pack_channel.js",
+    "modules/ohg_links.js",
     "once_human_guide_ui_v4.html",
     "once_human_guide_app.html",
     "Once_Human_Guide_v18_Modular_System.md",

@@ -1,0 +1,28 @@
+{
+  "tables": {
+    "deviations": ["deviace", "deviant", "odchylka", "deviation"],
+    "weapons": ["zbran", "zbraň", "gun", "weapon"],
+    "armor": ["zbroj", "brneni", "brnění", "set", "armor"],
+    "mods": ["mod", "modifikace", "suffix"],
+    "bosses": ["boss", "silo", "monolith", "raid"],
+    "locations": ["lokace", "mapa", "region", "misto", "místo"],
+    "recipes": ["recept", "crafting", "vyroba", "výroba", "recipe"],
+    "materials": ["material", "materiál", "surovina", "resource"],
+    "scenarios": ["scenar", "scénář", "season", "manibus"],
+    "quests": ["quest", "ukol", "úkol", "mise"],
+    "events": ["event", "akce", "prime war"],
+    "creatures": ["bestiar", "bestiář", "nepritel", "nepřítel", "mob"],
+    "npcs": ["npc", "obchodnik", "obchodník", "vendor"],
+    "plants": ["rostlina", "bylina", "plant"],
+    "fish": ["ryba", "rybolov", "fish"],
+    "animals": ["zvire", "zvíře", "animal", "taming"],
+    "flowers": ["kvetina", "květina", "flower", "graft"]
+  },
+  "terms": [
+    {"q": "motyl", "match": "butterfly"},
+    {"q": "vlk", "match": "lonewolf"},
+    {"q": "pyro", "match": "blaze"},
+    {"q": "ohniva", "match": "blaze"},
+    {"q": "slabina", "match": "weakspot"}
+  ]
+}

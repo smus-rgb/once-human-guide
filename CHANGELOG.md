@@ -1,5 +1,15 @@
 # Changelog
 
+## 5.5.0 / shell 19.2 — 2026-10-08
+
+- Czech search aliases in SQLite and the offline shell
+- FTS diacritic folding and safer token queries
+- `/integrity` duplicate-id and unlinked-recipe checks
+- API version comes from `version.json`
+- Pack stays at 372 records
+
+# Changelog
+
 ## 5.4.0 / shell 19.1 — 2026-10-01
 
 - `/ui` servíruje shell i statické assety (`/modules`, `ohg_data.js`, `ohg_sw.js`) — SPA se na API opravdu spustí

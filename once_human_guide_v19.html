@@ -104,12 +104,12 @@ th{color:var(--mut);font-weight:600}
 <body>
 <div class="app phone" id="app">
   <header class="topbar">
-    <div class="brand">OH GUIDE v19</div>
+    <div class="brand">OH GUIDE v19.2</div>
     <div class="searchbox" id="qbox">
       <span>⌕</span>
       <input id="q" placeholder="Hledat entity, recepty, lokace… (Ctrl+K)" autocomplete="off"/>
     </div>
-    <span class="badge" id="syncBadge">LOCAL</span>
+    <span class="badge" id="syncBadge" title="Data pack">PACK</span>
     <span class="badge" id="devBadge">PHONE</span>
     <button class="btn ghost" id="lockBtn">AUTO</button>
   </header>
@@ -118,11 +118,11 @@ th{color:var(--mut);font-weight:600}
   <main class="workspace" id="ws"></main>
   <aside class="ctx" id="ctx"><h3>Kontext</h3><div class="body muted">Vyber entitu.</div></aside>
   <nav class="bottomnav" id="bn">
-    <button data-r="home" class="active">⌂<span>Home</span></button>
-    <button data-r="search">⌕<span>Search</span></button>
-    <button data-r="map">◎<span>Map</span></button>
-    <button data-r="db">☰<span>Database</span></button>
-    <button data-r="more">⋯<span>More</span></button>
+    <button data-r="home" class="active">⌂<span>Domů</span></button>
+    <button data-r="search">⌕<span>Hledat</span></button>
+    <button data-r="map">◎<span>Mapa</span></button>
+    <button data-r="db">☰<span>Databáze</span></button>
+    <button data-r="more">⋯<span>Více</span></button>
   </nav>
 </div>
 <div class="overlay" id="ov"></div>

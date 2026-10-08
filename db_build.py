@@ -115,6 +115,19 @@ def _norm(name: str) -> str:
     return " ".join((name or "").lower().replace("-", " ").split())
 
 
+def _fold(text: str) -> str:
+    import unicodedata
+    raw = unicodedata.normalize("NFD", text or "")
+    return "".join(ch for ch in raw if unicodedata.category(ch) != "Mn").lower()
+
+
+def load_aliases() -> dict:
+    path = BASE / "search_aliases.json"
+    if not path.exists():
+        return {"tables": {}, "terms": []}
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
 def build(db_path: Path | None = None) -> dict:
     data = load_pack()
     path = db_path or DB_PATH
@@ -153,6 +166,10 @@ def build(db_path: Path | None = None) -> dict:
     for table, (schema, cols) in SCHEMAS.items():
         c.execute(f"CREATE TABLE {table} ({schema})")
         c.execute(f"CREATE INDEX idx_{table}_name ON {table}(name)")
+        if "type" in cols:
+            c.execute(f"CREATE INDEX idx_{table}_type ON {table}(type)")
+        if "rarity" in cols:
+            c.execute(f"CREATE INDEX idx_{table}_rarity ON {table}(rarity)")
         for row in data.get(table, []):
             vals = []
             for col in cols:
@@ -166,8 +183,17 @@ def build(db_path: Path | None = None) -> dict:
             )
             catalog.append((table, row))
             total += 1
+    aliases = load_aliases()
+    table_alias = aliases.get("tables") or {}
+    term_alias = aliases.get("terms") or []
     by_name: dict[str, list[tuple[str, str]]] = {}
+    seen_ids: dict[tuple[str, str], int] = {}
+    missing_ids = 0
     for table, row in catalog:
+        eid = row.get("id") or ""
+        if not eid:
+            missing_ids += 1
+        seen_ids[(table, eid)] = seen_ids.get((table, eid), 0) + 1
         name = row.get("name") or ""
         c.execute(
             "INSERT OR REPLACE INTO entities VALUES (?,?,?,?,?,?,?)",
@@ -178,7 +204,7 @@ def build(db_path: Path | None = None) -> dict:
                 row.get("type") or row.get("utility") or "",
                 row.get("rarity") or "",
                 row.get("region") or row.get("location") or "",
-                _blob(row),
+                _blob(row) + " " + " ".join(table_alias.get(table, [])) + " " + _fold(name),
             ),
         )
         key = _norm(name)
@@ -205,19 +231,63 @@ def build(db_path: Path | None = None) -> dict:
                     ("recipes", row.get("id"), dst_table, dst_id, "ingredient", 1.0),
                 )
                 link_count += 1
+    for row in data.get("bosses", []):
+        loc = _norm(row.get("location") or "")
+        hit = by_name.get(loc)
+        if not hit:
+            continue
+        for dst_table, dst_id in hit:
+            if dst_table != "locations":
+                continue
+            c.execute(
+                "INSERT OR IGNORE INTO links VALUES (?,?,?,?,?,?)",
+                ("bosses", row.get("id"), dst_table, dst_id, "located_at", 0.8),
+            )
+            link_count += 1
     c.execute(
-        "CREATE VIRTUAL TABLE entities_fts USING fts5(table_name, id, name, blob, tokenize='unicode61')"
+        """CREATE TABLE search_aliases (
+            alias TEXT PRIMARY KEY,
+            kind TEXT,
+            target TEXT
+        )"""
+    )
+    for table, words in table_alias.items():
+        for word in words:
+            c.execute(
+                "INSERT OR REPLACE INTO search_aliases VALUES (?,?,?)",
+                (_fold(word), "table", table),
+            )
+    for item in term_alias:
+        c.execute(
+            "INSERT OR REPLACE INTO search_aliases VALUES (?,?,?)",
+            (_fold(item.get("q") or ""), "term", item.get("match") or ""),
+        )
+    dupes = sum(1 for n in seen_ids.values() if n > 1)
+    c.execute(
+        "CREATE VIRTUAL TABLE entities_fts USING fts5(table_name, id, name, blob, tokenize='unicode61 remove_diacritics 2')"
     )
     c.execute(
         "INSERT INTO entities_fts(table_name, id, name, blob) SELECT table_name, id, name, blob FROM entities"
     )
     c.execute(
-        "INSERT INTO data_versions VALUES ('schema', '5.4-fts-links', ?)",
+        "INSERT INTO data_versions VALUES ('schema', '5.5-aliases-fts', ?)",
         (now,),
+    )
+    c.execute(
+        "INSERT INTO data_versions VALUES ('quality', ?, ?)",
+        (f"missing_ids={missing_ids};dupes={dupes}", now),
     )
     conn.commit()
     conn.close()
-    return {"records": total, "links": link_count, "version": ver, "db": str(path)}
+    return {
+        "records": total,
+        "links": link_count,
+        "version": ver,
+        "db": str(path),
+        "missing_ids": missing_ids,
+        "duplicate_ids": dupes,
+        "aliases": sum(len(v) for v in table_alias.values()) + len(term_alias),
+    }
 
 
 if __name__ == "__main__":

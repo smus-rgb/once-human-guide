@@ -103,11 +103,26 @@ function catList(key,extra){
   if(extra) arr=arr.concat((DATA[extra]||[]).map(e=>({...e,_cat:extra})));
   return arr;
 }
+function fold(s){
+  return (s||'').toString().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+}
+const SEARCH_ALIAS={
+  deviace:'deviation', deviant:'deviation', odchylka:'deviation',
+  zbran:'weapon', zbraň:'weapon', zbroj:'armor', brneni:'armor',
+  recept:'recipe', vyroba:'recipe', lokace:'location', mapa:'location',
+  ryba:'fish', rostlina:'plant', kvetina:'flower', květina:'flower',
+  bestiar:'creature', nepritel:'creature', ukol:'quest', scenar:'scenario',
+  motyl:'butterfly', vlk:'lonewolf', slabina:'weakspot'
+};
 function search(q){
-  q=(q||'').toLowerCase().trim();
+  q=fold(q).trim();
   const pool=allEntities();
   if(!q) return pool.slice(0,50);
-  return pool.filter(e=>[e.name,e.type,e.desc,e.region,e.location,e.rarity,e.slot,(e.tags||[]).join(' ')].join(' ').toLowerCase().includes(q)).slice(0,80);
+  const extra=SEARCH_ALIAS[q]||'';
+  return pool.filter(e=>{
+    const blob=fold([e.name,e.type,e.desc,e.region,e.location,e.rarity,e.slot,e._cat,(e.tags||[]).join(' ')].join(' '));
+    return blob.includes(q) || (extra && blob.includes(extra));
+  }).slice(0,80);
 }
 function renderNav(){
   const sb=document.getElementById('sidebar');

@@ -4,7 +4,9 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from pathlib import Path
 import json
+import re
 import sqlite3
+import unicodedata
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
@@ -16,8 +18,19 @@ DB_PATH = BASE / "once_human.db"
 if not DB_PATH.exists():
     DB_PATH = BASE.parent / "once_human.db"
 
-DATA_VERSION = "2026-10-01-v19.1-372"
-API_VERSION = "5.4.0"
+def _meta() -> dict:
+    path = BASE / "version.json"
+    if not path.exists():
+        return {}
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return {}
+
+
+META = _meta()
+DATA_VERSION = META.get("data_version", "2026-10-01-v19.1-372")
+API_VERSION = META.get("app_version", "5.4.0")
 MAP_EMBEDS = {
     "thgl": "https://oncehuman.th.gl",
     "mapgenie": "https://mapgenie.io/once-human/maps/nalcott",
@@ -51,6 +64,18 @@ def get_db() -> sqlite3.Connection:
     conn = sqlite3.connect(str(DB_PATH))
     conn.row_factory = sqlite3.Row
     return conn
+
+
+def fold(text: str) -> str:
+    raw = unicodedata.normalize("NFD", text or "")
+    return "".join(ch for ch in raw if unicodedata.category(ch) != "Mn").lower()
+
+
+def fts_query(q: str) -> str:
+    tokens = re.findall(r"[\w]+", fold(q), flags=re.UNICODE)
+    if not tokens:
+        return ""
+    return " AND ".join(f"{tok}*" for tok in tokens[:6])
 
 
 def rows_to_list(rows) -> list[dict]:
@@ -207,41 +232,98 @@ def integrity():
             empty = conn.execute(
                 f"SELECT COUNT(*) FROM {table} WHERE name IS NULL OR trim(name)=''"
             ).fetchone()[0]
+            dupes = conn.execute(
+                f"SELECT COUNT(*) FROM (SELECT id FROM {table} GROUP BY id HAVING COUNT(*)>1)"
+            ).fetchone()[0]
         except sqlite3.Error as exc:
             issues.append({"table": table, "error": str(exc)})
             continue
         counts[table] = n
         if empty:
             issues.append({"table": table, "empty_names": empty})
+        if dupes:
+            issues.append({"table": table, "duplicate_ids": dupes})
+    try:
+        orphans = conn.execute(
+            """SELECT COUNT(*) FROM recipes r
+               WHERE r.ingredients IS NOT NULL AND trim(r.ingredients) NOT IN ('', '[]')
+               AND NOT EXISTS (
+                 SELECT 1 FROM links l WHERE l.src_table='recipes' AND l.src_id=r.id
+               )"""
+        ).fetchone()[0]
+        if orphans:
+            issues.append({"table": "recipes", "unlinked_ingredients": orphans})
+    except sqlite3.Error:
+        pass
     quick = conn.execute("PRAGMA quick_check").fetchone()[0]
+    schema = None
+    try:
+        row = conn.execute(
+            "SELECT version FROM data_versions WHERE table_name='schema'"
+        ).fetchone()
+        schema = row["version"] if row else None
+    except sqlite3.Error:
+        schema = None
     conn.close()
+    total = sum(counts.values())
     return {
-        "ok": quick == "ok" and not issues,
+        "ok": quick == "ok" and not any("error" in i or "empty_names" in i or "duplicate_ids" in i for i in issues),
         "quick_check": quick,
+        "schema": schema,
         "counts": counts,
+        "total": total,
         "issues": issues,
-        "expected_records": 372,
+        "expected_records": META.get("records", 372),
     }
+
+
+@app.get("/aliases")
+def aliases():
+    conn = get_db()
+    try:
+        rows = conn.execute("SELECT alias, kind, target FROM search_aliases ORDER BY kind, alias").fetchall()
+    except sqlite3.Error:
+        rows = []
+    conn.close()
+    return {"count": len(rows), "aliases": [dict(r) for r in rows]}
 
 
 @app.get("/search")
 def search(q: str = Query(..., min_length=1), limit: int = Query(50, ge=1, le=200)):
     conn = get_db()
+    expanded = fold(q)
     try:
-        rows = conn.execute(
-            """SELECT table_name, id, name, blob
-               FROM entities_fts
-               WHERE entities_fts MATCH ?
-               LIMIT ?""",
-            (q.replace('"', " ") + "*", limit),
-        ).fetchall()
-        mode = "fts"
+        hit = conn.execute(
+            "SELECT kind, target FROM search_aliases WHERE alias=?",
+            (expanded,),
+        ).fetchone()
+        if hit and hit["kind"] == "term" and hit["target"]:
+            expanded = f"{expanded} {hit['target']}"
+        elif hit and hit["kind"] == "table":
+            expanded = f"{expanded} {hit['target']}"
     except sqlite3.Error:
+        pass
+    match = fts_query(expanded)
+    mode = "fts"
+    rows = []
+    if match:
+        try:
+            rows = conn.execute(
+                """SELECT table_name, id, name, blob
+                   FROM entities_fts
+                   WHERE entities_fts MATCH ?
+                   LIMIT ?""",
+                (match, limit),
+            ).fetchall()
+        except sqlite3.Error:
+            rows = []
+    if not rows:
+        like = f"%{fold(q)}%"
         rows = conn.execute(
             """SELECT table_name, id, name, blob FROM entities
                WHERE lower(name) LIKE ? OR lower(blob) LIKE ?
                LIMIT ?""",
-            (f"%{q.lower()}%", f"%{q.lower()}%", limit),
+            (like, like, limit),
         ).fetchall()
         mode = "like"
     conn.close()
@@ -249,7 +331,7 @@ def search(q: str = Query(..., min_length=1), limit: int = Query(50, ge=1, le=20
         {"table": r["table_name"], "id": r["id"], "name": r["name"], "snippet": (r["blob"] or "")[:180]}
         for r in rows
     ]
-    return {"q": q, "mode": mode, "count": len(results), "results": results}
+    return {"q": q, "expanded": expanded, "mode": mode, "count": len(results), "results": results}
 
 
 @app.get("/links/{table}/{item_id}")

@@ -1,12 +1,12 @@
 {
-  "app_version": "5.4.0",
-  "shell_version": "19.1",
-  "data_version": "2026-10-01-v19.1-372",
-  "released_at": "2026-10-01T14:00:00Z",
+  "app_version": "5.5.0",
+  "shell_version": "19.2",
+  "data_version": "2026-10-08-v19.2-372",
+  "released_at": "2026-10-08T13:00:00Z",
   "min_app_version": "5.0.0",
   "patch_target": "3.0.7",
   "records": 372,
-  "sw_cache": "ohg-v19-307",
+  "sw_cache": "ohg-v19.2-307",
   "files": {
     "database_full.json": "data",
     "ohg_data.js": "pack",
@@ -20,14 +20,16 @@
     "db_build.py": "db",
     "ohg_sw.js": "sw",
     "api_main.py": "api",
-    "version.json": "meta"
+    "version.json": "meta",
+    "search_aliases.json": "search"
   },
-  "notes": "v19.1: static shell assets, FTS search, recipe links. Pack 372 beze změny. User layer nemění pack.",
+  "notes": "v19.2: CZ alias search, FTS without diacritics, integrity (dupes/orphan recipes), version.json is source of API version. Pack 372 unchanged. User layer does not edit pack.",
   "changelog": [
-    "API serves /modules, /ohg_data.js, /ohg_sw.js so /ui actually boots",
-    "SQLite FTS5 catalog + indexes + /search /integrity /links",
-    "db_build.py derives ingredient links without editing pack",
-    "Brand badge v19"
+    "search_aliases.json + SQLite search_aliases (deviace, zbraň, recept, …)",
+    "FTS unicode61 remove_diacritics 2 and AND token query",
+    "/integrity reports duplicate ids and unlinked recipes",
+    "API version read from version.json",
+    "Shell v19.2 Czech bottom nav and folded client search"
   ],
   "github": {
     "owner": "smus-rgb",
