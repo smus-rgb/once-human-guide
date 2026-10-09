@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Build once_human.db from module JSON or database_full.json.
 
-Adds indexes, a unified entity catalog, FTS5 search, and name-based links.
-User-layer data is never written here.
+Adds indexes, a unified entity catalog, FTS5 search, and name-based links
+(ingredients, drops, sources, locations). User-layer data is a separate file
+and is never written or deleted here.
 """
 from __future__ import annotations
 
@@ -13,6 +14,7 @@ from pathlib import Path
 
 BASE = Path(__file__).resolve().parent
 DB_PATH = BASE / "once_human.db"
+SCHEMA_VERSION = "5.5-links-indexes"
 
 MODULES = {
     "deviations": "deviations.json",
@@ -71,6 +73,36 @@ SCHEMAS = {
                 ["id", "name", "type", "desc", "tags"]),
 }
 
+INDEXES = {
+    "deviations": ("type", "rarity"),
+    "weapons": ("type", "rarity"),
+    "armor": ("type", "rarity"),
+    "mods": ("type", "rarity", "slot"),
+    "bosses": ("region",),
+    "locations": ("type", "region"),
+    "recipes": ("type", "station"),
+    "scenarios": ("type", "phase"),
+    "quests": ("type", "region"),
+    "events": ("type", "status"),
+    "creatures": ("type", "threat"),
+    "npcs": ("type",),
+}
+
+LINK_FIELDS = {
+    "recipes": (("ingredients", "ingredient"),),
+    "bosses": (("drops", "drops"), ("location", "located_at")),
+    "deviations": (("source", "source"),),
+    "mods": (("source", "source"),),
+    "animals": (("drops", "drops"), ("location", "located_at")),
+    "quests": (("rewards", "rewards"),),
+    "events": (("rewards", "rewards"), ("location", "located_at")),
+    "scenarios": (("rewards", "rewards"), ("locations", "located_at")),
+    "plants": (("uses", "used_in"),),
+    "creatures": (("location", "located_at"),),
+    "npcs": (("location", "located_at"),),
+    "fish": (("location", "located_at"),),
+}
+
 
 def _load_modules() -> dict:
     data = {}
@@ -112,7 +144,45 @@ def _blob(row: dict) -> str:
 
 
 def _norm(name: str) -> str:
-    return " ".join((name or "").lower().replace("-", " ").split())
+    return " ".join((name or "").lower().replace("-", " ").replace("'", "").split())
+
+
+def _labels(value) -> list[str]:
+    if value is None:
+        return []
+    if isinstance(value, str):
+        try:
+            parsed = json.loads(value)
+        except json.JSONDecodeError:
+            parsed = None
+        if isinstance(parsed, list):
+            return _labels(parsed)
+        return [part.strip() for part in value.replace("/", ",").split(",") if part.strip()]
+    if isinstance(value, list):
+        out = []
+        for item in value:
+            if isinstance(item, dict):
+                out.append(str(item.get("name") or item.get("id") or ""))
+            else:
+                out.append(str(item))
+        return [x for x in out if x]
+    if isinstance(value, dict):
+        return [str(value.get("name") or "")]
+    return [str(value)]
+
+
+def _link(c, seen: set, src_table: str, src_id: str, dst_table: str, dst_id: str, relation: str) -> int:
+    if not src_id or not dst_id or (src_table, src_id) == (dst_table, dst_id):
+        return 0
+    key = (src_table, src_id, dst_table, dst_id, relation)
+    if key in seen:
+        return 0
+    seen.add(key)
+    c.execute(
+        "INSERT OR IGNORE INTO links VALUES (?,?,?,?,?,?)",
+        (src_table, src_id, dst_table, dst_id, relation, 1.0),
+    )
+    return 1
 
 
 def build(db_path: Path | None = None) -> dict:
@@ -141,6 +211,8 @@ def build(db_path: Path | None = None) -> dict:
             PRIMARY KEY (table_name, id)
         )"""
     )
+    c.execute("CREATE INDEX idx_entities_name ON entities(name)")
+    c.execute("CREATE INDEX idx_entities_kind ON entities(kind)")
     c.execute(
         """CREATE TABLE links (
             src_table TEXT, src_id TEXT, dst_table TEXT, dst_id TEXT,
@@ -148,11 +220,14 @@ def build(db_path: Path | None = None) -> dict:
             PRIMARY KEY (src_table, src_id, dst_table, dst_id, relation)
         )"""
     )
+    c.execute("CREATE INDEX idx_links_dst ON links(dst_table, dst_id)")
     total = 0
     catalog = []
     for table, (schema, cols) in SCHEMAS.items():
         c.execute(f"CREATE TABLE {table} ({schema})")
         c.execute(f"CREATE INDEX idx_{table}_name ON {table}(name)")
+        for col in INDEXES.get(table, ()):
+            c.execute(f"CREATE INDEX idx_{table}_{col} ON {table}({col})")
         for row in data.get(table, []):
             vals = []
             for col in cols:
@@ -182,29 +257,21 @@ def build(db_path: Path | None = None) -> dict:
             ),
         )
         key = _norm(name)
-        if key:
+        if len(key) >= 4:
             by_name.setdefault(key, []).append((table, row.get("id")))
+    seen: set = set()
     link_count = 0
-    for row in data.get("recipes", []):
-        ingredients = row.get("ingredients") or []
-        if isinstance(ingredients, str):
-            try:
-                ingredients = json.loads(ingredients)
-            except json.JSONDecodeError:
-                ingredients = []
-        for ing in ingredients:
-            label = ing.get("name") if isinstance(ing, dict) else str(ing)
-            hit = by_name.get(_norm(label))
-            if not hit:
+    for table, row in catalog:
+        for field, relation in LINK_FIELDS.get(table, ()):
+            text_bits = _labels(row.get(field))
+            blob = " | ".join(text_bits).lower()
+            if not blob:
                 continue
-            for dst_table, dst_id in hit:
-                if dst_table == "recipes":
+            for key, hits in by_name.items():
+                if key not in blob and key not in _norm(blob):
                     continue
-                c.execute(
-                    "INSERT OR IGNORE INTO links VALUES (?,?,?,?,?,?)",
-                    ("recipes", row.get("id"), dst_table, dst_id, "ingredient", 1.0),
-                )
-                link_count += 1
+                for dst_table, dst_id in hits:
+                    link_count += _link(c, seen, table, row.get("id"), dst_table, dst_id, relation)
     c.execute(
         "CREATE VIRTUAL TABLE entities_fts USING fts5(table_name, id, name, blob, tokenize='unicode61')"
     )
@@ -212,12 +279,18 @@ def build(db_path: Path | None = None) -> dict:
         "INSERT INTO entities_fts(table_name, id, name, blob) SELECT table_name, id, name, blob FROM entities"
     )
     c.execute(
-        "INSERT INTO data_versions VALUES ('schema', '5.4-fts-links', ?)",
-        (now,),
+        "INSERT INTO data_versions VALUES ('schema', ?, ?)",
+        (SCHEMA_VERSION, now),
     )
     conn.commit()
     conn.close()
-    return {"records": total, "links": link_count, "version": ver, "db": str(path)}
+    return {
+        "records": total,
+        "links": link_count,
+        "version": ver,
+        "schema": SCHEMA_VERSION,
+        "db": str(path),
+    }
 
 
 if __name__ == "__main__":

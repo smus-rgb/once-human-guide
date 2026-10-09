@@ -16,8 +16,8 @@ DB_PATH = BASE / "once_human.db"
 if not DB_PATH.exists():
     DB_PATH = BASE.parent / "once_human.db"
 
-DATA_VERSION = "2026-10-01-v19.1-372"
-API_VERSION = "5.4.0"
+DATA_VERSION = "2026-10-09-v19.2-372"
+API_VERSION = "5.5.0"
 MAP_EMBEDS = {
     "thgl": "https://oncehuman.th.gl",
     "mapgenie": "https://mapgenie.io/once-human/maps/nalcott",
@@ -65,21 +65,52 @@ def rows_to_list(rows) -> list[dict]:
     return items
 
 
-def fetch_all(table: str, q: str | None = None, limit: int = 500, offset: int = 0) -> list[dict]:
+FILTER_COLS = ("type", "rarity", "region", "slot", "status", "phase")
+USER_DB = BASE / "once_human_user.db"
+
+
+def user_db() -> sqlite3.Connection:
+    conn = sqlite3.connect(str(USER_DB))
+    conn.row_factory = sqlite3.Row
+    conn.execute(
+        """CREATE TABLE IF NOT EXISTS favorites (
+            id TEXT PRIMARY KEY,
+            table_name TEXT NOT NULL,
+            item_id TEXT NOT NULL,
+            name TEXT,
+            created_at TEXT NOT NULL
+        )"""
+    )
+    conn.commit()
+    return conn
+
+
+def fetch_all(
+    table: str,
+    q: str | None = None,
+    limit: int = 500,
+    offset: int = 0,
+    filters: dict | None = None,
+) -> list[dict]:
     if table not in TABLES:
         raise HTTPException(404, f"Unknown table: {table}")
     conn = get_db()
+    where, params = [], []
+    if q:
+        where.append("(lower(name) LIKE ? OR lower(coalesce(desc,'')) LIKE ?)")
+        params.extend([f"%{q.lower()}%", f"%{q.lower()}%"])
+    for col, val in (filters or {}).items():
+        if not val or col not in FILTER_COLS:
+            continue
+        where.append(f"lower(coalesce({col},'')) = ?")
+        params.append(val.lower())
+    sql = f"SELECT * FROM {table}"
+    if where:
+        sql += " WHERE " + " AND ".join(where)
+    sql += " LIMIT ? OFFSET ?"
+    params.extend([limit, offset])
     try:
-        if q:
-            rows = conn.execute(
-                f"SELECT * FROM {table} WHERE lower(name) LIKE ? OR lower(coalesce(desc,'')) LIKE ? LIMIT ? OFFSET ?",
-                (f"%{q.lower()}%", f"%{q.lower()}%", limit, offset),
-            ).fetchall()
-        else:
-            rows = conn.execute(
-                f"SELECT * FROM {table} LIMIT ? OFFSET ?",
-                (limit, offset),
-            ).fetchall()
+        rows = conn.execute(sql, params).fetchall()
     except sqlite3.Error as exc:
         conn.close()
         raise HTTPException(500, str(exc)) from exc
@@ -224,17 +255,31 @@ def integrity():
     }
 
 
+def _fts_query(q: str) -> str:
+    cleaned = "".join(ch if ch.isalnum() or ch.isspace() else " " for ch in q)
+    parts = [p for p in cleaned.split() if p]
+    return " ".join(p + "*" for p in parts) or "ohg"
+
+
 @app.get("/search")
-def search(q: str = Query(..., min_length=1), limit: int = Query(50, ge=1, le=200)):
+def search(
+    q: str = Query(..., min_length=1),
+    limit: int = Query(50, ge=1, le=200),
+    table: str | None = None,
+):
     conn = get_db()
     try:
-        rows = conn.execute(
-            """SELECT table_name, id, name, blob
+        match = _fts_query(q)
+        sql = """SELECT table_name, id, name, blob
                FROM entities_fts
-               WHERE entities_fts MATCH ?
-               LIMIT ?""",
-            (q.replace('"', " ") + "*", limit),
-        ).fetchall()
+               WHERE entities_fts MATCH ?"""
+        params: list = [match]
+        if table and table in TABLES:
+            sql += " AND table_name = ?"
+            params.append(table)
+        sql += " LIMIT ?"
+        params.append(limit)
+        rows = conn.execute(sql, params).fetchall()
         mode = "fts"
     except sqlite3.Error:
         rows = conn.execute(
@@ -259,11 +304,15 @@ def links(table: str, item_id: str):
     conn = get_db()
     try:
         rows = conn.execute(
-            """SELECT dst_table, dst_id, relation, score FROM links
-               WHERE src_table=? AND src_id=?
+            """SELECT l.dst_table, l.dst_id, l.relation, l.score, e.name
+               FROM links l
+               LEFT JOIN entities e ON e.table_name=l.dst_table AND e.id=l.dst_id
+               WHERE l.src_table=? AND l.src_id=?
                UNION
-               SELECT src_table, src_id, relation, score FROM links
-               WHERE dst_table=? AND dst_id=?""",
+               SELECT l.src_table, l.src_id, l.relation, l.score, e.name
+               FROM links l
+               LEFT JOIN entities e ON e.table_name=l.src_table AND e.id=l.src_id
+               WHERE l.dst_table=? AND l.dst_id=?""",
             (table, item_id, table, item_id),
         ).fetchall()
     except sqlite3.Error:
@@ -287,31 +336,28 @@ def db_file():
     return FileResponse(str(DB_PATH), filename="once_human.db")
 
 
-def _list(table: str, q: str | None = None, limit: int = 500, offset: int = 0):
-    return fetch_all(table, q, limit, offset)
+def _list(table: str, q: str | None = None, limit: int = 500, offset: int = 0, **filters):
+    return fetch_all(table, q, limit, offset, filters)
 
 
 @app.get("/deviations")
-def list_deviations(type: str | None = None, q: str | None = None, limit: int = 500, offset: int = 0):
-    items = _list("deviations", q, limit, offset)
-    if type:
-        items = [i for i in items if (i.get("type") or "").lower() == type.lower()]
-    return items
+def list_deviations(type: str | None = None, rarity: str | None = None, q: str | None = None, limit: int = 500, offset: int = 0):
+    return _list("deviations", q, limit, offset, type=type, rarity=rarity)
 
 
 @app.get("/weapons")
-def list_weapons(q: str | None = None, limit: int = 500, offset: int = 0):
-    return _list("weapons", q, limit, offset)
+def list_weapons(q: str | None = None, limit: int = 500, offset: int = 0, type: str | None = None, rarity: str | None = None):
+    return _list("weapons", q, limit, offset, type=type, rarity=rarity)
 
 
 @app.get("/armor")
-def list_armor(q: str | None = None, limit: int = 500, offset: int = 0):
-    return _list("armor", q, limit, offset)
+def list_armor(q: str | None = None, limit: int = 500, offset: int = 0, type: str | None = None, rarity: str | None = None):
+    return _list("armor", q, limit, offset, type=type, rarity=rarity)
 
 
 @app.get("/mods")
-def list_mods(q: str | None = None, limit: int = 500, offset: int = 0):
-    return _list("mods", q, limit, offset)
+def list_mods(q: str | None = None, limit: int = 500, offset: int = 0, type: str | None = None, rarity: str | None = None, slot: str | None = None):
+    return _list("mods", q, limit, offset, type=type, rarity=rarity, slot=slot)
 
 
 @app.get("/bosses")
@@ -320,8 +366,8 @@ def list_bosses(q: str | None = None, limit: int = 500, offset: int = 0):
 
 
 @app.get("/locations")
-def list_locations(q: str | None = None, limit: int = 500, offset: int = 0):
-    return _list("locations", q, limit, offset)
+def list_locations(q: str | None = None, limit: int = 500, offset: int = 0, type: str | None = None, region: str | None = None):
+    return _list("locations", q, limit, offset, type=type, region=region)
 
 
 @app.get("/recipes")
@@ -379,6 +425,39 @@ def list_flowers(q: str | None = None, limit: int = 500, offset: int = 0):
     return _list("flowers", q, limit, offset)
 
 
+
+@app.get("/user/favorites")
+def list_favorites():
+    conn = user_db()
+    rows = conn.execute("SELECT * FROM favorites ORDER BY created_at DESC").fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+
+@app.post("/user/favorites")
+def add_favorite(table: str, item_id: str, name: str | None = None):
+    if table not in TABLES:
+        raise HTTPException(404, f"Unknown table: {table}")
+    conn = user_db()
+    now = datetime.now(timezone.utc).isoformat()
+    conn.execute(
+        "INSERT OR REPLACE INTO favorites VALUES (?,?,?,?,?)",
+        (f"{table}:{item_id}", table, item_id, name or item_id, now),
+    )
+    conn.commit()
+    conn.close()
+    return {"ok": True, "id": f"{table}:{item_id}"}
+
+
+@app.delete("/user/favorites/{table}/{item_id}")
+def del_favorite(table: str, item_id: str):
+    conn = user_db()
+    conn.execute("DELETE FROM favorites WHERE id=?", (f"{table}:{item_id}",))
+    conn.commit()
+    conn.close()
+    return {"ok": True}
+
+
 @app.get("/update/check")
 def update_check():
     import urllib.request
@@ -393,7 +472,7 @@ def update_check():
     try:
         req = urllib.request.Request(
             f"{raw}/version.json",
-            headers={"User-Agent": "OnceHumanGuide-API/5.4"},
+            headers={"User-Agent": "OnceHumanGuide-API/5.5"},
         )
         with urllib.request.urlopen(req, timeout=20) as resp:
             remote = json.loads(resp.read().decode("utf-8"))

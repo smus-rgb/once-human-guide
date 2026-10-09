@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.5.0 / shell 19.2 — 2026-10-09
+
+- SQLite: indexy na type/rarity/region/slot, odvozené vazby drops/source/location/rewards (pack se nemění)
+- API: filtry `type` `rarity` `region` `slot`, FTS omezené na tabulku, `/links` vrací jméno entity
+- User layer: `once_human_user.db` + `/user/favorites` (rebuild pack DB je nesmaže)
+- App: panel Vazby ukazuje jména a umí znovu otevřít související kartu
+- Pack 372 beze změny
+
 ## 5.4.0 / shell 19.1 — 2026-10-01
 
 - `/ui` servíruje shell i statické assety (`/modules`, `ohg_data.js`, `ohg_sw.js`) — SPA se na API opravdu spustí
@@ -7,7 +15,6 @@
 - API: `/health`, `/integrity`, `/search` (FTS), `/links/{table}/{id}`, stránkování
 - `db_build.py`; updater ho preferuje před starým schématem
 - Badge v hostu v19; pack 372 beze změny
-
 
 ## 5.3.0 / shell 19.0 — 2026-10-01
 
