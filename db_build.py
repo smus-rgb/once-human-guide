@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build once_human.db from module JSON or database_full.json.
 
-Adds indexes, a unified entity catalog, FTS5 search, and name-based links.
+Adds indexes, a unified entity catalog, FTS5 search with diacritics removal, and name-based links.
 User-layer data is never written here.
 """
 from __future__ import annotations
@@ -153,6 +153,12 @@ def build(db_path: Path | None = None) -> dict:
     for table, (schema, cols) in SCHEMAS.items():
         c.execute(f"CREATE TABLE {table} ({schema})")
         c.execute(f"CREATE INDEX idx_{table}_name ON {table}(name)")
+        if "type" in cols:
+            c.execute(f"CREATE INDEX IF NOT EXISTS idx_{table}_type ON {table}(type)")
+        if "rarity" in cols:
+            c.execute(f"CREATE INDEX IF NOT EXISTS idx_{table}_rarity ON {table}(rarity)")
+        if "region" in cols:
+            c.execute(f"CREATE INDEX IF NOT EXISTS idx_{table}_region ON {table}(region)")
         for row in data.get(table, []):
             vals = []
             for col in cols:
@@ -206,7 +212,7 @@ def build(db_path: Path | None = None) -> dict:
                 )
                 link_count += 1
     c.execute(
-        "CREATE VIRTUAL TABLE entities_fts USING fts5(table_name, id, name, blob, tokenize='unicode61')"
+        "CREATE VIRTUAL TABLE entities_fts USING fts5(table_name, id, name, blob, tokenize='unicode61 remove_diacritics 2')"
     )
     c.execute(
         "INSERT INTO entities_fts(table_name, id, name, blob) SELECT table_name, id, name, blob FROM entities"
@@ -259,7 +265,7 @@ def build(db_path: Path | None = None) -> dict:
             if not by_name.get(_norm(label)):
                 issue("info", "unresolved_ingredient", "recipes", row.get("id"), label)
     c.execute(
-        "INSERT INTO data_versions VALUES ('schema', '5.5-audit-links', ?)",
+        "INSERT INTO data_versions VALUES ('schema', '5.5-audit-links-diacritics', ?)",
         (now,),
     )
     conn.commit()
