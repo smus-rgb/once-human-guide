@@ -6,6 +6,8 @@
 - API `/audit`, `stats.issues`, FTS dotaz bez speciálních znaků (žádný pád na `"` / `:`)
 - `version.json` je zdroj verze API
 - Panel kvality v shellu v19 (`modules/ohg_quality.js`), pack 372 beze změny
+- FTS5 `unicode61 remove_diacritics 2` — lepší české vyhledávání
+- Extra indexy na `type` / `rarity` / `region` pro rychlejší filtry
 
 
 ## 5.4.0 / shell 19.1 — 2026-10-01
