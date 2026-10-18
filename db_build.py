@@ -115,6 +115,24 @@ def _norm(name: str) -> str:
     return " ".join((name or "").lower().replace("-", " ").split())
 
 
+def _add_links(c, src_table, src_id, labels, relation, by_name, link_count):
+    for label in labels:
+        if not label:
+            continue
+        hit = by_name.get(_norm(str(label)))
+        if not hit:
+            continue
+        for dst_table, dst_id in hit:
+            if dst_table == src_table:
+                continue
+            c.execute(
+                "INSERT OR IGNORE INTO links VALUES (?,?,?,?,?,?)",
+                (src_table, src_id, dst_table, dst_id, relation, 1.0),
+            )
+            link_count += 1
+    return link_count
+
+
 def build(db_path: Path | None = None) -> dict:
     data = load_pack()
     path = db_path or DB_PATH
@@ -191,6 +209,7 @@ def build(db_path: Path | None = None) -> dict:
         if key:
             by_name.setdefault(key, []).append((table, row.get("id")))
     link_count = 0
+    # Recipes -> ingredients
     for row in data.get("recipes", []):
         ingredients = row.get("ingredients") or []
         if isinstance(ingredients, str):
@@ -198,19 +217,47 @@ def build(db_path: Path | None = None) -> dict:
                 ingredients = json.loads(ingredients)
             except json.JSONDecodeError:
                 ingredients = []
-        for ing in ingredients:
-            label = ing.get("name") if isinstance(ing, dict) else str(ing)
-            hit = by_name.get(_norm(label))
-            if not hit:
-                continue
-            for dst_table, dst_id in hit:
-                if dst_table == "recipes":
-                    continue
-                c.execute(
-                    "INSERT OR IGNORE INTO links VALUES (?,?,?,?,?,?)",
-                    ("recipes", row.get("id"), dst_table, dst_id, "ingredient", 1.0),
-                )
-                link_count += 1
+        labels = [ing.get("name") if isinstance(ing, dict) else str(ing) for ing in ingredients]
+        link_count = _add_links(c, "recipes", row.get("id"), labels, "ingredient", by_name, link_count)
+    # Bosses -> drops
+    for row in data.get("bosses", []):
+        drops = row.get("drops") or []
+        if isinstance(drops, str):
+            try:
+                drops = json.loads(drops)
+            except json.JSONDecodeError:
+                drops = [drops] if drops else []
+        labels = [d.get("name") if isinstance(d, dict) else str(d) for d in drops]
+        link_count = _add_links(c, "bosses", row.get("id"), labels, "drop", by_name, link_count)
+        # location
+        loc = row.get("location")
+        if loc:
+            link_count = _add_links(c, "bosses", row.get("id"), [loc], "located_at", by_name, link_count)
+    # Animals -> drops
+    for row in data.get("animals", []):
+        drops = row.get("drops") or []
+        if isinstance(drops, str):
+            try:
+                drops = json.loads(drops)
+            except json.JSONDecodeError:
+                drops = [drops] if drops else []
+        labels = [d.get("name") if isinstance(d, dict) else str(d) for d in drops]
+        link_count = _add_links(c, "animals", row.get("id"), labels, "drop", by_name, link_count)
+    # Quests/events/scenarios -> rewards / locations
+    for tbl, rel in (("quests", "reward"), ("events", "reward"), ("scenarios", "reward")):
+        for row in data.get(tbl, []):
+            rewards = row.get("rewards") or []
+            if isinstance(rewards, str):
+                try:
+                    rewards = json.loads(rewards)
+                except json.JSONDecodeError:
+                    rewards = [rewards] if rewards else []
+            labels = [r.get("name") if isinstance(r, dict) else str(r) for r in rewards]
+            link_count = _add_links(c, tbl, row.get("id"), labels, rel, by_name, link_count)
+            loc = row.get("location") or row.get("locations")
+            if loc:
+                locs = loc if isinstance(loc, list) else [loc]
+                link_count = _add_links(c, tbl, row.get("id"), locs, "located_at", by_name, link_count)
     c.execute(
         "CREATE VIRTUAL TABLE entities_fts USING fts5(table_name, id, name, blob, tokenize='unicode61 remove_diacritics 2')"
     )
@@ -265,7 +312,7 @@ def build(db_path: Path | None = None) -> dict:
             if not by_name.get(_norm(label)):
                 issue("info", "unresolved_ingredient", "recipes", row.get("id"), label)
     c.execute(
-        "INSERT INTO data_versions VALUES ('schema', '5.5-audit-links-diacritics', ?)",
+        "INSERT INTO data_versions VALUES ('schema', '5.5-audit-links-diacritics-expanded', ?)",
         (now,),
     )
     conn.commit()
