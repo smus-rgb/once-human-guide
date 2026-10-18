@@ -1,5 +1,15 @@
 # Changelog
 
+## 5.5.0 / shell 19.2 — 2026-10-18
+
+- SQLite `data_issues`: chybějící id, duplicity, prázdná jména, nerozpoznané ingredience
+- Rozšířené links: ingredients, drops (bosses/animals), rewards, located_at
+- API `/audit`, `stats.issues`, FTS bez speciálních znaků + unicode61 remove_diacritics 2
+- List endpointy s filtry type/rarity/region/slot; search podporuje `?table=`
+- `version.json` je zdroj verze API
+- Panel kvality v shellu v19 (`modules/ohg_quality.js`), pack 372 beze změny
+- Extra indexy na `type` / `rarity` / `region`
+
 ## 5.4.0 / shell 19.1 — 2026-10-01
 
 - `/ui` servíruje shell i statické assety (`/modules`, `ohg_data.js`, `ohg_sw.js`) — SPA se na API opravdu spustí
@@ -7,7 +17,6 @@
 - API: `/health`, `/integrity`, `/search` (FTS), `/links/{table}/{id}`, stránkování
 - `db_build.py`; updater ho preferuje před starým schématem
 - Badge v hostu v19; pack 372 beze změny
-
 
 ## 5.3.0 / shell 19.0 — 2026-10-01
 

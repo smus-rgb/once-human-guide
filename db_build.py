@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build once_human.db from module JSON or database_full.json.
 
-Adds indexes, a unified entity catalog, FTS5 search, and name-based links.
+Adds indexes, a unified entity catalog, FTS5 search with diacritics removal, and name-based links.
 User-layer data is never written here.
 """
 from __future__ import annotations
@@ -115,6 +115,24 @@ def _norm(name: str) -> str:
     return " ".join((name or "").lower().replace("-", " ").split())
 
 
+def _add_links(c, src_table, src_id, labels, relation, by_name, link_count):
+    for label in labels:
+        if not label:
+            continue
+        hit = by_name.get(_norm(str(label)))
+        if not hit:
+            continue
+        for dst_table, dst_id in hit:
+            if dst_table == src_table:
+                continue
+            c.execute(
+                "INSERT OR IGNORE INTO links VALUES (?,?,?,?,?,?)",
+                (src_table, src_id, dst_table, dst_id, relation, 1.0),
+            )
+            link_count += 1
+    return link_count
+
+
 def build(db_path: Path | None = None) -> dict:
     data = load_pack()
     path = db_path or DB_PATH
@@ -153,6 +171,12 @@ def build(db_path: Path | None = None) -> dict:
     for table, (schema, cols) in SCHEMAS.items():
         c.execute(f"CREATE TABLE {table} ({schema})")
         c.execute(f"CREATE INDEX idx_{table}_name ON {table}(name)")
+        if "type" in cols:
+            c.execute(f"CREATE INDEX IF NOT EXISTS idx_{table}_type ON {table}(type)")
+        if "rarity" in cols:
+            c.execute(f"CREATE INDEX IF NOT EXISTS idx_{table}_rarity ON {table}(rarity)")
+        if "region" in cols:
+            c.execute(f"CREATE INDEX IF NOT EXISTS idx_{table}_region ON {table}(region)")
         for row in data.get(table, []):
             vals = []
             for col in cols:
@@ -185,6 +209,97 @@ def build(db_path: Path | None = None) -> dict:
         if key:
             by_name.setdefault(key, []).append((table, row.get("id")))
     link_count = 0
+    # Recipes -> ingredients
+    for row in data.get("recipes", []):
+        ingredients = row.get("ingredients") or []
+        if isinstance(ingredients, str):
+            try:
+                ingredients = json.loads(ingredients)
+            except json.JSONDecodeError:
+                ingredients = []
+        labels = [ing.get("name") if isinstance(ing, dict) else str(ing) for ing in ingredients]
+        link_count = _add_links(c, "recipes", row.get("id"), labels, "ingredient", by_name, link_count)
+    # Bosses -> drops
+    for row in data.get("bosses", []):
+        drops = row.get("drops") or []
+        if isinstance(drops, str):
+            try:
+                drops = json.loads(drops)
+            except json.JSONDecodeError:
+                drops = [drops] if drops else []
+        labels = [d.get("name") if isinstance(d, dict) else str(d) for d in drops]
+        link_count = _add_links(c, "bosses", row.get("id"), labels, "drop", by_name, link_count)
+        # location
+        loc = row.get("location")
+        if loc:
+            link_count = _add_links(c, "bosses", row.get("id"), [loc], "located_at", by_name, link_count)
+    # Animals -> drops
+    for row in data.get("animals", []):
+        drops = row.get("drops") or []
+        if isinstance(drops, str):
+            try:
+                drops = json.loads(drops)
+            except json.JSONDecodeError:
+                drops = [drops] if drops else []
+        labels = [d.get("name") if isinstance(d, dict) else str(d) for d in drops]
+        link_count = _add_links(c, "animals", row.get("id"), labels, "drop", by_name, link_count)
+    # Quests/events/scenarios -> rewards / locations
+    for tbl, rel in (("quests", "reward"), ("events", "reward"), ("scenarios", "reward")):
+        for row in data.get(tbl, []):
+            rewards = row.get("rewards") or []
+            if isinstance(rewards, str):
+                try:
+                    rewards = json.loads(rewards)
+                except json.JSONDecodeError:
+                    rewards = [rewards] if rewards else []
+            labels = [r.get("name") if isinstance(r, dict) else str(r) for r in rewards]
+            link_count = _add_links(c, tbl, row.get("id"), labels, rel, by_name, link_count)
+            loc = row.get("location") or row.get("locations")
+            if loc:
+                locs = loc if isinstance(loc, list) else [loc]
+                link_count = _add_links(c, tbl, row.get("id"), locs, "located_at", by_name, link_count)
+    c.execute(
+        "CREATE VIRTUAL TABLE entities_fts USING fts5(table_name, id, name, blob, tokenize='unicode61 remove_diacritics 2')"
+    )
+    c.execute(
+        "INSERT INTO entities_fts(table_name, id, name, blob) SELECT table_name, id, name, blob FROM entities"
+    )
+    c.execute(
+        """CREATE TABLE data_issues (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            severity TEXT NOT NULL,
+            code TEXT NOT NULL,
+            table_name TEXT,
+            entity_id TEXT,
+            detail TEXT
+        )"""
+    )
+    c.execute("CREATE INDEX idx_issues_code ON data_issues(code)")
+    c.execute("CREATE INDEX idx_links_src ON links(src_table, src_id)")
+    c.execute("CREATE INDEX idx_links_dst ON links(dst_table, dst_id)")
+    issue_count = 0
+
+    def issue(severity, code, table, entity_id, detail):
+        nonlocal issue_count
+        c.execute(
+            "INSERT INTO data_issues (severity, code, table_name, entity_id, detail) VALUES (?,?,?,?,?)",
+            (severity, code, table, entity_id, detail),
+        )
+        issue_count += 1
+
+    seen = {}
+    for table, row in catalog:
+        eid = row.get("id")
+        name = (row.get("name") or "").strip()
+        if not eid:
+            issue("error", "missing_id", table, None, name or "(bez jména)")
+        else:
+            key = (table, str(eid))
+            if key in seen:
+                issue("error", "duplicate_id", table, str(eid), name)
+            seen[key] = name
+        if not name:
+            issue("warn", "empty_name", table, eid, "prázdné name")
     for row in data.get("recipes", []):
         ingredients = row.get("ingredients") or []
         if isinstance(ingredients, str):
@@ -194,30 +309,21 @@ def build(db_path: Path | None = None) -> dict:
                 ingredients = []
         for ing in ingredients:
             label = ing.get("name") if isinstance(ing, dict) else str(ing)
-            hit = by_name.get(_norm(label))
-            if not hit:
-                continue
-            for dst_table, dst_id in hit:
-                if dst_table == "recipes":
-                    continue
-                c.execute(
-                    "INSERT OR IGNORE INTO links VALUES (?,?,?,?,?,?)",
-                    ("recipes", row.get("id"), dst_table, dst_id, "ingredient", 1.0),
-                )
-                link_count += 1
+            if not by_name.get(_norm(label)):
+                issue("info", "unresolved_ingredient", "recipes", row.get("id"), label)
     c.execute(
-        "CREATE VIRTUAL TABLE entities_fts USING fts5(table_name, id, name, blob, tokenize='unicode61')"
-    )
-    c.execute(
-        "INSERT INTO entities_fts(table_name, id, name, blob) SELECT table_name, id, name, blob FROM entities"
-    )
-    c.execute(
-        "INSERT INTO data_versions VALUES ('schema', '5.4-fts-links', ?)",
+        "INSERT INTO data_versions VALUES ('schema', '5.5-audit-links-diacritics-expanded', ?)",
         (now,),
     )
     conn.commit()
     conn.close()
-    return {"records": total, "links": link_count, "version": ver, "db": str(path)}
+    return {
+        "records": total,
+        "links": link_count,
+        "issues": issue_count,
+        "version": ver,
+        "db": str(path),
+    }
 
 
 if __name__ == "__main__":

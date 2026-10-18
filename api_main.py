@@ -16,8 +16,18 @@ DB_PATH = BASE / "once_human.db"
 if not DB_PATH.exists():
     DB_PATH = BASE.parent / "once_human.db"
 
-DATA_VERSION = "2026-10-01-v19.1-372"
-API_VERSION = "5.4.0"
+def _meta():
+    path = BASE / "version.json"
+    if path.exists():
+        try:
+            return json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            pass
+    return {}
+
+_META = _meta()
+DATA_VERSION = _META.get("data_version", "2026-10-01-v19.1-372")
+API_VERSION = _META.get("app_version", "5.5.0")
 MAP_EMBEDS = {
     "thgl": "https://oncehuman.th.gl",
     "mapgenie": "https://mapgenie.io/once-human/maps/nalcott",
@@ -65,21 +75,43 @@ def rows_to_list(rows) -> list[dict]:
     return items
 
 
-def fetch_all(table: str, q: str | None = None, limit: int = 500, offset: int = 0) -> list[dict]:
+def fetch_all(
+    table: str,
+    q: str | None = None,
+    limit: int = 500,
+    offset: int = 0,
+    type_: str | None = None,
+    rarity: str | None = None,
+    region: str | None = None,
+    slot: str | None = None,
+) -> list[dict]:
     if table not in TABLES:
         raise HTTPException(404, f"Unknown table: {table}")
     conn = get_db()
     try:
+        where = []
+        params = []
         if q:
-            rows = conn.execute(
-                f"SELECT * FROM {table} WHERE lower(name) LIKE ? OR lower(coalesce(desc,'')) LIKE ? LIMIT ? OFFSET ?",
-                (f"%{q.lower()}%", f"%{q.lower()}%", limit, offset),
-            ).fetchall()
-        else:
-            rows = conn.execute(
-                f"SELECT * FROM {table} LIMIT ? OFFSET ?",
-                (limit, offset),
-            ).fetchall()
+            where.append("(lower(name) LIKE ? OR lower(coalesce(desc,'')) LIKE ?)")
+            params.extend([f"%{q.lower()}%", f"%{q.lower()}%"])
+        if type_:
+            where.append("lower(coalesce(type,'')) = ?")
+            params.append(type_.lower())
+        if rarity:
+            where.append("lower(coalesce(rarity,'')) = ?")
+            params.append(rarity.lower())
+        if region:
+            where.append("lower(coalesce(region,'')) = ?")
+            params.append(region.lower())
+        if slot:
+            where.append("lower(coalesce(slot,'')) = ?")
+            params.append(slot.lower())
+        sql = f"SELECT * FROM {table}"
+        if where:
+            sql += " WHERE " + " AND ".join(where)
+        sql += " LIMIT ? OFFSET ?"
+        params.extend([limit, offset])
+        rows = conn.execute(sql, params).fetchall()
     except sqlite3.Error as exc:
         conn.close()
         raise HTTPException(500, str(exc)) from exc
@@ -102,6 +134,7 @@ def root():
             "stats": "/stats",
             "search": "/search?q=",
             "integrity": "/integrity",
+            "audit": "/audit",
             "links": "/links/{table}/{id}",
             "export": "/export",
             "maps": "/maps",
@@ -187,9 +220,11 @@ def stats():
     try:
         out["links"] = conn.execute("SELECT COUNT(*) FROM links").fetchone()[0]
         out["fts"] = conn.execute("SELECT COUNT(*) FROM entities_fts").fetchone()[0]
+        out["issues"] = conn.execute("SELECT COUNT(*) FROM data_issues").fetchone()[0]
     except Exception:
         out["links"] = 0
         out["fts"] = 0
+        out["issues"] = None
     conn.close()
     out["total"] = total
     out["data_version"] = DATA_VERSION
@@ -224,32 +259,72 @@ def integrity():
     }
 
 
-@app.get("/search")
-def search(q: str = Query(..., min_length=1), limit: int = Query(50, ge=1, le=200)):
+def _fts_query(q: str) -> str:
+    cleaned = "".join(ch if ch.isalnum() or ch.isspace() else " " for ch in q)
+    terms = [t for t in cleaned.split() if t]
+    if not terms:
+        return '""'
+    return " ".join(t + "*" for t in terms[:8])
+
+
+@app.get("/audit")
+def audit():
     conn = get_db()
     try:
         rows = conn.execute(
-            """SELECT table_name, id, name, blob
-               FROM entities_fts
-               WHERE entities_fts MATCH ?
-               LIMIT ?""",
-            (q.replace('"', " ") + "*", limit),
+            """SELECT severity, code, COUNT(*) AS n
+               FROM data_issues GROUP BY severity, code ORDER BY n DESC"""
         ).fetchall()
+        sample = conn.execute(
+            """SELECT severity, code, table_name, entity_id, detail
+               FROM data_issues ORDER BY
+                 CASE severity WHEN 'error' THEN 0 WHEN 'warn' THEN 1 ELSE 2 END, id
+               LIMIT 40"""
+        ).fetchall()
+    except sqlite3.Error as exc:
+        conn.close()
+        raise HTTPException(503, f"Audit table missing — rebuild DB: {exc}") from exc
+    conn.close()
+    return {
+        "ok": not any(r["severity"] == "error" for r in rows),
+        "summary": [dict(r) for r in rows],
+        "sample": [dict(r) for r in sample],
+        "data_version": DATA_VERSION,
+    }
+
+
+@app.get("/search")
+def search(q: str = Query(..., min_length=1), limit: int = Query(50, ge=1, le=200), table: str | None = None):
+    conn = get_db()
+    try:
+        sql = """SELECT table_name, id, name, blob
+               FROM entities_fts
+               WHERE entities_fts MATCH ?"""
+        params = [_fts_query(q)]
+        if table and table in TABLES:
+            sql += " AND table_name = ?"
+            params.append(table)
+        sql += " LIMIT ?"
+        params.append(limit)
+        rows = conn.execute(sql, params).fetchall()
         mode = "fts"
     except sqlite3.Error:
-        rows = conn.execute(
-            """SELECT table_name, id, name, blob FROM entities
-               WHERE lower(name) LIKE ? OR lower(blob) LIKE ?
-               LIMIT ?""",
-            (f"%{q.lower()}%", f"%{q.lower()}%", limit),
-        ).fetchall()
+        sql = """SELECT table_name, id, name, blob FROM entities
+               WHERE (lower(name) LIKE ? OR lower(blob) LIKE ?)"""
+        params = [f"%{q.lower()}%", f"%{q.lower()}%"]
+        if table and table in TABLES:
+            sql += " AND table_name = ?"
+            params.append(table)
+        sql += " LIMIT ?"
+        params.append(limit)
+        rows = conn.execute(sql, params).fetchall()
         mode = "like"
     conn.close()
     results = [
         {"table": r["table_name"], "id": r["id"], "name": r["name"], "snippet": (r["blob"] or "")[:180]}
         for r in rows
     ]
-    return {"q": q, "mode": mode, "count": len(results), "results": results}
+    return {"q": q, "mode": mode, "count": len(results), "results": results, "table": table}
 
 
 @app.get("/links/{table}/{item_id}")
@@ -287,96 +362,194 @@ def db_file():
     return FileResponse(str(DB_PATH), filename="once_human.db")
 
 
-def _list(table: str, q: str | None = None, limit: int = 500, offset: int = 0):
-    return fetch_all(table, q, limit, offset)
+def _list(
+    table: str,
+    q: str | None = None,
+    limit: int = 500,
+    offset: int = 0,
+    type_: str | None = None,
+    rarity: str | None = None,
+    region: str | None = None,
+    slot: str | None = None,
+):
+    return fetch_all(table, q, limit, offset, type_, rarity, region, slot)
 
 
 @app.get("/deviations")
-def list_deviations(type: str | None = None, q: str | None = None, limit: int = 500, offset: int = 0):
-    items = _list("deviations", q, limit, offset)
-    if type:
-        items = [i for i in items if (i.get("type") or "").lower() == type.lower()]
-    return items
+def list_deviations(
+    type: str | None = None,
+    rarity: str | None = None,
+    q: str | None = None,
+    limit: int = 500,
+    offset: int = 0,
+):
+    return _list("deviations", q, limit, offset, type_=type, rarity=rarity)
 
 
 @app.get("/weapons")
-def list_weapons(q: str | None = None, limit: int = 500, offset: int = 0):
-    return _list("weapons", q, limit, offset)
+def list_weapons(
+    type: str | None = None,
+    rarity: str | None = None,
+    q: str | None = None,
+    limit: int = 500,
+    offset: int = 0,
+):
+    return _list("weapons", q, limit, offset, type_=type, rarity=rarity)
 
 
 @app.get("/armor")
-def list_armor(q: str | None = None, limit: int = 500, offset: int = 0):
-    return _list("armor", q, limit, offset)
+def list_armor(
+    type: str | None = None,
+    rarity: str | None = None,
+    q: str | None = None,
+    limit: int = 500,
+    offset: int = 0,
+):
+    return _list("armor", q, limit, offset, type_=type, rarity=rarity)
 
 
 @app.get("/mods")
-def list_mods(q: str | None = None, limit: int = 500, offset: int = 0):
-    return _list("mods", q, limit, offset)
+def list_mods(
+    type: str | None = None,
+    rarity: str | None = None,
+    slot: str | None = None,
+    q: str | None = None,
+    limit: int = 500,
+    offset: int = 0,
+):
+    return _list("mods", q, limit, offset, type_=type, rarity=rarity, slot=slot)
 
 
 @app.get("/bosses")
-def list_bosses(q: str | None = None, limit: int = 500, offset: int = 0):
-    return _list("bosses", q, limit, offset)
+def list_bosses(
+    region: str | None = None,
+    q: str | None = None,
+    limit: int = 500,
+    offset: int = 0,
+):
+    return _list("bosses", q, limit, offset, region=region)
 
 
 @app.get("/locations")
-def list_locations(q: str | None = None, limit: int = 500, offset: int = 0):
-    return _list("locations", q, limit, offset)
+def list_locations(
+    type: str | None = None,
+    region: str | None = None,
+    q: str | None = None,
+    limit: int = 500,
+    offset: int = 0,
+):
+    return _list("locations", q, limit, offset, type_=type, region=region)
 
 
 @app.get("/recipes")
-def list_recipes(q: str | None = None, limit: int = 500, offset: int = 0):
-    return _list("recipes", q, limit, offset)
+def list_recipes(
+    type: str | None = None,
+    q: str | None = None,
+    limit: int = 500,
+    offset: int = 0,
+):
+    return _list("recipes", q, limit, offset, type_=type)
 
 
 @app.get("/materials")
-def list_materials(q: str | None = None, limit: int = 500, offset: int = 0):
-    return _list("materials", q, limit, offset)
+def list_materials(
+    type: str | None = None,
+    q: str | None = None,
+    limit: int = 500,
+    offset: int = 0,
+):
+    return _list("materials", q, limit, offset, type_=type)
 
 
 @app.get("/scenarios")
-def list_scenarios(q: str | None = None, limit: int = 500, offset: int = 0):
-    return _list("scenarios", q, limit, offset)
+def list_scenarios(
+    type: str | None = None,
+    q: str | None = None,
+    limit: int = 500,
+    offset: int = 0,
+):
+    return _list("scenarios", q, limit, offset, type_=type)
 
 
 @app.get("/quests")
-def list_quests(q: str | None = None, limit: int = 500, offset: int = 0):
-    return _list("quests", q, limit, offset)
+def list_quests(
+    type: str | None = None,
+    region: str | None = None,
+    q: str | None = None,
+    limit: int = 500,
+    offset: int = 0,
+):
+    return _list("quests", q, limit, offset, type_=type, region=region)
 
 
 @app.get("/events")
-def list_events(q: str | None = None, limit: int = 500, offset: int = 0):
-    return _list("events", q, limit, offset)
+def list_events(
+    type: str | None = None,
+    q: str | None = None,
+    limit: int = 500,
+    offset: int = 0,
+):
+    return _list("events", q, limit, offset, type_=type)
 
 
 @app.get("/creatures")
-def list_creatures(q: str | None = None, limit: int = 500, offset: int = 0):
-    return _list("creatures", q, limit, offset)
+def list_creatures(
+    type: str | None = None,
+    q: str | None = None,
+    limit: int = 500,
+    offset: int = 0,
+):
+    return _list("creatures", q, limit, offset, type_=type)
 
 
 @app.get("/npcs")
-def list_npcs(q: str | None = None, limit: int = 500, offset: int = 0):
-    return _list("npcs", q, limit, offset)
+def list_npcs(
+    type: str | None = None,
+    q: str | None = None,
+    limit: int = 500,
+    offset: int = 0,
+):
+    return _list("npcs", q, limit, offset, type_=type)
 
 
 @app.get("/plants")
-def list_plants(q: str | None = None, limit: int = 500, offset: int = 0):
-    return _list("plants", q, limit, offset)
+def list_plants(
+    type: str | None = None,
+    q: str | None = None,
+    limit: int = 500,
+    offset: int = 0,
+):
+    return _list("plants", q, limit, offset, type_=type)
 
 
 @app.get("/fish")
-def list_fish(q: str | None = None, limit: int = 500, offset: int = 0):
-    return _list("fish", q, limit, offset)
+def list_fish(
+    type: str | None = None,
+    q: str | None = None,
+    limit: int = 500,
+    offset: int = 0,
+):
+    return _list("fish", q, limit, offset, type_=type)
 
 
 @app.get("/animals")
-def list_animals(q: str | None = None, limit: int = 500, offset: int = 0):
-    return _list("animals", q, limit, offset)
+def list_animals(
+    type: str | None = None,
+    q: str | None = None,
+    limit: int = 500,
+    offset: int = 0,
+):
+    return _list("animals", q, limit, offset, type_=type)
 
 
 @app.get("/flowers")
-def list_flowers(q: str | None = None, limit: int = 500, offset: int = 0):
-    return _list("flowers", q, limit, offset)
+def list_flowers(
+    type: str | None = None,
+    q: str | None = None,
+    limit: int = 500,
+    offset: int = 0,
+):
+    return _list("flowers", q, limit, offset, type_=type)
 
 
 @app.get("/update/check")
@@ -393,7 +566,7 @@ def update_check():
     try:
         req = urllib.request.Request(
             f"{raw}/version.json",
-            headers={"User-Agent": "OnceHumanGuide-API/5.4"},
+            headers={"User-Agent": "OnceHumanGuide-API/5.5"},
         )
         with urllib.request.urlopen(req, timeout=20) as resp:
             remote = json.loads(resp.read().decode("utf-8"))
