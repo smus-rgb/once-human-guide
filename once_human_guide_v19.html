@@ -67,6 +67,9 @@ h1{font-size:22px;margin:0 0 6px}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .chip{font-size:12px;padding:3px 8px;border-radius:8px;background:var(--bg3);border:1px solid var(--line)}
 .btn{background:#16352f;color:var(--acc);border:1px solid #1f5a4e;padding:8px 12px;border-radius:10px}
+.app.phone .btn{min-height:44px}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.pin:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
 .btn.ghost{background:var(--bg3);color:var(--txt);border-color:var(--line)}
 .btn.danger{background:#3a1520;color:var(--bad);border-color:#5a2432}
 .list{display:flex;flex-direction:column;gap:8px}
@@ -128,19 +131,19 @@ th{color:var(--mut);font-weight:600}
   </nav>
 </div>
 <div class="overlay" id="ov"></div>
-<div class="sheet" id="sheet"></div>
-<div class="cmd" id="cmd">
-  <input id="cmdq" placeholder="Command search — všechny entity"/>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Detail entity"></div>
+<div class="cmd" id="cmd" role="dialog" aria-modal="true" aria-label="Rychlé hledání">
+  <input id="cmdq" placeholder="Command search — všechny entity" aria-label="Hledat entity"/>
   <div id="cmdres" class="list" style="max-height:50vh;overflow:auto;padding:8px"></div>
 </div>
-<div class="toast" id="toast"></div>
-<script src="ohg_data.js"></script>
-<script src="modules/ohg_runtime.js"></script>
-<script src="modules/ohg_map.js"></script>
-<script src="modules/ohg_builds.js"></script>
-<script src="modules/ohg_pack_channel.js"></script>
-<script src="modules/ohg_links.js"></script>
-<script src="modules/ohg_quality.js"></script>
-<script src="modules/ohg_selfheal.js"></script>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="ohg_data.js?v=2026-10-09-v19.2-372"></script>
+<script src="modules/ohg_runtime.js?v=2026-10-09-v19.2-372"></script>
+<script src="modules/ohg_map.js?v=2026-10-09-v19.2-372"></script>
+<script src="modules/ohg_builds.js?v=2026-10-09-v19.2-372"></script>
+<script src="modules/ohg_pack_channel.js?v=2026-10-09-v19.2-372"></script>
+<script src="modules/ohg_links.js?v=2026-10-09-v19.2-372"></script>
+<script src="modules/ohg_quality.js?v=2026-10-09-v19.2-372"></script>
+<script src="modules/ohg_selfheal.js?v=2026-10-09-v19.2-372"></script>
 </body>
 </html>

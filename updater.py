@@ -17,6 +17,7 @@ import sqlite3
 import sys
 import urllib.error
 import urllib.request
+from datetime import datetime
 from pathlib import Path
 
 BASE = Path(__file__).resolve().parent
@@ -45,6 +46,12 @@ UPDATE_MAP = {
     "version.json": "version.json",
     "db_build.py": "db_build.py",
     "modules/ohg_links.js": "modules/ohg_links.js",
+    "modules/ohg_quality.js": "modules/ohg_quality.js",
+    "modules/ohg_selfheal.js": "modules/ohg_selfheal.js",
+    "pytest.ini": "pytest.ini",
+    "tests/test_api.py": "tests/test_api.py",
+    "docker-compose.base44.yml": "docker-compose.base44.yml",
+    "nginx.base44.conf": "nginx.base44.conf",
     "start.sh": "start.sh",
     "deviations.json": "deviations.json",
     "weapons.json": "weapons.json",
@@ -216,6 +223,48 @@ def rebuild_sqlite(json_path: Path, db_path: Path) -> int:
     return total
 
 
+BACKUP_DIR = BASE / ".ohg_backup"
+
+
+def snapshot(paths) -> Path | None:
+    """Copy the files an update is about to replace into .ohg_backup/<stamp>/,
+    so the update is always reversible with --rollback."""
+    stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    target = BACKUP_DIR / stamp
+    kept = 0
+    for rel in paths:
+        src = BASE / rel
+        if not src.exists():
+            continue
+        dest = target / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(src.read_bytes())
+        kept += 1
+    return target if kept else None
+
+
+def rollback(stamp: str | None = None) -> int:
+    """Restore the most recent (or the named) snapshot taken before an update."""
+    snaps = sorted([p for p in BACKUP_DIR.iterdir() if p.is_dir()]) if BACKUP_DIR.exists() else []
+    if not snaps:
+        print("[updater] no snapshot to roll back to")
+        return 2
+    chosen = BACKUP_DIR / stamp if stamp else snaps[-1]
+    if not chosen.exists():
+        print(f"[updater] snapshot {chosen.name} not found")
+        return 2
+    restored = 0
+    for src in chosen.rglob("*"):
+        if not src.is_file():
+            continue
+        dest = BASE / src.relative_to(chosen)
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(src.read_bytes())
+        restored += 1
+    print(f"[updater] rolled back {restored} files from {chosen.name}")
+    return 0
+
+
 def run(check_only: bool = False, force: bool = False) -> int:
     local = load_local()
     raw_base = (local.get("github") or {}).get("raw_base") or DEFAULT_RAW
@@ -245,20 +294,45 @@ def run(check_only: bool = False, force: bool = False) -> int:
     if remote_files:
         files = list(dict.fromkeys(list(remote_files.keys()) + files))
 
-    updated = []
+    fetched: dict[str, bytes] = {}
     for name in files:
         if name not in UPDATE_MAP:
             continue
-        url = f"{raw_base}/{name}"
-        dest = BASE / UPDATE_MAP[name]
-        dest.parent.mkdir(parents=True, exist_ok=True)
         try:
-            data = fetch_bytes(url)
-            dest.write_bytes(data)
-            updated.append(name)
-            print(f"[updater] downloaded {name} ({len(data)} bytes)")
+            fetched[name] = fetch_bytes(f"{raw_base}/{name}")
         except Exception as e:
             print(f"[updater] skip {name}: {e}")
+
+    # Validate the pack before anything local is replaced: a truncated or broken
+    # download must never overwrite a working installation.
+    pack = fetched.get("database_full.json")
+    if pack is not None:
+        try:
+            parsed = json.loads(pack.decode("utf-8"))
+        except Exception as exc:
+            print(f"[updater] pack rejected ({exc}); nothing was replaced")
+            return 3
+        tables = [k for k, v in parsed.items() if isinstance(v, list)]
+        records = sum(len(parsed[k]) for k in tables)
+        expected = remote.get("records")
+        if not tables or records < 50:
+            print(f"[updater] pack rejected: {records} records in {len(tables)} tables")
+            return 3
+        if expected and abs(int(expected) - records) > max(5, int(expected) * 0.05):
+            print(f"[updater] pack rejected: manifest says {expected} records, pack has {records}")
+            return 3
+
+    snap = snapshot([UPDATE_MAP[name] for name in fetched])
+    if snap:
+        print(f"[updater] snapshot {snap.name} — undo with --rollback")
+
+    updated = []
+    for name, data in fetched.items():
+        dest = BASE / UPDATE_MAP[name]
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(data)
+        updated.append(name)
+        print(f"[updater] installed {name} ({len(data)} bytes)")
 
     # rebuild sqlite if database_full present
     full = BASE / "database_full.json"
@@ -283,7 +357,10 @@ def main():
     ap = argparse.ArgumentParser(description="Once Human Guide auto-updater")
     ap.add_argument("--check", action="store_true", help="Only check for updates")
     ap.add_argument("--force", action="store_true", help="Force re-download")
+    ap.add_argument("--rollback", nargs="?", const="", help="Restore files from the last (or named) snapshot")
     args = ap.parse_args()
+    if args.rollback is not None:
+        sys.exit(rollback(args.rollback or None))
     sys.exit(run(check_only=args.check, force=args.force))
 
 

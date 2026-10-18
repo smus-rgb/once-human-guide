@@ -87,3 +87,16 @@ Open `once_human_guide_v19.html` (needs `modules/`, `ohg_data.js`, `ohg_sw.js` v
 | http://127.0.0.1:8000/docs | OpenAPI |
 | http://127.0.0.1:8000/stats | Counts |
 | http://127.0.0.1:8000/update/check | Update check (shell + data) |
+| http://127.0.0.1:8000/update/run | Update (POST, locked — see below) |
+| http://127.0.0.1:8000/export · /db-file | Data dump / SQLite file (locked) |
+
+**Locked endpoints.** `/update/run`, `/export` and `/db-file` answer `403` unless a
+token is configured (env `OHG_ADMIN_TOKEN`, or an untracked `.admin_token` file in the
+repo root) and sent as the `X-Update-Token` header. The shell never calls them, so the
+app works unchanged without a token. Cross-origin API calls are opt-in too
+(`OHG_ALLOWED_ORIGINS`).
+
+**Generated files.** `python db_build.py` builds `once_human.db`, writes
+`ohg_data.js` and the `data_versions` row from `version.json`, and stamps the release
+into the shell's script URLs and the service worker cache. `version.json` is the only
+place a version is set by hand.

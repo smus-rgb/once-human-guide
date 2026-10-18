@@ -4,9 +4,11 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from pathlib import Path
 import json
+import os
+import secrets
 import sqlite3
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, Header, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -44,12 +46,51 @@ app = FastAPI(
     version=API_VERSION,
     description="Game companion data API for Once Human Guide",
 )
+def allowed_origins() -> list[str]:
+    """Cross-origin callers are opt-in.
+
+    The shell is served same-origin by this API, so an empty list keeps the app
+    fully working while a visited page can no longer call the API from a
+    browser. Set OHG_ALLOWED_ORIGINS (comma separated) for real integrations;
+    the sandbox preview origins are added when the platform suffix is present.
+    """
+    raw = os.environ.get("OHG_ALLOWED_ORIGINS", "")
+    origins = [o.strip().rstrip("/") for o in raw.split(",") if o.strip()]
+    suffix = os.environ.get("BASE44_PUBLIC_HOST_SUFFIX", "").strip()
+    if suffix:
+        origins += [f"https://{port}-{suffix}" for port in ("3000", "8000")]
+    return origins
+
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
+    allow_origins=allowed_origins(),
+    allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
+
+TOKEN_FILE = BASE / ".admin_token"
+
+
+def admin_token() -> str:
+    """Admin token: OHG_ADMIN_TOKEN env first, then the untracked .admin_token file."""
+    token = os.environ.get("OHG_ADMIN_TOKEN", "").strip()
+    if token:
+        return token
+    if TOKEN_FILE.exists():
+        try:
+            return TOKEN_FILE.read_text(encoding="utf-8").strip()
+        except OSError:
+            return ""
+    return ""
+
+
+def admin_allowed(provided: str | None) -> bool:
+    """No configured token means the admin endpoints stay closed, not open."""
+    token = admin_token()
+    if not token:
+        return False
+    return bool(provided) and secrets.compare_digest(str(provided), token)
 
 # The shell and its modules change with every release (and with updater.py), so
 # they must never be trusted from a stale browser cache: served without
@@ -372,7 +413,12 @@ def links(table: str, item_id: str):
 
 
 @app.get("/export")
-def export_all():
+def export_all(x_update_token: str | None = Header(None, alias="X-Update-Token")):
+    if not admin_allowed(x_update_token):
+        raise HTTPException(
+            403,
+            "Export is locked: set OHG_ADMIN_TOKEN (or .admin_token) and send it as X-Update-Token",
+        )
     data = {"version": DATA_VERSION, "exported_at": datetime.now(timezone.utc).isoformat()}
     for table in TABLES:
         data[table] = fetch_all(table, limit=2000)
@@ -380,7 +426,12 @@ def export_all():
 
 
 @app.get("/db-file")
-def db_file():
+def db_file(x_update_token: str | None = Header(None, alias="X-Update-Token")):
+    if not admin_allowed(x_update_token):
+        raise HTTPException(
+            403,
+            "Database download is locked: set OHG_ADMIN_TOKEN (or .admin_token) and send it as X-Update-Token",
+        )
     if not DB_PATH.exists():
         raise HTTPException(404, "SQLite file missing")
     return FileResponse(str(DB_PATH), filename="once_human.db")
@@ -618,10 +669,15 @@ def update_check():
 
 
 @app.post("/update/run")
-def update_run(force: bool = False):
+def update_run(force: bool = False, x_update_token: str | None = Header(None, alias="X-Update-Token")):
     import subprocess
     import sys
 
+    if not admin_allowed(x_update_token):
+        raise HTTPException(
+            403,
+            "Update is locked: set OHG_ADMIN_TOKEN (or .admin_token) and send it as X-Update-Token",
+        )
     updater = BASE / "updater.py"
     if not updater.exists():
         raise HTTPException(404, "updater.py not found")

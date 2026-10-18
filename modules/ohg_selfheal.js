@@ -103,6 +103,43 @@
       if (typeof saveUser === "function") saveUser();
     }
   }
+  /* An upgrade is applied only when the new pack passes these checks, and the
+     pack in use is snapshotted first, so a bad upgrade can be undone. */
+  const SNAPSHOT_KEY = "ohg_pack_prev";
+  function keepSnapshot(data, meta) {
+    try {
+      localStorage.setItem(SNAPSHOT_KEY, JSON.stringify({
+        at: new Date().toISOString(), meta: meta || null, data: data || null
+      }));
+    } catch (e) { /* no room for the snapshot — the checks below still guard the upgrade */ }
+  }
+  function packProblem(pack, meta) {
+    const tables = Object.keys(pack || {}).filter(function (k) { return Array.isArray(pack[k]); });
+    if (!tables.length) return "pack nemá žádné tabulky";
+    const records = tables.reduce(function (n, k) { return n + pack[k].length; }, 0);
+    if (records < 50) return "pack obsahuje jen " + records + " záznamů";
+    const declared = meta && meta.entities != null ? Number(meta.entities) : null;
+    if (declared != null && Math.abs(declared - records) > Math.max(5, declared * 0.05)) {
+      return "manifest uvádí " + declared + " záznamů, pack má " + records;
+    }
+    if (!String((meta && meta.version) || "").trim()) return "pack bez verze";
+    return "";
+  }
+  function rollbackPack() {
+    let snap = null;
+    try { snap = JSON.parse(localStorage.getItem(SNAPSHOT_KEY) || "null"); } catch (e) { snap = null; }
+    if (!snap || !snap.data) return false;
+    window.OHG_DATA = snap.data;
+    if (snap.meta) window.OHG_META = snap.meta;
+    DATA = window.OHG_DATA;
+    if (window.OHG_META) META = window.OHG_META;
+    state.pack.rolledBackTo = packVersion();
+    safeRender();
+    log("pack-rollback", "návrat na " + packVersion());
+    return true;
+  }
+  state.rollbackPack = rollbackPack;
+
   async function upgradePack() {
     try {
       const res = await window.fetch("version.json", { cache: "no-store" });
@@ -115,6 +152,13 @@
       if (!target || target === state.pack.from || !once("ohg_pack_" + target)) return;
       await loadScript("ohg_data.js?v=" + encodeURIComponent(target));
       if (!window.OHG_DATA || !shellReady()) return;
+      const problem = packProblem(window.OHG_DATA, window.OHG_META);
+      if (problem) {
+        log("pack-rejected", problem);
+        rollbackPack();
+        return;
+      }
+      keepSnapshot(DATA, typeof META === "undefined" ? null : META);
       DATA = window.OHG_DATA;
       if (window.OHG_META) META = window.OHG_META;
       state.pack.applied = packVersion() !== state.pack.from;

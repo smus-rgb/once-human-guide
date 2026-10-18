@@ -204,7 +204,7 @@ function viewHome(){
   const done=Object.values(user.progress).filter(Boolean).length;
   const bp=typeof calcBuild==='function'?calcBuild():{power:0,filled:0};
   return `<div class="kicker">Dashboard</div><h1>Once Human Guide</h1>
-    <p class="sub">App 18.0 · ModuleHost · ${META.version||'pack'} · Patch ${META.patch||'3.0.7'} · ${n} entit · ${MODULES.length} modulů · AdaptiveShell ${device}</p>
+    <p class="sub">App ${META.app||'—'} · ModuleHost ${META.shell?('v'+META.shell):''} · ${META.version||'pack'} · Patch ${META.patch||'3.0.7'} · ${n} entit · ${MODULES.length} modulů · AdaptiveShell ${device}</p>
     <div class="grid g4">
       <div class="card"><div class="kicker">Databáze</div><div class="stat">${n}</div><div class="muted">lokální pack</div></div>
       <div class="card"><div class="kicker">Build Power</div><div class="stat">${bp.power||'—'}</div><div class="muted">${bp.filled||0}/5 slotů</div></div>
@@ -535,13 +535,13 @@ function viewSettings(){
       <label class="btn ghost">Import JSON<input type="file" accept="application/json" style="display:none" onchange="importUser(this)"/></label>
       <button class="btn danger" onclick="if(confirm('Smazat user layer?')){localStorage.removeItem('ohg_user');location.reload()}">Reset user data</button>
     </div>
-    <p class="muted">OHG v18 · pack ${META.version} · ${META.entities} entit · AdaptiveShell phone/tablet/desktop/ultrawide · user layer = localStorage</p>`;
+    <p class="muted">OHG v${META.shell||'19'} · pack ${META.version} · ${META.entities} entit · AdaptiveShell phone/tablet/desktop/ultrawide · user layer = localStorage</p>`;
 }
 function viewOffline(){
   const sw = navigator.serviceWorker && navigator.serviceWorker.controller ? 'ACTIVE' : (window.OHG_SW||'NONE');
   return `<div class="kicker">Offline</div><h1>Cache a synchronizace</h1>
     <div class="card"><div class="kicker">Status</div><b>${user.offline?'OFFLINE FIRST':'ONLINE PREFERRED'}</b>
-      <p class="muted">Pack v ohg_data.js (${META.entities} záznamů). User layer = localStorage. Service worker cache = ohg-v18-307. Pack kanál: local first, SW precache, volitelný remote version.json.</p>
+      <p class="muted">Pack v ohg_data.js (${META.entities} záznamů). User layer = localStorage. Service worker cache = ${META.sw||'ohg-…'}. Pack kanál: local first, SW precache, volitelný remote version.json.</p>
       <div class="row"><span class="badge on">LOCAL PACK</span><span class="badge ${sw==='ACTIVE'?'on':''}">SW ${sw}</span></div>
       <div class="row" style="margin-top:10px">
         <button class="btn ghost" onclick="user.offline=!user.offline;saveUser();render()">Přepnout offline flag</button>

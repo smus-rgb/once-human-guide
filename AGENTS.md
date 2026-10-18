@@ -3,7 +3,8 @@
 ## What this app is
 FastAPI + SQLite game-companion API (`api_main.py`) served together with a thin
 static v19 HTML shell (`once_human_guide_v19.html` + `modules/*.js`). No Node/JS
-build step, no external services, no secrets.
+build step and no external services; the only optional secret is the admin token
+below.
 
 ## Non-obvious setup facts
 - `api_main.py` needs `once_human.db` in the repo root. It is **gitignored** and
@@ -34,11 +35,43 @@ build step, no external services, no secrets.
   failed GET once, redraws after a runtime error, reloads once when `#ws` is
   empty, re-fetches a module script that failed to load, and resets a corrupt
   `ohg_user`. Its trail is `window.OHG_selfheal` and localStorage `ohg_repairs`.
-- Known mismatch: `version.json` declares `data_version 2026-10-09-v19.2-372`
-  while the generated `ohg_data.js` still carries `OHG_META.version
-  2026-09-30-v18-372`. So the pack channel queues a diff on every load and the
-  self-heal upgrade runs but finds nothing newer to apply; regenerating
-  `ohg_data.js` (via `db_build.py`) closes the gap.
+- One release source: `version.json` is authoritative. `db_build.py` (the compose
+  `db` one-shot, or `python db_build.py`) writes `ohg_data.js`'s
+  `OHG_DATA`/`OHG_META` **and** the `data_versions` row from it, then stamps the
+  release into `once_human_guide_v19.html` (`?v=<data_version>` on every script
+  tag), `ohg_sw.js` (`CACHE`) and `version.json`'s `sw_cache`. That stamping is
+  what makes a release reach a browser: without it a cached asset can stay in use
+  for a share of the file's age (heuristic freshness), which is how an edited
+  module once appeared to have no effect at all. Never hand-edit those version
+  strings — rebuild instead.
+
+## Admin endpoints and secrets
+`POST /update/run`, `GET /export` and `GET /db-file` run the updater or expose
+the whole installation, so they are locked: they answer **403** unless
+`OHG_ADMIN_TOKEN` (env, delivered from `/run/base44/app.env` in the sandbox) or
+the untracked `.admin_token` file in the repo root holds a token, which must be
+sent as the `X-Update-Token` header. No token configured means closed, not open
+— deliberate, and the shell never calls these endpoints. CORS is opt-in too
+(`OHG_ALLOWED_ORIGINS`, plus the sandbox preview origins when
+`BASE44_PUBLIC_HOST_SUFFIX` is set): the shell is same-origin, so an empty list
+changes nothing for users while a visited page can no longer call the API.
+
+## Data links
+`db_build.py` derives `links` from the pack only — recipes→ingredients,
+bosses/animals→drops, x→locations, npcs→quests, plants→uses, plus prose `source`
+fields matched against entity names (≥6 characters, word boundaries, score 0.6).
+`_label_keys()` also splits bundled labels ("Metal Scraps / Ingots"). Coverage
+was 58/372 entities before, ~143/372 now; the remaining `unresolved_ingredient`
+issues are ingredients the pack does not contain at all, i.e. a pack-authoring
+backlog rather than a bug.
+
+## Updating itself
+`updater.py` downloads from GitHub, **validates the pack before replacing
+anything** (JSON parse + record count against `version.json`), snapshots the
+files it is about to overwrite into `.ohg_backup/<stamp>/` (gitignored), and can
+undo a release with `python updater.py --rollback [stamp]`. Keep `UPDATE_MAP` in
+sync when adding a shipped file — a missing entry means that file silently never
+updates.
 
 ## Module wrappers (easy to get wrong)
 `modules/ohg_builds.js` and `modules/ohg_pack_channel.js` extend a view defined in
@@ -57,20 +90,26 @@ cache-first under `CACHE`, so bump `CACHE` (and `version.json`'s `sw_cache`) whe
 module changes.
 
 ## CI (`.github/workflows/python-app.yml`)
-Runs on pushes/PRs to `main`; both steps fail the job:
+Runs on pushes/PRs to `main` on Python 3.12 (same as the compose runtime) with
+`requirements.txt` pinned. Every step fails the job:
 - `flake8 . --count --select=E9,F63,F7,F82` → must report **0** errors. This is
   fatal-error lint, so an undefined name here is a real `NameError` at runtime
   (`install_gui.py` had two: a missing `import webbrowser` and an exception
   variable captured by a deferred `lambda`).
+- `node --check` on `modules/*.js`, `ohg_data.js`, `ohg_sw.js` → the shell has no
+  build step, so a syntax error would otherwise ship silently.
 - `pytest` → must collect at least one test, otherwise pytest exits 5 and the
   job fails. `pytest.ini` sets `pythonpath = .` so `import api_main` resolves
-  from the repo root.
+  from the repo root. The tests cover the release being consistent
+  (`version.json` ↔ pack ↔ shell stamps ↔ SW cache), that every file in
+  `version.json`'s `files` exists, the admin token gate, and floors for derived
+  links and unresolved ingredients.
 
-Run locally:
+Run locally (same image as CI):
 ```bash
-python -m pip install -r requirements.txt flake8 pytest
-flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-pytest
+docker run --rm -v "$PWD":/app -w /app python:3.12-slim sh -c \
+  "pip install -q -r requirements.txt flake8 pytest && flake8 . --count --select=E9,F63,F7,F82 && pytest"
+docker run --rm -v "$PWD":/app -w /app node:20 sh -c 'for f in modules/*.js ohg_data.js ohg_sw.js; do node --check "$f"; done'
 ```
 
 ## Sandbox / preview (`docker-compose.base44.yml`)
