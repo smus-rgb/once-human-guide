@@ -28,6 +28,17 @@ build step, no external services, no secrets.
 - `.app.phone` needs `grid-template-columns:minmax(0,1fr)` and a wrapping topbar;
   without them the auto-sized implicit grid column takes the topbar's min-content
   width and the phone layout scrolls ~235 px sideways.
+- `modules/ohg_selfheal.js` loads last and works silently in the background: it
+  upgrades the pack when `version.json`'s `data_version` differs from the loaded
+  one (re-loads `ohg_data.js?v=<target>`, then rebinds `DATA`/`META`), retries a
+  failed GET once, redraws after a runtime error, reloads once when `#ws` is
+  empty, re-fetches a module script that failed to load, and resets a corrupt
+  `ohg_user`. Its trail is `window.OHG_selfheal` and localStorage `ohg_repairs`.
+- Known mismatch: `version.json` declares `data_version 2026-10-09-v19.2-372`
+  while the generated `ohg_data.js` still carries `OHG_META.version
+  2026-09-30-v18-372`. So the pack channel queues a diff on every load and the
+  self-heal upgrade runs but finds nothing newer to apply; regenerating
+  `ohg_data.js` (via `db_build.py`) closes the gap.
 
 ## CI (`.github/workflows/python-app.yml`)
 Runs on pushes/PRs to `main`; both steps fail the job:

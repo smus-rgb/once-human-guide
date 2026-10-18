@@ -21,7 +21,8 @@
     "ohg_sw.js": "sw",
     "api_main.py": "api",
     "version.json": "meta",
-    "modules/ohg_quality.js": "module"
+    "modules/ohg_quality.js": "module",
+    "modules/ohg_selfheal.js": "module"
   },
   "notes": "v19.2: SQLite audit (data_issues), bezpečné FTS, panel kvality. Pack 372 beze změny. User layer nemění pack.",
   "changelog": [
