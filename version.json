@@ -6,7 +6,7 @@
   "min_app_version": "5.0.0",
   "patch_target": "3.0.7",
   "records": 372,
-  "sw_cache": "ohg-v19.2-307",
+  "sw_cache": "ohg-v19.2-308",
   "files": {
     "database_full.json": "data",
     "ohg_data.js": "pack",

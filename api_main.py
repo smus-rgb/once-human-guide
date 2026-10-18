@@ -51,6 +51,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# The shell and its modules change with every release (and with updater.py), so
+# they must never be trusted from a stale browser cache: served without
+# Cache-Control the browser caches them heuristically and keeps running an
+# outdated module copy. `no-cache` still allows ETag/Last-Modified revalidation.
+REVALIDATE_ASSETS = ("/ui", "/version.json", "/ohg_data.js", "/ohg_sw.js")
+
+
+@app.middleware("http")
+async def revalidate_assets(request, call_next):
+    response = await call_next(request)
+    path = request.url.path
+    if path in REVALIDATE_ASSETS or path.startswith("/modules/"):
+        response.headers["Cache-Control"] = "no-cache"
+    return response
+
 if (BASE / "modules").is_dir():
     app.mount("/modules", StaticFiles(directory=BASE / "modules"), name="modules")
 

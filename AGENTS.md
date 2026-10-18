@@ -40,6 +40,22 @@ build step, no external services, no secrets.
   self-heal upgrade runs but finds nothing newer to apply; regenerating
   `ohg_data.js` (via `db_build.py`) closes the gap.
 
+## Module wrappers (easy to get wrong)
+`modules/ohg_builds.js` and `modules/ohg_pack_channel.js` extend a view defined in
+`ohg_runtime.js` by aliasing it and adding markup. The wrapper MUST be a function
+*expression* assigned to the view name (`viewBuilds = function () {…}`). Written as
+a function declaration it is hoisted, so the alias taken above it points at the
+wrapper itself and the view recurses until `RangeError: Maximum call stack size
+exceeded`; the shell then leaves the previous screen on display (Build Planner and
+AI Agent both looked "empty" this way).
+
+`/ui`, `/version.json`, `/ohg_data.js`, `/ohg_sw.js` and `/modules/*` are sent with
+`Cache-Control: no-cache` (middleware in `api_main.py`). Without it the browser
+caches these assets heuristically and keeps executing an outdated module after an
+edit or a release. The service worker (`ohg_sw.js`) additionally caches modules
+cache-first under `CACHE`, so bump `CACHE` (and `version.json`'s `sw_cache`) when a
+module changes.
+
 ## CI (`.github/workflows/python-app.yml`)
 Runs on pushes/PRs to `main`; both steps fail the job:
 - `flake8 . --count --select=E9,F63,F7,F82` → must report **0** errors. This is
