@@ -15,7 +15,16 @@ import db_build
 
 def test_routes_registered():
     paths = {route.path for route in api_main.app.routes}
-    assert {"/", "/health", "/ui", "/stats", "/search", "/audit", "/integrity"}.issubset(paths)
+    assert {
+        "/",
+        "/health",
+        "/ui",
+        "/stats",
+        "/search",
+        "/audit",
+        "/integrity",
+        "/version.json",
+    }.issubset(paths)
 
 
 def test_versions_loaded():

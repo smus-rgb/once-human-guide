@@ -178,6 +178,15 @@ def sw_js():
     return FileResponse(path, media_type="application/javascript")
 
 
+@app.get("/version.json")
+def version_json():
+    """The shell (modules/ohg_pack_channel.js) reads version.json next to itself."""
+    path = BASE / "version.json"
+    if not path.exists():
+        raise HTTPException(404, "version.json missing")
+    return FileResponse(path, media_type="application/json")
+
+
 @app.get("/version")
 def version():
     conn = get_db()
