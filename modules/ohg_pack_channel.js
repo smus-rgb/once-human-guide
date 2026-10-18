@@ -10,6 +10,13 @@ async function checkPackChannel(){
   }catch(e){ remote=null; }
   if(!remote){
     try{
+      const base='https://raw.githubusercontent.com/trebajinak-cmyk/once-human-guide/main';
+      const res=await fetch(base+'/version.json',{cache:'no-store'});
+      if(res.ok) remote=await res.json();
+    }catch(e){ /* offline */ }
+  }
+  if(!remote){
+    try{
       const base='https://raw.githubusercontent.com/smus-rgb/once-human-guide/main';
       const res=await fetch(base+'/version.json',{cache:'no-store'});
       if(res.ok) remote=await res.json();
