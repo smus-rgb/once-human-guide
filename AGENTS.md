@@ -18,9 +18,16 @@ build step, no external services, no secrets.
   (`database_full.json`), currently `2026-09-30-v5-complete`, while `/stats`
   reports `version.json`'s `data_version`. Both are expected, they are different
   sources.
-- `modules/ohg_quality.js` looks for `#view` and `#/db`-style hashes; the shell
-  has no `#view` (its workspace is `#ws`) and writes `#db`. The audit card
-  therefore never mounts — the API side (`/audit`, `stats.issues`) works.
+- Module-to-shell contract: the shell renders the workspace into `#ws` and
+  writes plain hashes (`#db`, `#db/<id>`). `modules/ohg_quality.js` mounts its
+  audit card into `#ws` on the `home`/`db`/`settings` routes and re-mounts after
+  every `render()` (the shell rewrites `#ws` on each render). `modules/ohg_links.js`
+  listens for clicks on `[data-table][data-id]` — `itemRow()` in `ohg_runtime.js`
+  emits those attributes — and appends `/links` results to `#ctx .body`, or to
+  `#sheet` on phone, where entities open instead.
+- `.app.phone` needs `grid-template-columns:minmax(0,1fr)` and a wrapping topbar;
+  without them the auto-sized implicit grid column takes the topbar's min-content
+  width and the phone layout scrolls ~235 px sideways.
 
 ## CI (`.github/workflows/python-app.yml`)
 Runs on pushes/PRs to `main`; both steps fail the job:

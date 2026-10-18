@@ -180,7 +180,7 @@ function addInv(id){
 function saveNote(id){ const el=document.getElementById('note_'+id); if(el){ user.notes[id]=el.value; saveUser(); toast('Poznámka uložena'); } }
 
 function itemRow(e){
-  return `<button class="item ${selected&&selected.id===e.id?'sel':''}" onclick='openEntity(${JSON.stringify(e).replace(/'/g,"&#39;")})'>
+  return `<button class="item ${selected&&selected.id===e.id?'sel':''}" data-table="${e._cat||''}" data-id="${e.id}" onclick='openEntity(${JSON.stringify(e).replace(/'/g,"&#39;")})'>
     <div><b>${e.name||e.id}</b><div class="muted">${e._cat||''} · ${e.type||e.rarity||e.region||''}</div></div>
     <span class="chip">${e.rarity||e.slot||e.phase||'·'}</span></button>`;
 }
