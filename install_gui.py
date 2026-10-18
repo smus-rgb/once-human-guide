@@ -15,6 +15,7 @@ import subprocess
 import sys
 import threading
 import urllib.request
+import webbrowser
 from pathlib import Path
 from tkinter import (
     BooleanVar,
@@ -420,7 +421,8 @@ class InstallerGUI:
             self.root.after(0, lambda: self._on_done(dest, success=True))
         except Exception as e:
             self.append_log(f"ERROR: {e}")
-            self.root.after(0, lambda: self._on_done(dest, success=False, err=str(e)))
+            err_msg = str(e)
+            self.root.after(0, lambda: self._on_done(dest, success=False, err=err_msg))
 
     def _on_done(self, dest: Path, success: bool, err: str = "") -> None:
         self.busy = False

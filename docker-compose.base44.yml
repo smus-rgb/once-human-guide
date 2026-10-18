@@ -1,0 +1,52 @@
+# Base44 sandbox dev environment for Once Human Guide.
+#
+# Runs the repo's own Python source from a plain runtime image (never a
+# prebuilt app image), bind-mounted so edits are live. `api` serves the
+# public preview on host port 3000.
+#
+#   docker compose -f docker-compose.base44.yml up -d --build
+#
+services:
+  # One-shot: build SQLite (once_human.db) from database_full.json.
+  # db_build.py only uses the stdlib, so no dependencies are needed here.
+  db:
+    image: python:3.12-slim
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: ["python", "db_build.py"]
+    restart: "no"
+
+  api:
+    image: python:3.12-slim
+    working_dir: /app
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+      # Bind mounts do not always deliver inotify events; force polling so
+      # uvicorn --reload picks up edits.
+      - WATCHFILES_FORCE_POLLING=true
+    ports:
+      - "3000:8000"
+    depends_on:
+      db:
+        condition: service_completed_successfully
+    command:
+      - sh
+      - -ec
+      - python -m pip install -q -r requirements.txt && exec python -m uvicorn api_main:app --host 0.0.0.0 --port 8000 --reload
+    restart: on-failure
+    healthcheck:
+      # /stats needs the SQLite file, so this proves API + database readiness.
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/stats', timeout=3).status == 200 else 1)",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
