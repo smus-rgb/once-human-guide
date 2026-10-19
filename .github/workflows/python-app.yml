@@ -1,4 +1,4 @@
-# Build checks + auto-regenerate ohg_data.js when version/modules change
+# CI: lint, pytest, shell syntax, auto-regenerate ohg_data.js on main
 name: Python application
 
 on:
@@ -16,15 +16,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v3
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v5
       with:
-        python-version: "3.10"
+        python-version: "3.12"
+    - name: Set up Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: "20"
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        pip install flake8 pytest
     - name: Regenerate ohg_data.js from modules
       run: python3 regen_pack.py
     - name: Commit regenerated pack if changed
@@ -43,6 +47,10 @@ jobs:
       run: |
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Test with pytest
+    - name: Check shell JavaScript syntax
       run: |
-        pytest || true
+        for f in modules/*.js ohg_data.js ohg_sw.js; do
+          if [ -f "$f" ]; then node --check "$f"; fi
+        done
+    - name: Test with pytest
+      run: pytest -q || true
