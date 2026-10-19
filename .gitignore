@@ -1,8 +1,8 @@
-node_modules/
-.expo/
-dist/
-.DS_Store
-*.pyc
 __pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
 .env
-once_human.db
+*.db-journal
+.DS_Store

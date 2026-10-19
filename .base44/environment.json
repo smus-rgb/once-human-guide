@@ -1,0 +1,5 @@
+{
+  "type": "docker-compose",
+  "file": "docker-compose.base44.yml",
+  "port": 3000
+}
