@@ -23,12 +23,13 @@
     "version.json": "meta",
     "modules/ohg_quality.js": "module"
   },
-  "notes": "v19.2: SQLite audit (data_issues), bezpečné FTS, panel kvality. Pack 372 beze změny. User layer nemění pack.",
+  "notes": "v19.2: SQLite audit (data_issues), bezpečné FTS, panel kvality. Pack 372 — data_version sjednocen s OHG_META. User layer nemění pack.",
   "changelog": [
     "db_build writes data_issues (missing id, duplicate id, empty name, unresolved ingredients)",
     "API /audit and stats.issues; FTS query strips special characters",
     "SPA quality card on Home/Database/Settings when API is online",
-    "version.json is the API version source"
+    "version.json is the API version source",
+    "Pack regenerate: OHG_META.version == version.json data_version (2026-10-09-v19.2-372)"
   ],
   "github": {
     "owner": "smus-rgb",
