@@ -1,8 +1,10 @@
-__pycache__/
-*.py[cod]
-.pytest_cache/
-.venv/
-venv/
-.env
-*.db-journal
+node_modules/
+.expo/
+dist/
 .DS_Store
+*.pyc
+__pycache__/
+.env
+.admin_token
+once_human.db
+.ohg_backup/
