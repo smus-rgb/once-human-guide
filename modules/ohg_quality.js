@@ -15,6 +15,7 @@
   }
 
   async function mount() {
+    /* The shell renders the workspace into #ws and writes plain hashes (#db). */
     const view = document.getElementById("ws");
     if (!view || document.getElementById("ohg-audit")) return;
     if (ROUTES.indexOf(route) < 0) return;
@@ -29,6 +30,7 @@
     } catch (e) { /* offline */ }
   }
 
+  /* Every render() rewrites #ws, so re-mount after the shell's own render. */
   const baseRender = window.render;
   if (typeof baseRender === "function") {
     window.render = function () {

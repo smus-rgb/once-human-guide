@@ -29,6 +29,9 @@ function exportBuildJSON(){
   a.click();
   toast(issues.length?('Export s '+issues.length+' varováními'):'Build JSON exportován');
 }
+/* The wrapper must be a function expression: a declaration named viewBuilds
+   here would be hoisted, so `_viewBuilds` above would capture the wrapper
+   itself and calling it would recurse forever. */
 viewBuilds = function(){
   const html=_viewBuilds();
   const issues=slotIssues(user.currentBuild||{});

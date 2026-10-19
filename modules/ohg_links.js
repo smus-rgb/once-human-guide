@@ -14,6 +14,7 @@
         (data.links || []).slice(0, 8).map(function (l) {
           return "<div class='chip'>" + l.relation + " · " + (l.dst_table || l.src_table) + "/" + (l.dst_id || l.src_id) + "</div>";
         }).join(" ") || "<span class='muted'>žádné odvozené vazby</span>";
+      /* Phone opens entities in the bottom sheet, wider layouts in the context panel. */
       const target = device === "phone" ? document.getElementById("sheet") : ctx.querySelector(".body");
       if (target) target.appendChild(host);
     } catch (e) { /* offline pack */ }

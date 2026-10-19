@@ -7,6 +7,7 @@ User-layer data is never written here.
 from __future__ import annotations
 
 import json
+import re
 import sqlite3
 from datetime import datetime, timezone
 from pathlib import Path
@@ -84,19 +85,89 @@ def _load_modules() -> dict:
     return data
 
 
+def _release_meta() -> dict:
+    """version.json is the single release source (pack version, patch target)."""
+    path = BASE / "version.json"
+    if not path.exists():
+        return {}
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return {}
+
+
 def load_pack() -> dict:
     full = BASE / "database_full.json"
     if full.exists():
         data = json.loads(full.read_text(encoding="utf-8"))
         if isinstance(data, dict) and any(k in data for k in MODULES):
+            # The pack JSON carries its own, older version string. version.json wins,
+            # otherwise /version, /stats, the DB and the shell disagree (see AGENTS.md).
+            data["version"] = _release_meta().get("data_version", data.get("version", "local"))
             return data
     data = _load_modules()
-    ver_path = BASE / "version.json"
-    version = "local"
-    if ver_path.exists():
-        version = json.loads(ver_path.read_text(encoding="utf-8")).get("data_version", version)
-    data["version"] = version
+    data["version"] = _release_meta().get("data_version", "local")
     return data
+
+
+def write_pack_js(data: dict) -> Path:
+    """Regenerate ohg_data.js from the pack, so shell, DB and version.json agree."""
+    meta = _release_meta()
+    tables = {table: data.get(table, []) for table in MODULES if table in data}
+    records = sum(len(rows) for rows in tables.values())
+    payload = {
+        "version": data.get("version", "local"),
+        "patch": meta.get("patch_target", "") or "",
+        "app": meta.get("app_version", "") or "",
+        "shell": meta.get("shell_version", "") or "",
+        "sw": meta.get("sw_cache", "") or "",
+        "entities": records,
+        "counts": {table: len(rows) for table, rows in tables.items()},
+    }
+    path = BASE / "ohg_data.js"
+    path.write_text(
+        "window.OHG_DATA=" + json.dumps(tables, ensure_ascii=False) + ";\n"
+        + "window.OHG_META=" + json.dumps(payload, ensure_ascii=False) + ";\n",
+        encoding="utf-8",
+    )
+    return path
+
+
+def stamp_release(version: str) -> list[str]:
+    """Stamp the release version into the asset URLs and the service worker cache.
+
+    Browsers keep unversioned scripts from their own cache for a long time
+    (heuristic freshness is a share of the file's age), so a released module can
+    stay invisible for hours. The shell, the service worker cache and
+    version.json are stamped from the one version in version.json.
+    """
+    changed: list[str] = []
+    shell = BASE / "once_human_guide_v19.html"
+    if shell.exists():
+        html = shell.read_text(encoding="utf-8")
+        stamped = re.sub(
+            r'(<script src="(?:ohg_data\.js|modules/[a-z_]+\.js))(?:\?v=[^"]*)?"',
+            r'\1?v=' + version + '"',
+            html,
+        )
+        if stamped != html:
+            shell.write_text(stamped, encoding="utf-8")
+            changed.append(shell.name)
+    sw = BASE / "ohg_sw.js"
+    if sw.exists():
+        text = sw.read_text(encoding="utf-8")
+        stamped = re.sub(r"const CACHE = '[^']*';", "const CACHE = 'ohg-" + version + "';", text, count=1)
+        if stamped != text:
+            sw.write_text(stamped, encoding="utf-8")
+            changed.append(sw.name)
+    meta_path = BASE / "version.json"
+    if meta_path.exists():
+        meta = meta_path.read_text(encoding="utf-8")
+        stamped = re.sub(r'"sw_cache": "[^"]*"', '"sw_cache": "ohg-' + version + '"', meta, count=1)
+        if stamped != meta:
+            meta_path.write_text(stamped, encoding="utf-8")
+            changed.append(meta_path.name)
+    return changed
 
 
 def _blob(row: dict) -> str:
@@ -115,19 +186,57 @@ def _norm(name: str) -> str:
     return " ".join((name or "").lower().replace("-", " ").split())
 
 
+_LABEL_SPLIT = re.compile(r"\s*(?:/|,|;|&|\+|\||→|->)\s*")
+
+
+def _label_keys(label: str) -> list[str]:
+    """One field can carry several names ("Metal Scraps / Ingots", "Harveseed, Tar
+    Pudding"); try the whole label and each part, so one label can resolve to more
+    than one entity."""
+    text = str(label or "").strip()
+    keys: list[str] = []
+    for candidate in [text] + _LABEL_SPLIT.split(text):
+        key = _norm(candidate)
+        if key and key not in keys:
+            keys.append(key)
+    return keys
+
+
 def _add_links(c, src_table, src_id, labels, relation, by_name, link_count):
     for label in labels:
         if not label:
             continue
-        hit = by_name.get(_norm(str(label)))
-        if not hit:
+        for key in _label_keys(label):
+            for dst_table, dst_id in by_name.get(key, []):
+                if dst_table == src_table:
+                    continue
+                c.execute(
+                    "INSERT OR IGNORE INTO links VALUES (?,?,?,?,?,?)",
+                    (src_table, src_id, dst_table, dst_id, relation, 1.0),
+                )
+                link_count += 1
+    return link_count
+
+
+def _add_text_links(c, src_table, src_id, text, relation, by_name, link_count):
+    """Link a prose field ("Silo Alpha secondary boss; Monolith of Thirst") by the
+    entity names that actually occur in it. Only names of six characters or more,
+    on word boundaries, so a short name ("Acid") cannot match inside another word
+    ("Acidic"); the lower score marks such a link as derived from text."""
+    haystack = _norm(text)
+    if not haystack:
+        return link_count
+    for key, hits in by_name.items():
+        if len(key) < 6:
             continue
-        for dst_table, dst_id in hit:
+        if not re.search(r"(?<![a-z0-9])" + re.escape(key) + r"(?![a-z0-9])", haystack):
+            continue
+        for dst_table, dst_id in hits:
             if dst_table == src_table:
                 continue
             c.execute(
                 "INSERT OR IGNORE INTO links VALUES (?,?,?,?,?,?)",
-                (src_table, src_id, dst_table, dst_id, relation, 1.0),
+                (src_table, src_id, dst_table, dst_id, relation, 0.6),
             )
             link_count += 1
     return link_count
@@ -258,6 +367,32 @@ def build(db_path: Path | None = None) -> dict:
             if loc:
                 locs = loc if isinstance(loc, list) else [loc]
                 link_count = _add_links(c, tbl, row.get("id"), locs, "located_at", by_name, link_count)
+    # Further fields that name other entities (locations, quests, drops, uses)
+    field_links = (
+        ("creatures", "location", "located_at"),
+        ("creatures", "drops", "drop"),
+        ("animals", "location", "located_at"),
+        ("plants", "location", "located_at"),
+        ("plants", "uses", "used_for"),
+        ("fish", "location", "located_at"),
+        ("npcs", "location", "located_at"),
+        ("npcs", "quests", "gives_quest"),
+    )
+    for table, field, relation in field_links:
+        for row in data.get(table, []):
+            value = row.get(field)
+            if not value:
+                continue
+            values = value if isinstance(value, list) else [value]
+            labels = [v.get("name") if isinstance(v, dict) else str(v) for v in values]
+            link_count = _add_links(c, table, row.get("id"), labels, relation, by_name, link_count)
+    # Prose fields that mention locations and bosses by name
+    for table in ("deviations", "mods", "materials", "creatures"):
+        for row in data.get(table, []):
+            link_count = _add_text_links(
+                c, table, row.get("id"), row.get("source") or row.get("weaknesses"),
+                "source", by_name, link_count,
+            )
     c.execute(
         "CREATE VIRTUAL TABLE entities_fts USING fts5(table_name, id, name, blob, tokenize='unicode61 remove_diacritics 2')"
     )
@@ -309,7 +444,7 @@ def build(db_path: Path | None = None) -> dict:
                 ingredients = []
         for ing in ingredients:
             label = ing.get("name") if isinstance(ing, dict) else str(ing)
-            if not by_name.get(_norm(label)):
+            if not any(by_name.get(key) for key in _label_keys(label)):
                 issue("info", "unresolved_ingredient", "recipes", row.get("id"), label)
     c.execute(
         "INSERT INTO data_versions VALUES ('schema', '5.5-audit-links-diacritics-expanded', ?)",
@@ -317,12 +452,21 @@ def build(db_path: Path | None = None) -> dict:
     )
     conn.commit()
     conn.close()
+    pack_js = None
+    stamped: list[str] = []
+    if db_path is None:
+        # Refreshing the repo DB also refreshes the shell pack and the cache keys,
+        # so the version sources cannot drift apart and a release reaches browsers.
+        pack_js = write_pack_js(data)
+        stamped = stamp_release(str(ver))
     return {
         "records": total,
         "links": link_count,
         "issues": issue_count,
         "version": ver,
         "db": str(path),
+        "pack_js": str(pack_js) if pack_js else None,
+        "stamped": stamped,
     }
 
 
