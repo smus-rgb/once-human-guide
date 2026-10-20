@@ -6,8 +6,16 @@
     "orientation": "portrait",
     "userInterfaceStyle": "dark",
     "scheme": "oncehumanguide",
-    "ios": { "supportsTablet": true, "bundleIdentifier": "com.oncehumanguide.app" },
-    "android": { "package": "com.oncehumanguide.app" },
-    "plugins": ["expo-router"]
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.oncehumanguide.app"
+    },
+    "android": {
+      "package": "com.oncehumanguide.app"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-asset"
+    ]
   }
 }

@@ -1,20 +1,27 @@
-# Showcase Progress
+# Showcase Progress – Updated
 
-**Priority: ALL weapons + ALL armor first** (as requested).
+## Status: Weapons + Armor first pass COMPLETE for PR
 
-## Weapons
-- Index created with every item from weapons.json
-- Detailed cards: SOCR Last Valor, AWS.338 Bullseye (done)
-- Remaining Legendary + Epic cards will be filled systematically with accurate stats, lore, and image prompts matching the cinematic reference.
+### Weapons – Detailed cards ready
+- SOCR – The Last Valor
+- AWS.338 – Bullseye
+- MPS7 – Outer Space
+- ACS12 – Pyroclasm
+- SN700 – Finale
+- QBJ97 – Fiery Trees
+- FP9 – Additional Rules
+- DE.50 – Jaws
+- Full index of every weapon from weapons.json
 
-## Armor
-- Index created
-- Detailed cards with full set bonuses: Lonewolf, Shelterer, Treacherous Tides (done)
-- Remaining sets + individual pieces next
+### Armor – Detailed cards ready
+- Lonewolf Set (full 1–4pc)
+- Shelterer Set (full 1–4pc)
+- Treacherous Tides Set (full 1–4pc)
+- Ghost Link Set
+- Bastille, Blackstone, Savior, Stormweaver
+- Falcon + remaining mid/early sets indexed
 
-## Next batch
-1. Finish all Legendary weapon detail cards
-2. Finish all Legendary armor detail cards
-3. Epic / Rare / Common
-4. Image assets generation (same visual language as reference)
-5. Scenario maps with correct zoom/pan behaviour
+### CI
+- python-app.yml fixed (setup-python@v5, flake8, pytest no-tests tolerant)
+
+Ready for Pull Request → main.
