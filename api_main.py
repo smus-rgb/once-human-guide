@@ -6,6 +6,8 @@ from pathlib import Path
 import json
 import sqlite3
 
+import guide_source
+
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
@@ -135,6 +137,9 @@ def root():
             "search": "/search?q=",
             "integrity": "/integrity",
             "audit": "/audit",
+            "guide": "/guide",
+            "guide_local": "/guide.json",
+            "guide_reload": "POST /guide/reload",
             "links": "/links/{table}/{id}",
             "export": "/export",
             "maps": "/maps",
@@ -160,6 +165,17 @@ def serve_ui():
         if html.exists():
             return HTMLResponse(html.read_text(encoding="utf-8"))
     raise HTTPException(404, "UI HTML not found")
+
+
+@app.get("/once_human_guide_v19.html")
+def shell_v19():
+    """Shell pod svým jménem — precache service workeru i přímé offline otevření."""
+    return FileResponse(BASE / "once_human_guide_v19.html", media_type="text/html")
+
+
+@app.get("/once_human_guide_v18.html")
+def shell_v18():
+    return FileResponse(BASE / "once_human_guide_v18.html", media_type="text/html")
 
 
 @app.get("/ohg_data.js")
@@ -207,6 +223,30 @@ def version_json():
     if path.exists():
         return FileResponse(path, media_type="application/json")
     return _META
+
+
+@app.get("/guide.json")
+def guide_json():
+    """Local guide content — the offline source precached by the service worker."""
+    path = BASE / "guide.json"
+    if not path.exists():
+        raise HTTPException(404, "guide.json missing")
+    return FileResponse(path, media_type="application/json")
+
+
+@app.get("/guide")
+def guide():
+    """Effective guide: Google Drive document when configured, otherwise guide.json."""
+    doc = guide_source.effective()
+    if doc is None:
+        raise HTTPException(404, "guide.json missing")
+    return doc
+
+
+@app.post("/guide/reload")
+def guide_reload():
+    """Force a Drive refresh instead of waiting for the cache TTL."""
+    return guide_source.reload()
 
 
 @app.get("/maps")

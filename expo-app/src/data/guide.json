@@ -1,0 +1,431 @@
+{
+  "meta": {
+    "id": "ohg-guide",
+    "version": "2026-10-20-guide-1",
+    "lang": "cs",
+    "updated_at": "2026-10-20",
+    "patch_target": "3.0.7",
+    "source": "local",
+    "note": "Obsah průvodce hráčem. Kanonická data entit zůstávají v packu (ohg_data.js / JSON moduly) — guide.json na ně odkazuje přes links[].id, nikdy je neduplikuje.",
+    "fields": {
+      "paths[].steps[].goal": "Co má hráč po kroku umět nebo mít",
+      "paths[].steps[].why": "Proč to má dělat v tomhle pořadí",
+      "paths[].steps[].actions[]": "Konkrétní postup",
+      "paths[].steps[].tips[]": "Zkratka nebo chyba, které se vyhnout",
+      "paths[].steps[].keywords[]": "Slova, podle kterých krok najde vyhledávání",
+      "paths[].steps[].links[]": "{table, id, label} — id musí existovat v packu",
+      "paths[].steps[].source_refs[]": "Odkud informace je",
+      "paths[].steps[].verified_at": "Datum posledního ověření proti patchi"
+    }
+  },
+  "paths": [
+    {
+      "id": "beginner",
+      "title": "Nováček (0–2 h)",
+      "summary": "První hodiny: vybrat scénář, založit territory, udržet jídlo a vodu, získat první deviation.",
+      "phase": "beginner",
+      "keywords": ["nováček", "start", "tutorial", "začátek", "první hodiny", "jak začít"],
+      "steps": [
+        {
+          "id": "beginner-01",
+          "title": "Vyber scénář a založ postavu",
+          "goal": "Rozjet hru ve scénáři, který odpovídá tomu, co chceš hrát.",
+          "why": "Scénář určuje mapu, pravidla světa i to, jak dlouho server poběží — později se mění jen obtížně.",
+          "keywords": ["scénář", "manibus", "winter", "pvp", "výběr scénáře"],
+          "time_estimate": "10 min",
+          "actions": [
+            "Vyber scénář: Manibus pro klasický PvE start, The Way of Winter pro přežití v zimě, Prismverse's Clash pro PvP.",
+            "Dokonči úvodní quest Eve of Evolution — odemkne základní systémy a territory.",
+            "Zkontroluj, že máš v inventáři jídlo a vodu alespoň na první hodinu."
+          ],
+          "tips": ["Na Manibusu je nejvíc hráčů i veřejných návodů — pro první hru je nejbezpečnější."],
+          "links": [
+            { "table": "scenarios", "id": "sc_manibus", "label": "Manibus" },
+            { "table": "scenarios", "id": "sc_winter", "label": "The Way of Winter" },
+            { "table": "scenarios", "id": "sc_prism", "label": "Prismverse's Clash" },
+            { "table": "quests", "id": "q_tutorial", "label": "Eve of Evolution" }
+          ],
+          "source_refs": ["in-game 3.0.7"],
+          "verified_at": "2026-10-20"
+        },
+        {
+          "id": "beginner-02",
+          "title": "První territory a základní suroviny",
+          "goal": "Mít postavené territory s úložištěm a pravidelným přísunem Scrapu a kovu.",
+          "why": "Bez territory přicházíš o sklad i o práci, když tě někdo položí; suroviny jsou základ každého dalšího kroku.",
+          "keywords": ["territory", "base", "suroviny", "scrap", "kov", "stavění"],
+          "time_estimate": "30 min",
+          "actions": [
+            "Založ territory u vody a u cesty — vodu potřebuješ pořád, cestu využiješ při farmení.",
+            "Postav Storage Chest a alespoň jeden Crafting Bench.",
+            "Projdi okolní budovy a posbírej Scrap, Metal Scraps a jídlo do zásoby."
+          ],
+          "tips": ["Territory nedávej na první místo, které se ti líbí — později se stěhuje špatně."],
+          "links": [
+            { "table": "materials", "id": "mat_scrap", "label": "Scrap" },
+            { "table": "materials", "id": "mat_metal", "label": "Metal Scraps / Ingots" },
+            { "table": "locations", "id": "loc_greywater", "label": "Greywater Camp" }
+          ],
+          "source_refs": ["in-game 3.0.7"],
+          "verified_at": "2026-10-20"
+        },
+        {
+          "id": "beginner-03",
+          "title": "První deviation a bezpečné silo",
+          "goal": "Mít jednu pracovní deviation a vědět, jak proběhnout první silo.",
+          "why": "Deviation je hlavní zdroj pasivních bonusů; silo je první místo, kde získáš materiál na mody.",
+          "keywords": ["deviation", "silo", "kapturing", "sběr", "první silo"],
+          "time_estimate": "45 min",
+          "actions": [
+            "Chyť první lehkou deviation — Festering Gel nebo Butterfly's Emissary stačí na začátek.",
+            "Projdi nejnižší silo v regionu a cestou sbírej vše, co jde odnést.",
+            "Vrať se do territory, rozděl suroviny a ulož je do úložiště."
+          ],
+          "tips": ["Nezkoušej silo solo bez jídla a bandáží — první pokusy končí smrtí na otravě."],
+          "links": [
+            { "table": "deviations", "id": "dev_festering", "label": "Festering Gel" },
+            { "table": "deviations", "id": "dev_butterfly", "label": "Butterfly's Emissary" },
+            { "table": "bosses", "id": "boss_ravenous", "label": "Ravenous Hunter" }
+          ],
+          "source_refs": ["in-game 3.0.7"],
+          "verified_at": "2026-10-20"
+        }
+      ]
+    },
+    {
+      "id": "early",
+      "title": "Early game (2–10 h)",
+      "summary": "První zbraň, která vydrží, jídlo s buffem a zbrojní set, na kterém postavíš build.",
+      "phase": "early",
+      "keywords": ["early", "první zbraň", "jídlo", "buffy", "zbroj", "set"],
+      "steps": [
+        {
+          "id": "early-01",
+          "title": "Získej první použitelnou zbraň",
+          "goal": "Mít zbraň, se kterou zvládneš silo i první bosse bez přehnaného utrácení.",
+          "why": "Zbraň určuje tempo celé early fáze — od ní se odvíjí mody, zbroj i deviation.",
+          "keywords": ["zbraň", "weapon", "socr", "m416", "puška", "mod"],
+          "time_estimate": "1 h",
+          "actions": [
+            "Vyber si jednu linii a drž se jí — útočná puška je nejuniverzálnější volba pro start.",
+            "Nasaď základní mod na hlaveň podle toho, jestli chceš crit nebo shrapnel.",
+            "Zbraň neupgraduj na maximum, dokud nevíš, že u ní zůstaneš."
+          ],
+          "tips": ["SOCR – The Last Valor je bezpečná volba: funguje v PvE i jako základ meta buildu."],
+          "links": [
+            { "table": "weapons", "id": "w_socr_valor", "label": "SOCR - The Last Valor" },
+            { "table": "weapons", "id": "w_m416_silent", "label": "M416 - Silent Anabasis" },
+            { "table": "mods", "id": "mod_deadshot", "label": "Deadshot" }
+          ],
+          "source_refs": ["in-game 3.0.7", "community builds 2026"],
+          "verified_at": "2026-10-20"
+        },
+        {
+          "id": "early-02",
+          "title": "Jídlo, voda a buffy",
+          "goal": "Mít stálý přísun jídla, které dává buff do boje, ne jen sytí hlad.",
+          "why": "Buff z jídla je zdarma navíc k buildu — a nejčastěji se zapomíná.",
+          "keywords": ["jídlo", "vaření", "buffy", "hlad", "žízeň", "recept"],
+          "time_estimate": "30 min",
+          "actions": [
+            "Uvař jednoduchá jídla do zásoby (Roasted Meat, Corn Soup, Fruit Tea).",
+            "Před silo si dej jídlo i pití s bojovým buffem.",
+            "Noste jídlo i do inventáře — hlad v půlce dungeonu znamená smrt."
+          ],
+          "tips": ["Pití s regenerací šetří bandáže; vyplatí se vařit ve větším množství najednou."],
+          "links": [
+            { "table": "recipes", "id": "rec_roasted_meat", "label": "Roasted Meat" },
+            { "table": "recipes", "id": "rec_corn_soup", "label": "Corn Soup" },
+            { "table": "recipes", "id": "rec_fruit_tea", "label": "Fruit Tea" }
+          ],
+          "source_refs": ["in-game 3.0.7"],
+          "verified_at": "2026-10-20"
+        },
+        {
+          "id": "early-03",
+          "title": "První zbrojní set",
+          "goal": "Mít složený set zbroje se setovým bonusem, ne mix náhodných kusů.",
+          "why": "Setové bonusy se sčítají podle počtu kusů — mix bez bonusu ztrácí většinu síly.",
+          "keywords": ["zbroj", "armor", "set", "bonus", "lonewolf", "falcon"],
+          "time_estimate": "2 h",
+          "actions": [
+            "Vyber set, který sedí tvé zbrani: crit build chce crit bonusy, elemental chce elemental.",
+            "Skládej set po kusech a noste ho až od 2–3 kusů, kdy bonus začne fungovat.",
+            "Zbytek doplň kusy s co nejlepšími staty, dokud set nenasbíráš celý."
+          ],
+          "tips": ["Scout set je levný a rychlý na start, než poskládáš Lonewolf nebo Falcon."],
+          "links": [
+            { "table": "armor", "id": "set_scout", "label": "Scout Set" },
+            { "table": "armor", "id": "set_falcon", "label": "Falcon Set" },
+            { "table": "armor", "id": "set_lonewolf", "label": "Lonewolf Set" }
+          ],
+          "source_refs": ["in-game 3.0.7", "community builds 2026"],
+          "verified_at": "2026-10-20"
+        }
+      ]
+    },
+    {
+      "id": "mid",
+      "title": "Mid game (10–40 h)",
+      "summary": "Farm materiálů, první bossové a build jako promyšlený systém místo sbírky náhodných věcí.",
+      "phase": "mid",
+      "keywords": ["mid", "farm", "boss", "build", "starchrom", "silo"],
+      "steps": [
+        {
+          "id": "mid-01",
+          "title": "Postav farmu materiálů",
+          "goal": "Mít pravidelný přísun materiálů na mody, zbroj a munici bez ručního běhání mapy.",
+          "why": "Mid game stojí na objemu — bez farmy utratíš všechny hodiny chozením pro základní suroviny.",
+          "keywords": ["farm", "materiál", "starchrom", "zdroje", "těžba"],
+          "time_estimate": "1 den",
+          "actions": [
+            "Najdi dvě tři lokality s hustými zdroji a střídej je, aby se respawnovaly.",
+            "Sbírej Starchrom a vzácné suroviny přednostně — na běžný materiál stačí nájezdy.",
+            "Ulož si trasu jako vlastní body na mapě, ať ji nemusíš hledat znovu."
+          ],
+          "tips": ["Když jedeš na sběr, jdi bez bojového vybavení navíc — místo v inventáři rozhoduje."],
+          "links": [
+            { "table": "materials", "id": "mat_starchrom", "label": "Starchrom" },
+            { "table": "materials", "id": "mat_heart_vine", "label": "Heart Vine" },
+            { "table": "locations", "id": "loc_tallgrass", "label": "Tall Grass Inn" }
+          ],
+          "source_refs": ["in-game 3.0.7"],
+          "verified_at": "2026-10-20"
+        },
+        {
+          "id": "mid-02",
+          "title": "Nauč se bosse a jejich slabiny",
+          "goal": "Porazit regionální bosse bez plýtvání municí a s vědomím, co z nich padá.",
+          "why": "Bossové drží vzácné materiály a mody; bez znalosti slabin je souboj jen o štěstí a municu.",
+          "keywords": ["boss", "slabina", "drop", "treant", "arachsiam", "raid"],
+          "time_estimate": "2 h",
+          "actions": [
+            "Nejdřív zjisti, na jaký typ damage boss reaguje, a teprve pak vybírej zbraň.",
+            "Bojuj s jídlem, bandážemi a odstupem — bosse se nedotýkej, když nemusíš.",
+            "Po souboji si zapiš drop, ať příště nechodíš pro něco, co nepadá."
+          ],
+          "tips": ["Treant je dobrý první bosse na nácvik slabin — jeho útoky se dají číst."],
+          "links": [
+            { "table": "bosses", "id": "boss_treant", "label": "Treant" },
+            { "table": "bosses", "id": "boss_arachsiam", "label": "Arachsiam" },
+            { "table": "bosses", "id": "boss_shadow", "label": "Shadow Hound" }
+          ],
+          "source_refs": ["in-game 3.0.7", "community builds 2026"],
+          "verified_at": "2026-10-20"
+        },
+        {
+          "id": "mid-03",
+          "title": "Přestaň mixovat, začni stavět build",
+          "goal": "Mít build, kde se bonusy násobí mezi sebou, ne jen sčítají v jednom bucketu.",
+          "why": "Stejný typ bonusu se sčítá, různé typy se násobí — proto vyvážený build porazí hromadu jednoho statu.",
+          "keywords": ["build", "buckety", "crit", "shrapnel", "meta", "synergie"],
+          "time_estimate": "2 h",
+          "actions": [
+            "Rozhodni, jestli jedeš crit, shrapnel nebo elemental, a podle toho skládej mody.",
+            "Doplň zbroj tak, aby pokryla druhý bucket — ne jen ten, co už máš ve zbrani.",
+            "Porovnej build v planneru před a po změně, ať vidíš, jestli to bylo k lepšímu."
+          ],
+          "tips": ["Tři buckety vyváženě porazí jeden přeplněný — platí pro elemental i status."],
+          "links": [
+            { "table": "mods", "id": "mod_shrapnel_smash", "label": "Shrapnel Smash" },
+            { "table": "mods", "id": "mod_blaze_amp", "label": "Blaze Amplifier" },
+            { "table": "armor", "id": "set_lonewolf", "label": "Lonewolf Set" }
+          ],
+          "source_refs": ["community builds 2026"],
+          "verified_at": "2026-10-20"
+        }
+      ]
+    },
+    {
+      "id": "endgame",
+      "title": "Endgame",
+      "summary": "Monolith a raid bossové, dotažené buildy a sezónní eventy, které se nedají dohnat později.",
+      "phase": "endgame",
+      "keywords": ["endgame", "monolith", "raid", "meta", "event", "sezóna"],
+      "steps": [
+        {
+          "id": "endgame-01",
+          "title": "Monolith a raid bossové",
+          "goal": "Zvládnout obsah, kde už nestačí dobrá zbraň — je potřeba sladěná parta a přesný build.",
+          "why": "Monolith a raid mají mechaniky, které se nedají přeskočit damage; tady se láme výbava.",
+          "keywords": ["monolith", "raid", "foul shadowhunter", "mensdevoran", "endgame boss"],
+          "time_estimate": "2–3 h",
+          "actions": [
+            "Zjisti slabinu konkrétního bosse a build na ni postav ještě před vstupem.",
+            "Jdi s partou, kde má každý jasnou roli — healing a utility nejsou volitelné.",
+            "Předpokládej dva až tři pokusy; ber to jako nácvik mechanik, ne jako ztrátu času."
+          ],
+          "tips": ["Foul Shadowhunter a Mensdevoran jsou nejčastější zeď na konci — jdi na ně s hotovým buildem, ne s rozpracovaným."],
+          "links": [
+            { "table": "bosses", "id": "boss_foul", "label": "Foul Shadowhunter" },
+            { "table": "bosses", "id": "boss_mensdevoran", "label": "Mensdevoran" },
+            { "table": "weapons", "id": "w_kam_abyss", "label": "KAM - Abyss Glance" }
+          ],
+          "source_refs": ["in-game 3.0.7", "community builds 2026"],
+          "verified_at": "2026-10-20"
+        },
+        {
+          "id": "endgame-02",
+          "title": "Dotáhni build a deviation na maximum",
+          "goal": "Mít build, který má každý slot vybraný s důvodem, a deviation, která se s ním neruší.",
+          "why": "V endgame rozhodují jednotky procent; náhodná deviation dokáže build rozhodit víc než chybějící mod.",
+          "keywords": ["build", "deviation", "meta", "optimalizace", "lonewolf whisper"],
+          "time_estimate": "průběžně",
+          "actions": [
+            "Projdi build slot po slotu a u každého věz, čím přispívá do bucketů.",
+            "Vyber deviation podle typu damage — ne podle toho, která vypadá nejlépe.",
+            "Ulož si varianty pro bosse a pro AoE obsah zvlášť, ať přepínáš podle situace."
+          ],
+          "tips": ["Butterfly's Emissary a Lonewolf's Whisper se používají v drtivé většině endgame buildů."],
+          "links": [
+            { "table": "deviations", "id": "dev_butterfly", "label": "Butterfly's Emissary" },
+            { "table": "deviations", "id": "dev_lonewolf", "label": "Lonewolf's Whisper" },
+            { "table": "mods", "id": "mod_ruthless", "label": "Ruthless Reaper" }
+          ],
+          "source_refs": ["community builds 2026"],
+          "verified_at": "2026-10-20"
+        },
+        {
+          "id": "endgame-03",
+          "title": "Sezónní eventy a časové okno",
+          "goal": "Nezmeškat eventy, které se vracejí jen jednou za sezónu.",
+          "why": "Některé odměny a materiály jde získat jen v době eventu — po konci okna už nejsou dostupné.",
+          "keywords": ["event", "sezóna", "golden autumn", "prime war", "odměny"],
+          "time_estimate": "30 min denně",
+          "actions": [
+            "Sleduj, který event právě běží, a podle toho naplánuj farmu na ten den.",
+            "Udělej si denní minimum úkolů, i když nemáš čas na celý obsah.",
+            "Odměny si vyzvedni hned — nedokončené eventy se na konci sezóny nedoúčtují."
+          ],
+          "tips": ["Golden Autumn Harvest a Prime War jsou nejčastější zdroj sezónních materiálů."],
+          "links": [
+            { "table": "events", "id": "ev_autumn", "label": "Golden Autumn Harvest" },
+            { "table": "events", "id": "ev_prime", "label": "Prime War" },
+            { "table": "quests", "id": "q_carnival", "label": "Carnival of Doom" }
+          ],
+          "source_refs": ["in-game 3.0.7"],
+          "verified_at": "2026-10-20"
+        }
+      ]
+    },
+    {
+      "id": "pvp",
+      "title": "PvP",
+      "summary": "Druhý build, mobilita a čtení mapy — v PvP rozhoduje příprava, ne jen damage.",
+      "phase": "pvp",
+      "keywords": ["pvp", "prismverse", "mobilita", "mapa", "souboj"],
+      "steps": [
+        {
+          "id": "pvp-01",
+          "title": "Nauč se pravidla PvP scénáře",
+          "goal": "Vědět, kde tě může někdo napadnout a co za to komu hrozí.",
+          "why": "Pravidla scénářů se liší — co platí v Prismverse's Clash, nemusí platit jinde.",
+          "keywords": ["pvp scénář", "prismverse", "pravidla", "bezpečná zóna"],
+          "time_estimate": "30 min",
+          "actions": [
+            "Zkontroluj, jestli scénář zná bezpečné zóny, nebo je PvP plošné.",
+            "Zjisti, jak funguje smrt — co ztratíš a co zůstane v territory.",
+            "Nechoď na PvP mapu s výbavou, kterou si nemůžeš dovolit ztratit."
+          ],
+          "tips": ["Prismverse's Clash je nejrychlejší způsob, jak si PvP vyzkoušet bez velkých ztrát."],
+          "links": [
+            { "table": "scenarios", "id": "sc_prism", "label": "Prismverse's Clash" },
+            { "table": "scenarios", "id": "sc_endless", "label": "Endless Dreams" }
+          ],
+          "source_refs": ["in-game 3.0.7"],
+          "verified_at": "2026-10-20"
+        },
+        {
+          "id": "pvp-02",
+          "title": "Postav druhý build na souboj",
+          "goal": "Mít loadout na krátkou vzdálenost s mobilitou, ne PvE build na bosse.",
+          "why": "PvE build stojí na vydržení a slabinách; v PvP vyhrává rychlost a burst v pravou chvíli.",
+          "keywords": ["pvp build", "mobilita", "burst", "krátká vzdálenost", "deviation"],
+          "time_estimate": "1 h",
+          "actions": [
+            "Postav druhý build odděleně od PvE — jiná zbraň, jiné mody, jiná deviation.",
+            "Zaměř se na krátkou a střední vzdálenost a na schopnost rychle ustoupit.",
+            "Noste léčivo a prostředek na únik; v PvP se souboje rozhodují v sekundách."
+          ],
+          "tips": ["Polar Jelly dává mobilitu, kterou v PvP využiješ častěji než čistý damage."],
+          "links": [
+            { "table": "weapons", "id": "w_socr_cosmic", "label": "SOCR - Cosmic Visitor" },
+            { "table": "deviations", "id": "dev_polar", "label": "Polar Jelly" },
+            { "table": "mods", "id": "mod_deadshot", "label": "Deadshot" }
+          ],
+          "source_refs": ["community builds 2026"],
+          "verified_at": "2026-10-20"
+        },
+        {
+          "id": "pvp-03",
+          "title": "Čti mapu a používej úkryty",
+          "goal": "Vědět, kde se dá schovat, kde se čeká na spawn a kudy se dá utéct.",
+          "why": "Většina PvP smrtí přijde z neznámé strany — znalost terénu je stejně důležitá jako zbraň.",
+          "keywords": ["mapa", "úkryt", "pozice", "terén", "blackfell"],
+          "time_estimate": "1 h",
+          "actions": [
+            "Projdi mapu bez boje a zapamatuj si budovy s více východy.",
+            "Vyznač si vlastní body na mapě tam, kde se dá dobře bránit.",
+            "Nikdy nebojuj na otevřeném prostoru, pokud nemáš výhodu v dostřelu."
+          ],
+          "tips": ["Města jako Blackfell nabízejí hodně úkrytů, ale i hodně pastí — uč se je v klidu."],
+          "links": [
+            { "table": "locations", "id": "loc_blackfell", "label": "Blackfell" },
+            { "table": "locations", "id": "loc_meyer", "label": "Meyer's Market" },
+            { "table": "locations", "id": "loc_tallgrass", "label": "Tall Grass Inn" }
+          ],
+          "source_refs": ["in-game 3.0.7"],
+          "verified_at": "2026-10-20"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "id": "faq-01",
+      "q": "Odkud jsou čísla a údaje v průvodci?",
+      "a": "Z kanonického packu (ohg_data.js / JSON moduly) a z ověření proti patchi 3.0.7. Každý krok má source_refs a datum ověření.",
+      "keywords": ["zdroj", "data", "odkud", "ověření", "přesnost"]
+    },
+    {
+      "id": "faq-02",
+      "q": "Funguje průvodce offline?",
+      "a": "Ano. guide.json je v cache service workeru, takže se průvodce otevře i bez připojení. Online režim navíc načítá texty z Google Disku.",
+      "keywords": ["offline", "cache", "bez internetu", "service worker"]
+    },
+    {
+      "id": "faq-03",
+      "q": "Jak si označím splněné kroky?",
+      "a": "V detailu kroku zaškrtni Splněno. Stav se ukládá do user layer (localStorage) a nikdy nemění pack ani guide.json.",
+      "keywords": ["progress", "splněno", "checklist", "postup"]
+    },
+    {
+      "id": "faq-04",
+      "q": "Jak najdu krok podle klíčového slova?",
+      "a": "V průvodci je vyhledávací pole nad cestami — filtruje podle názvu, cíle a klíčových slov. Stejné kroky najde i globální hledání (Ctrl+K).",
+      "keywords": ["hledání", "vyhledávání", "filtr", "klíčová slova", "search"]
+    },
+    {
+      "id": "faq-05",
+      "q": "Jak nahlásím chybu v datech?",
+      "a": "Přes GitHub issue typu data s uvedením entity, patche a toho, co je špatně. Oprava jde do JSON modulu, pack se regeneruje.",
+      "keywords": ["chyba", "issue", "oprava", "report", "bug"]
+    },
+    {
+      "id": "faq-06",
+      "q": "Můžu texty průvodce psát ve svém dokumentu?",
+      "a": "Ano — dokument na Google Disku se nastaví přes GOOGLE_DRIVE_FILE_ID a aplikace si texty načte sama podle domluvené struktury (cesta, krok, cíl, proč, klíčová slova, odkazy).",
+      "keywords": ["google drive", "dokument", "správa textů", "obsah"]
+    }
+  ],
+  "glossary": [
+    { "term": "Deviation", "definition": "Společník, který dává pasivní bonusy a schopnosti. Vyzná se podle typu damage buildu.", "keywords": ["deviation", "společník"] },
+    { "term": "Territory", "definition": "Tvoje základna se skladem a výrobou. Drží se i po smrti, ale může o ni přijít.", "keywords": ["territory", "base", "základna"] },
+    { "term": "Starchrom", "definition": "Vzácná surovina pro pokročilé věci a mody.", "keywords": ["starchrom", "surovina", "vzácná"] },
+    { "term": "Silo", "definition": "Instancovaný dungeon s bossem na konci. První zdroj materiálu na mody.", "keywords": ["silo", "dungeon", "instance"] },
+    { "term": "Monolith", "definition": "Endgame obsah s vlastními mechanikami a nejtěžšími bossy.", "keywords": ["monolith", "endgame"] },
+    { "term": "Bucket", "definition": "Skupina stejného bonusu. Bonusy ve stejném bucketu se sčítají, mezi buckety se násobí.", "keywords": ["bucket", "bonus", "násobení", "build"] },
+    { "term": "Pack", "definition": "Kanonická data entit (ohg_data.js / JSON moduly / SQLite). UI a průvodce ho jen čtou.", "keywords": ["pack", "data", "kanonický"] },
+    { "term": "User layer", "definition": "Tvoje data — oblíbené, inventář, poznámky, postup v průvodci. Uložená zvlášť, mimo pack.", "keywords": ["user layer", "localstorage", "moje data"] }
+  ]
+}

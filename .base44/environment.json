@@ -2,5 +2,16 @@
   "previewPort": 3000,
   "healthPath": "/",
   "startCommand": "docker compose -f docker-compose.base44.yml up -d",
-  "secrets": []
+  "secrets": [
+    {
+      "name": "GOOGLE_API_KEY",
+      "description": "Google Cloud API key se zapnutým Drive API. Čte dokument průvodce z GOOGLE_DRIVE_FILE_ID. Nepovinné — bez klíče aplikace servíruje lokální guide.json.",
+      "requiredAtBoot": false
+    },
+    {
+      "name": "GOOGLE_DRIVE_FILE_ID",
+      "description": "Id Google dokumentu (nasdíleného jako 'Anyone with the link') nebo JSON souboru s texty průvodce. Najdeš ho v URL dokumentu.",
+      "requiredAtBoot": false
+    }
+  ]
 }

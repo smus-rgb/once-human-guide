@@ -1,5 +1,14 @@
 # Changelog
 
+## 5.6.0 / shell 19.3 — 2026-10-20
+
+- Průvodce hráčem jako data: `guide.json` (5 cest, 15 kroků, FAQ, slovníček) + modul `modules/ohg_guide.js`
+- Vyhledávací pole v průvodci (název, cíl, klíčová slova) a stejné kroky i v globálním hledání (Ctrl+K)
+- Google Drive overlay textů: `/guide`, `/guide.json`, `/guide/reload` (`guide_source.py`)
+- Service worker: precache bez chybějícího `modules/ohg_selfheal.js`, cache `ohg-2026-10-20-guide-1`, `guide.json` offline
+- Expo klient: zdroj v repu (obrazy průvodce, `npm run sync:guide`), doplněné závislosti expo-router
+- `version.json`: app 5.6.0, shell 19.3, manifest souborů průvodce
+
 ## 5.5.0 / shell 19.2 — 2026-10-18
 
 - SQLite `data_issues`: chybějící id, duplicity, prázdná jména, nerozpoznané ingredience

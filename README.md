@@ -1,7 +1,7 @@
 # Once Human Guide
 
 Adaptive game companion for **Once Human**  
-**App 5.5.0** · Shell **v19.2** · Data `2026-10-09-v19.2-372` · Patch **3.0.7** · 372 entit · SW `ohg-v19.2-307`
+**App 5.6.0** · Shell **v19.3** · Data `2026-10-09-v19.2-372` · Patch **3.0.7** · 373 entit · SW `ohg-2026-10-20-guide-1`
 
 **Repo:** https://github.com/smus-rgb/once-human-guide
 
@@ -87,3 +87,27 @@ Open `once_human_guide_v19.html` (needs `modules/`, `ohg_data.js`, `ohg_sw.js` v
 | http://127.0.0.1:8000/stats | Counts |
 | http://127.0.0.1:8000/update/check | Update check (shell + data) |
 | http://127.0.0.1:8000/audit | Data quality issues |
+| http://127.0.0.1:8000/guide | Průvodce (Google Drive overlay, když je nastavený) |
+| http://127.0.0.1:8000/guide.json | Průvodce — lokální obsah (offline kopie) |
+
+---
+
+## Průvodce hráčem (`guide.json`)
+
+Obsah průvodce je datový soubor, ne text v HTML. Struktura: `paths[]` (cesta podle fáze hráče) → `steps[]` (krok s `goal`, `why`, `actions[]`, `tips[]`, `keywords[]`, `links[]`, `source_refs`, `verified_at`), dále `faq[]` a `glossary[]`.
+
+- `links[].id` odkazuje na entity v packu (`weapons`, `deviations`, `scenarios`, …) — obsah se nikdy neduplikuje.
+- Vyhledávání v aplikaci filtruje cesty i kroky podle názvu, cíle a klíčových slov; stejné kroky najde i globální hledání (Ctrl+K).
+- Splněné kroky jdou do user layer, nikdy do `guide.json` ani do packu.
+- Změna obsahu nepotřebuje rebuild: `guide.json` čte shell v19 i Expo klient.
+
+### Texty z Google Disku
+
+Texty průvodce lze psát přímo v dokumentu na Google Disku:
+
+1. V Google Cloud zapni **Drive API** a vytvoř **API klíč**.
+2. Dokument nasdílej jako „Anyone with the link" — API klíč ho jinak nepřečte.
+3. Nastav `GOOGLE_API_KEY` a `GOOGLE_DRIVE_FILE_ID` (id z URL dokumentu).
+4. `/guide` pak vrací obsah z Disku (cache 300 s), `/guide.json` zůstává offline kopie a `POST /guide/reload` vynutí obnovení. Když Disku něco chybí, aplikace mlčky použije lokální `guide.json`.
+
+Struktura dokumentu: `# Cesta: …`, `# FAQ`, `# Slovníček`; uvnitř `## Krok: …`, řádky `Cíl:`, `Proč:`, `Čas:`, `Klíčová slova:`, `Odkazy:` (ve tvaru `tabulka/id`), odrážky `-` jako postup a `!` jako tip.

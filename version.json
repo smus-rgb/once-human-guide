@@ -1,12 +1,12 @@
 {
-  "app_version": "5.5.0",
-  "shell_version": "19.2",
+  "app_version": "5.6.0",
+  "shell_version": "19.3",
   "data_version": "2026-10-09-v19.2-372",
   "released_at": "2026-10-09T14:00:00Z",
   "min_app_version": "5.0.0",
   "patch_target": "3.0.7",
   "records": 373,
-  "sw_cache": "ohg-v19.2-307",
+  "sw_cache": "ohg-2026-10-20-guide-1",
   "files": {
     "database_full.json": "data",
     "ohg_data.js": "pack",
@@ -22,12 +22,14 @@
     "api_main.py": "api",
     "version.json": "meta",
     "modules/ohg_quality.js": "module",
+    "modules/ohg_guide.js": "module",
+    "guide.json": "guide",
+    "guide_source.py": "guide",
     "regen_pack.py": "tool",
-    "modules/ohg_selfheal.js": "module",
     "pytest.ini": "test",
     "tests/test_api.py": "test"
   },
-  "notes": "v19.2: audit/FTS/quality + selfheal + green CI. Pack OHG_META.version == data_version. User layer nemění pack.",
+  "notes": "v19.2: audit/FTS/quality + green CI. Pack OHG_META.version == data_version. User layer nemění pack. Guide: guide.json + modules/ohg_guide.js (vyhledávání), SW precache bez chybějícího souboru, volitelný Google Drive overlay.",
   "changelog": [
     "db_build writes data_issues (missing id, duplicate id, empty name, unresolved ingredients)",
     "API /audit and stats.issues; FTS query strips special characters",
@@ -36,7 +38,9 @@
     "Pack regenerate: OHG_META.version == version.json data_version (2026-10-09-v19.2-372)",
     "records 373 (weapons 39 on main modules)",
     "PR#19: selfheal, quality/links fix, /version.json, phone layout, pytest",
-    "CI: regen_pack.py auto-commit on main + flake8/pytest/shell syntax"
+    "Guide: guide.json struktura + modul ohg_guide.js s vyhledáváním podle názvu a klíčových slov",
+    "SW: precache bez chybějícího modules/ohg_selfheal.js, cache ohg-2026-10-20-guide-1, guide.json offline",
+    "API: /guide, /guide.json a /guide/reload (Google Drive overlay pro texty průvodce)"
   ],
   "github": {
     "owner": "smus-rgb",
