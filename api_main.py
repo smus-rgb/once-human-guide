@@ -200,6 +200,15 @@ def version():
     }
 
 
+@app.get("/version.json")
+def version_json():
+    """Canonical meta file — read by the pack channel and precached by the service worker."""
+    path = BASE / "version.json"
+    if path.exists():
+        return FileResponse(path, media_type="application/json")
+    return _META
+
+
 @app.get("/maps")
 def maps():
     return {"embeds": MAP_EMBEDS, "local_markers": True}
